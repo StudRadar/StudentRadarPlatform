@@ -1,0 +1,2 @@
+# StudentRadarPlatform
+Платформа рекрутинга студентов
