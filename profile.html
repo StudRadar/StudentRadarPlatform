@@ -1,0 +1,1220 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Профиль — СтудРадар</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&family=Manrope:wght@400;500;600;700&family=Tektur:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Hero photo column */
+    .hero-photo-col {
+      position: relative;
+      width: 100%;
+      min-height: 320px;
+    }
+    .hero-photo-col .cabinet-photo-ph {
+      width: 100%; height: 100%; min-height: 320px;
+      border-radius: 26px;
+      background: #eef0f7;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(2,3,39,0.20);
+    }
+    .hero-photo-col #heroPhoto {
+      width: 100%; height: 100%; min-height: 320px;
+      object-fit: cover; border-radius: 26px; display: block;
+    }
+    .cabinet-photo-edit {
+      position: absolute;
+      bottom: 12px; right: 12px;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: #fff;
+      border: 1.5px solid rgba(2,3,39,0.12);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: rgba(2,3,39,0.70);
+      box-shadow: 0 2px 8px rgba(2,3,39,0.14);
+      transition: background .18s, color .18s, border-color .18s;
+      z-index: 2;
+    }
+    .cabinet-photo-edit:hover {
+      background: #1153B5; color: #fff; border-color: #1153B5;
+    }
+    /* profile-tags spacing in hero */
+    #heroCard .profile-tags { margin-bottom: 0; }
+    /* Photo upload area — same component as doc upload */
+    .photo-upload-area {
+      display: flex; align-items: center; gap: 14px;
+      min-height: 90px; width: 100%; box-sizing: border-box;
+      background: hsla(238,90%,8%,0.04);
+      border: 1.5px dashed rgba(2,3,39,0.20);
+      border-radius: 16px; padding: 18px 20px;
+      cursor: pointer; transition: border-color .18s, background .18s;
+    }
+    .photo-upload-area:hover { border-color: #1153B5; background: hsla(216,83%,39%,0.05); }
+    .photo-upload-area.has-file { border-style: solid; border-color: rgba(2,3,39,0.15); cursor: default; }
+    .photo-upload-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: hsla(238,90%,8%,0.06);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .photo-upload-text { font-family: 'Manrope', sans-serif; font-size: 14px; color: rgba(2,3,39,0.55); line-height: 1.4; }
+    .photo-upload-text strong { display: block; font-size: 15px; font-weight: 600; color: #020327; margin-bottom: 2px; }
+    .photo-upload-remove {
+      margin-left: auto; background: none; border: none; cursor: pointer;
+      color: rgba(2,3,39,0.35); padding: 6px; border-radius: 8px;
+      display: flex; align-items: center; transition: color .18s, background .18s;
+    }
+    .photo-upload-remove:hover { color: #DD5444; background: rgba(221,84,68,0.08); }
+    @media (max-width: 700px) {
+      .cabinet-photo-wrap { width: 100%; }
+      .cabinet-photo-wrap .cabinet-photo,
+      .cabinet-photo-ph { width: 100%; height: 220px; }
+    }
+  </style>
+</head>
+<body class="cabinet-body" data-screen-label="07 Профиль (личный кабинет)">
+
+<!-- ===== HEADER (Student-logged) ===== -->
+<header class="feed-header">
+  <a href="for-students.html" class="feed-logo">
+    <span class="feed-logo-mark"><img src="assets/logo.svg" alt=""/></span>
+    <span class="feed-logo-text">СтудРадар</span>
+  </a>
+
+  <nav class="feed-nav" aria-label="Меню">
+    <a href="catalog.html" class="feed-chip">
+      <svg class="feed-chip-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M15.625 2.5H12.7922C12.441 2.10681 12.0108 1.79223 11.5296 1.57684C11.0484 1.36145 10.5272 1.25011 10 1.25011C9.47282 1.25011 8.95158 1.36145 8.47041 1.57684C7.98924 1.79223 7.55899 2.10681 7.20781 2.5H4.375C4.04348 2.5 3.72554 2.6317 3.49112 2.86612C3.2567 3.10054 3.125 3.41848 3.125 3.75V16.875C3.125 17.2065 3.2567 17.5245 3.49112 17.7589C3.72554 17.9933 4.04348 18.125 4.375 18.125H15.625C15.9565 18.125 16.2745 17.9933 16.5089 17.7589C16.7433 17.5245 16.875 17.2065 16.875 16.875V3.75C16.875 3.41848 16.7433 3.10054 16.5089 2.86612C16.2745 2.6317 15.9565 2.5 15.625 2.5Z"/></svg>
+      <span>Лента задач</span>
+    </a>
+    <a href="profile.html" class="feed-chip is-active">
+      <svg class="feed-chip-icon" width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,24a16,16,0,0,0-7.16,1.69l-88,44a16,16,0,0,0,0,28.62l88,44a16,16,0,0,0,14.32,0l88-44a16,16,0,0,0,0-28.62l-88-44A16,16,0,0,0,128,24Z"/><path d="M219.16,152.84,128,198.42,36.84,152.84a8,8,0,1,0-7.16,14.31l92,46a8,8,0,0,0,7.16,0l92-46a8,8,0,1,0-7.16-14.31Z"/><path d="M219.16,190.84,128,236.42,36.84,190.84a8,8,0,1,0-7.16,14.31l92,46a8,8,0,0,0,7.16,0l92-46a8,8,0,1,0-7.16-14.31Z"/></svg>
+      <span>Мой кабинет</span>
+    </a>
+  </nav>
+
+  <div class="feed-user-wrap">
+    <button type="button" class="feed-user" aria-haspopup="menu" aria-expanded="false" id="userBtn">
+      <span class="feed-user-avatar"></span>
+      <span class="feed-user-name">+7 912 559 43 21</span>
+      <svg class="feed-user-caret" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="feed-user-menu" role="menu" id="userMenu" hidden>
+      <a href="profile.html" role="menuitem" class="is-active">Профиль</a>
+      <a href="documents.html" role="menuitem">Документы</a>
+      <a href="settings.html" role="menuitem">Настройки</a>
+      <button type="button" class="feed-user-menu-logout" data-logout>Выйти</button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== CABINET ===== -->
+<main class="cabinet">
+  <aside class="cabinet-nav" aria-label="Разделы кабинета">
+    <a href="profile.html" class="cabinet-nav-item is-active">Профиль</a>
+    <a href="my-tasks.html#work" class="cabinet-nav-item">В работе<span class="cabinet-nav-count">3</span></a>
+    <a href="my-tasks.html#responses" class="cabinet-nav-item">Отклики и предложения</a>
+    <a href="my-tasks.html#done" class="cabinet-nav-item">Завершенные задачи</a>
+    <a href="documents.html" class="cabinet-nav-item">Документы</a>
+    <a href="student-finance.html" class="cabinet-nav-item">Финансы</a>
+    <a href="settings.html" class="cabinet-nav-item">Настройки</a>
+  </aside>
+
+  <div class="cabinet-main">
+
+    <!-- Certificate missing banner -->
+    <div class="cabinet-card" id="certBanner" style="display:none;background:hsla(216,83%,39%,0.06);border:1.5px solid hsla(216,83%,39%,0.20);border-radius:24px;padding:20px 28px;">
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0;">
+          <div style="width:40px;height:40px;border-radius:12px;background:hsla(216,83%,39%,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 256 256" fill="#1153B5"><path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Zm-40-64H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Zm0,32H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Z"/></svg>
+          </div>
+          <div>
+            <div style="font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;color:#020327;margin-bottom:2px;">Справка об обучении не загружена</div>
+            <div style="font-family:'Manrope',sans-serif;font-size:14px;color:rgba(2,3,39,0.60);line-height:1.4;">Загрузите справку, чтобы подтвердить статус студента и получить доступ ко всем функциям</div>
+          </div>
+        </div>
+        <a href="documents.html" style="display:inline-flex;align-items:center;height:44px;padding:0 20px;background:#1153B5;color:#fff;border-radius:12px;font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap;transition:background .18s;" onmouseover="this.style.background='#0d439a'" onmouseout="this.style.background='#1153B5'">Загрузить справку</a>
+      </div>
+    </div>
+
+    <!-- Self-employment warning banner -->
+    <div class="cabinet-card" id="selfEmpBanner" style="background:hsla(38,100%,50%,0.08);border:1.5px solid hsla(38,100%,50%,0.25);border-radius:24px;padding:20px 28px;">
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0;">
+          <div style="width:40px;height:40px;border-radius:12px;background:hsla(38,100%,50%,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 256 256" fill="#B07400"><path d="M236.8,188.09,149.35,36.22a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM120,104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm8,88a12,12,0,1,1,12-12A12,12,0,0,1,128,192Z"/></svg>
+          </div>
+          <div>
+            <div style="font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;color:#020327;margin-bottom:2px;">Статус самозанятого не подтверждён</div>
+            <div style="font-family:'Manrope',sans-serif;font-size:14px;color:rgba(2,3,39,0.60);line-height:1.4;">Без подтверждённого статуса вы не можете участвовать в сделках на платформе</div>
+          </div>
+        </div>
+        <a href="documents.html" style="display:inline-flex;align-items:center;height:44px;padding:0 20px;background:#1153B5;color:#fff;border-radius:12px;font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap;transition:background .18s;" onmouseover="this.style.background='#0d439a'" onmouseout="this.style.background='#1153B5'">Подтвердить статус</a>
+      </div>
+    </div>
+
+    <!-- Hero placeholder (cert not confirmed) -->
+    <section class="cabinet-card" id="heroPlaceholder" style="display:none;">
+      <div style="display:flex;align-items:center;gap:20px;padding:8px 0;">
+        <div style="width:72px;height:72px;border-radius:20px;background:hsla(216,83%,39%,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="32" height="32" viewBox="0 0 256 256" fill="#1153B5" opacity="0.5"><path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8C53.79,195.27,79.23,184,128,184s74.21,11.27,89.07,36a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"/></svg>
+        </div>
+        <div>
+          <div style="font-family:'Tektur',sans-serif;font-size:18px;font-weight:700;color:#020327;text-transform:uppercase;letter-spacing:-0.01em;margin-bottom:6px;">Персональные данные</div>
+          <div style="font-family:'Manrope',sans-serif;font-size:14px;color:rgba(2,3,39,0.55);line-height:1.5;max-width:420px;">Персональные данные появятся после подтверждения справки об обучении. Загрузите справку в разделе «Документы».</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hero card (shown after cert confirmed) -->
+    <section class="profile-hero" id="heroCard" style="display:none;">
+      <!-- Photo column -->
+      <div class="hero-photo-col">
+        <div class="cabinet-photo-ph" id="heroPhotoPh">
+          <svg width="80" height="80" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8C53.79,195.27,79.23,184,128,184s74.21,11.27,89.07,36a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"/></svg>
+        </div>
+        <img class="profile-hero-photo" src="" alt="" id="heroPhoto" style="display:none;"/>
+        <button type="button" class="cabinet-photo-edit" data-modal="profile" aria-label="Изменить фото">
+          <svg width="14" height="14" viewBox="0 0 256 256" fill="currentColor"><path d="M227.32,73.37,182.63,28.69a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.32,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.69,147.32,64l24-24L216,84.69Z"/></svg>
+        </button>
+      </div>
+
+
+      <!-- Info column -->
+      <div class="profile-hero-info">
+        <div class="profile-badge">
+          <svg width="20" height="20" viewBox="0 0 256 256" fill="#DD5444" aria-hidden="true"><path d="M225.86,102.82c-3.77-3.94-7.67-8-9.14-11.57-1.36-3.27-1.44-8.69-1.52-13.94-.15-9.76-.31-20.82-8-28.51S178.44,40.46,168.68,40.31c-5.25-.08-10.67-.16-13.94-1.52-3.56-1.47-7.63-5.37-11.57-9.14C136.24,22.81,128.28,15,120,15s-16.24,7.81-23.18,14.65c-3.94,3.77-8,7.67-11.57,9.14C82,40.15,76.56,40.23,71.31,40.31c-9.76.15-20.82.31-28.51,8s-7.85,18.75-8,28.51c-.08,5.25-.16,10.67-1.52,13.94-1.47,3.56-5.37,7.63-9.14,11.57C17.31,109.76,9.5,117.72,9.5,126s7.81,16.24,14.65,23.18c3.77,3.94,7.67,8,9.14,11.57,1.36,3.27,1.44,8.69,1.52,13.94.15,9.76.31,20.82,8,28.51s18.75,7.85,28.51,8c5.25.08,10.67.16,13.94,1.52,3.56,1.47,7.63,5.37,11.57,9.14C103.76,228.69,111.72,236.5,120,236.5s16.24-7.81,23.18-14.65c3.94-3.77,8-7.67,11.57-9.14,3.27-1.36,8.69-1.44,13.94-1.52,9.76-.15,20.82-.31,28.51-8s7.85-18.75,8-28.51c.08-5.25.16-10.67,1.52-13.94,1.47-3.56,5.37-7.63,9.14-11.57C231.69,142.24,239.5,134.28,239.5,126S231.69,109.76,225.86,102.82Zm-53.32,3.51-50,72a8,8,0,0,1-12.49.93l-32-32a8,8,0,0,1,11.32-11.32l25.43,25.43,44.59-64.18a8,8,0,1,1,13.16,9.14Z" transform="translate(8,2)"/></svg>
+          <span>Студент верифицирован</span>
+          <svg width="14" height="8" viewBox="0 0 14 8" fill="none" aria-hidden="true"><path d="M1 1L7 7L13 1" stroke="rgba(2,3,39,0.4)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h1 class="profile-name" id="heroName">Анна Петрова</h1>
+        <div class="profile-rating">
+          <span class="profile-rating-item">
+            <img src="assets/Star.svg" alt="" width="20" height="20"/>
+            <span class="profile-rating-num">0</span>
+          </span>
+          <span class="profile-rating-item">
+            <img src="assets/ChatTeardropDots.svg" alt="" width="20" height="20"/>
+            <span class="profile-rating-num">0 отзывов</span>
+          </span>
+        </div>
+        <div class="profile-tags" id="heroTags"></div>
+        <div class="profile-hero-divider"></div>
+        <div class="profile-meta" id="heroMeta">
+          <span id="heroCity">Ханты-Мансийск</span>
+          <span class="profile-meta-dot" id="heroDot1">·</span>
+          <span id="heroUniversity">ЮГУ · 3 курс</span>
+          <span class="profile-meta-dot" id="heroDot2">·</span>
+          <span id="heroDirection">Лингвистика</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- О себе -->
+    <section class="cabinet-card" data-section="about">
+      <header class="cabinet-card-head">
+        <h2 class="cabinet-card-title">О&nbsp;себе</h2>
+        <button type="button" class="cabinet-edit" data-modal="about" aria-label="Редактировать">
+          <svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M227.32,73.37,182.63,28.69a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.32,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.69,147.32,64l24-24L216,84.69Z"/></svg>
+        </button>
+      </header>
+      <p class="cabinet-text">Учусь на третьем курсе лингвистики в&nbsp;ЮГУ, направление — перевод и&nbsp;переводоведение, английский язык. С&nbsp;первого курса работаю на&nbsp;форумах и&nbsp;конференциях в&nbsp;Ханты-Мансийске: переводила в&nbsp;режиме последовательного перевода, сопровождала делегации, выполняла хостес-функции на&nbsp;крупных событиях окружного уровня.</p>
+      <p class="cabinet-text">Беру задачи в&nbsp;трёх направлениях: письменный перевод текстов общей и&nbsp;туристической тематики, устный последовательный перевод на&nbsp;встречах и&nbsp;переговорах, репетиторство по&nbsp;английскому для школьников 5–9&nbsp;классов.</p>
+      <p class="cabinet-text">До отклика на задачу обычно прошу прислать пример текста или короткое описание мероприятия, чтобы оценить, подходит ли&nbsp;мой уровень и&nbsp;будет ли&nbsp;результат полезен. Если вижу, что не&nbsp;справлюсь — честно говорю, не&nbsp;берусь ради опыта</p>
+    </section>
+
+    <!-- Навыки -->
+    <section class="cabinet-card" data-section="skills">
+      <header class="cabinet-card-head">
+        <h2 class="cabinet-card-title">Навыки</h2>
+        <button type="button" class="cabinet-edit" data-modal="skills" aria-label="Редактировать">
+          <svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M227.32,73.37,182.63,28.69a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.32,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.69,147.32,64l24-24L216,84.69Z"/></svg>
+        </button>
+      </header>
+      <div class="cabinet-tags">
+        <span class="cabinet-tag">Английский B2</span>
+        <span class="cabinet-tag">Немецкий А2</span>
+        <span class="cabinet-tag">Перевод субтитров</span>
+        <span class="cabinet-tag">SmartCat</span>
+      </div>
+    </section>
+
+    <!-- Достижения -->
+    <section class="cabinet-card" data-section="achievements">
+      <header class="cabinet-card-head">
+        <h2 class="cabinet-card-title">Достижения</h2>
+        <button type="button" class="cabinet-edit" data-modal="achievements" aria-label="Добавить">
+          <svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg>
+        </button>
+      </header>
+      <ul class="cabinet-achievements">
+        <li><span>Стажировка в&nbsp;туристско-информационном центре Югры</span><span class="cabinet-year">2026</span></li>
+        <li><span>Курс «Синхронный перевод: вход в&nbsp;профессию», Лингваконтакт</span><span class="cabinet-year">2026</span></li>
+        <li><span>Волонтёр-переводчик на&nbsp;чемпионате мира по&nbsp;ММА</span><span class="cabinet-year">2025</span></li>
+        <li><span>Сертификат IELTS&nbsp;7.5</span><span class="cabinet-year">2024</span></li>
+        <li><span>II место на&nbsp;студенческой олимпиаде по&nbsp;устному переводу</span><span class="cabinet-year">2022</span></li>
+      </ul>
+      <a href="#more" class="cabinet-more">Все достижения
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </section>
+
+    <!-- Услуги и цены -->
+    <section class="cabinet-card" data-section="services">
+      <header class="cabinet-card-head">
+        <h2 class="cabinet-card-title">Услуги и&nbsp;цены</h2>
+        <button type="button" class="cabinet-edit" data-modal="services" aria-label="Редактировать">
+          <svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M227.32,73.37,182.63,28.69a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.32,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.69,147.32,64l24-24L216,84.69Z"/></svg>
+        </button>
+      </header>
+      <ul class="cabinet-services">
+        <li>
+          <span class="cabinet-service-name">Английский для школьников 5–9 классов</span>
+          <span class="cabinet-service-price">600&nbsp;₽ / 60&nbsp;мин</span>
+        </li>
+        <li>
+          <span class="cabinet-service-name">Английский для подготовки к&nbsp;ОГЭ</span>
+          <span class="cabinet-service-price">800&nbsp;₽ / 60&nbsp;мин</span>
+        </li>
+        <li>
+          <span class="cabinet-service-name">Подготовка к&nbsp;IELTS / TOEFL</span>
+          <span class="cabinet-service-price">1000&nbsp;₽ / 60&nbsp;мин</span>
+        </li>
+      </ul>
+      <a href="#more" class="cabinet-more">Все услуги
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </section>
+  </div>
+</main>
+
+<!-- ===== MODALS ===== -->
+<div class="modal" id="modal-profile" hidden role="dialog" aria-modal="true" aria-labelledby="modalProfileTitle">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-window">
+    <header class="modal-head">
+      <h2 class="modal-title" id="modalProfileTitle">Профиль</h2>
+      <button type="button" class="modal-close" data-close aria-label="Закрыть">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 2l10 10M12 2l-10 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </header>
+    <p class="modal-desc">Загрузите фото профиля — его видят заказчики.</p>
+    <div style="position:relative;">
+      <label class="photo-upload-area" id="profileUploadLabel" for="profileFile">
+        <div class="photo-upload-icon" id="profileUploadIcon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M11 4v14M4 11h14" stroke="rgba(2,3,39,0.4)" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="photo-upload-text" id="profileUploadText">
+          <strong>Перетащите фото или нажмите здесь</strong>
+          JPG, PNG — до 10 МБ
+        </div>
+        <input type="file" accept="image/*" id="profileFile" hidden/>
+      </label>
+      <button type="button" class="photo-upload-remove" id="profileRemoveBtn" hidden aria-label="Удалить фото" style="position:absolute;right:16px;top:50%;transform:translateY(-50%);">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <button type="button" class="modal-save">Сохранить</button>
+  </div>
+</div>
+
+<div class="modal" id="modal-about" hidden role="dialog" aria-modal="true" aria-labelledby="modalAboutTitle">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-window">
+    <header class="modal-head">
+      <h2 class="modal-title" id="modalAboutTitle">О&nbsp;себе</h2>
+      <button type="button" class="modal-close" data-close aria-label="Закрыть">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 2l10 10M12 2l-10 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </header>
+    <p class="modal-desc">Расскажите подробно о&nbsp;себе, чтобы клиенты узнали вас получше. Не&nbsp;добавляйте сюда ссылки, контакты и&nbsp;цены на&nbsp;услуги.</p>
+    <textarea class="modal-textarea" placeholder="Чем занимаетесь, какой опыт уже накопили, какие задачи вам интересны." rows="8"></textarea>
+    <button type="button" class="modal-save">Сохранить</button>
+  </div>
+</div>
+
+<div class="modal" id="modal-skills" hidden role="dialog" aria-modal="true" aria-labelledby="modalSkillsTitle">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-window">
+    <header class="modal-head">
+      <div>
+        <h2 class="modal-title" id="modalSkillsTitle">Навыки</h2>
+        <p class="modal-subtitle">До 6 навыков — выбирайте самые релевантные</p>
+      </div>
+      <button type="button" class="modal-close" data-close aria-label="Закрыть">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 2l10 10M12 2l-10 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </header>
+    <div class="modal-skills-input">
+      <input type="text" class="modal-skill-input" placeholder="Начните вводить навык…"/>
+      <svg class="modal-skill-caret" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <ul class="modal-skill-options"></ul>
+    <button type="button" class="modal-save">Сохранить</button>
+  </div>
+</div>
+
+<div class="modal" id="modal-achievements" hidden role="dialog" aria-modal="true" aria-labelledby="modalAchTitle">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-window">
+    <header class="modal-head">
+      <h2 class="modal-title" id="modalAchTitle">Достижения</h2>
+      <button type="button" class="modal-close" data-close aria-label="Закрыть">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 2l10 10M12 2l-10 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </header>
+    <p class="modal-desc">Грамоты, награды, конкурсы</p>
+    <textarea class="modal-textarea" placeholder="Название" rows="4"></textarea>
+    <input type="text" class="modal-input" placeholder="Год получения"/>
+    <h3 class="modal-subtitle">Фото документа</h3>
+    <label class="modal-upload" id="achievementUploadLabel">
+      <input type="file" accept="image/*" id="achievementFile" hidden/>
+      <svg class="modal-upload-plus" width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M11 4v14M4 11h14" stroke="rgba(2,3,39,0.4)" stroke-width="2" stroke-linecap="round"/></svg>
+    </label>
+    <label class="modal-toggle">
+      <span>Показывать фото клиентам</span>
+      <span class="modal-switch">
+        <input type="checkbox" checked/>
+        <span class="modal-switch-slider"></span>
+      </span>
+    </label>
+    <button type="button" class="modal-save">Сохранить</button>
+    <button type="button" class="modal-delete" id="achievementsDelete" hidden>
+      <svg width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"/></svg>
+      Удалить достижение
+    </button>
+  </div>
+</div>
+
+<div class="modal" id="modal-services" hidden role="dialog" aria-modal="true" aria-labelledby="modalServicesTitle">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-window">
+    <header class="modal-head">
+      <h2 class="modal-title" id="modalServicesTitle">Услуги и&nbsp;цены</h2>
+      <button type="button" class="modal-close" data-close aria-label="Закрыть">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 2l10 10M12 2l-10 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </header>
+    <p class="modal-desc">Опишите, какие услуги вы&nbsp;оказываете и&nbsp;по&nbsp;какой цене.</p>
+    <textarea class="modal-textarea" placeholder="Название услуги" rows="3"></textarea>
+    <input type="text" class="modal-input" placeholder="Цена / время"/>
+    <button type="button" class="modal-save">Сохранить</button>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script>
+(function(){
+  // ===== Default phone for header pill =====
+  (function(){
+    try {
+      var d = JSON.parse(localStorage.getItem('studradar_docs_v1') || '{}');
+      if (!d.phone) { d.phone = '+7 912 559 43 21'; localStorage.setItem('studradar_docs_v1', JSON.stringify(d)); }
+    } catch(e) {}
+  })();
+  // ===== Banners + hero visibility =====
+  (function(){
+    try {
+      var s = JSON.parse(localStorage.getItem('studradar_session') || '{}');
+      var certOk = !!s.certConfirmed;
+      try {
+        if (!certOk) {
+          var _d = JSON.parse(localStorage.getItem('studradar_docs_v1') || '{}');
+          if (_d.certConfirmed) certOk = true;
+        }
+      } catch(eDoc) {}
+      var heroCard = document.getElementById('heroCard');
+      var heroPlaceholder = document.getElementById('heroPlaceholder');
+      var certBanner = document.getElementById('certBanner');
+      if (certOk) {
+        if (heroCard) heroCard.style.display = '';
+        if (heroPlaceholder) heroPlaceholder.style.display = 'none';
+        if (certBanner) certBanner.style.display = 'none';
+      } else {
+        if (heroCard) heroCard.style.display = 'none';
+        if (heroPlaceholder) heroPlaceholder.style.display = '';
+        if (certBanner) certBanner.style.display = '';
+      }
+    // Self-employment banner: hide only when confirmed
+    (function(){
+      var selfOk = false;
+      try {
+        var _s2 = JSON.parse(localStorage.getItem('studradar_session') || '{}');
+        if (_s2.selfEmployed === 'confirmed') selfOk = true;
+        if (!selfOk) {
+          var _d2 = JSON.parse(localStorage.getItem('studradar_docs_v1') || '{}');
+          if (_d2.selfConfirmed) selfOk = true;
+        }
+      } catch(e2) {}
+      var selfBanner = document.getElementById('selfEmpBanner');
+      if (selfBanner) selfBanner.style.display = selfOk ? 'none' : '';
+    })();
+    } catch(e) {
+      // Fallback: show hero
+      var hc = document.getElementById('heroCard');
+      if (hc) hc.style.display = '';
+    }
+  })();
+
+
+  // ===== Helpers =====
+  function getSection(name) {
+    return document.querySelector('[data-section="' + name + '"]');
+  }
+  function closeModal(modal) {
+    modal.hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  // ===== Persistence (localStorage) =====
+  var STORAGE_KEY = 'studradar_profile_v1';
+  function saveState() {
+    try {
+      var state = {};
+      var nameEl = document.getElementById('heroName');
+      var photoEl = document.getElementById('heroPhoto');
+      var cityEl = document.getElementById('heroCity');
+      var univEl = document.getElementById('heroUniversity');
+      var dirEl  = document.getElementById('heroDirection');
+      state.profile = {
+        name:       nameEl  ? nameEl.textContent.trim()  : '',
+        photo:      (photoEl && photoEl.style.display !== 'none') ? photoEl.getAttribute('src') : '',
+        city:       cityEl  ? cityEl.textContent.trim()  : '',
+        university: univEl  ? univEl.textContent.trim()  : '',
+        direction:  dirEl   ? dirEl.textContent.trim()   : ''
+      };
+      var aboutSec = getSection('about');
+      state.about = aboutSec ? Array.from(aboutSec.querySelectorAll('.cabinet-text')).map(function(p){ return p.textContent.trim(); }) : [];
+      var skillsSec = getSection('skills');
+      state.skills = skillsSec ? Array.from(skillsSec.querySelectorAll('.cabinet-tag')).map(function(t){ return t.textContent.trim(); }) : [];
+      var achSec = getSection('achievements');
+      state.achievements = achSec ? Array.from(achSec.querySelectorAll('.cabinet-achievements li')).map(function(li){
+        var y = li.querySelector('.cabinet-year');
+        var n = li.querySelector('span:not(.cabinet-year):not(.cabinet-achievement-photo)');
+        return { year: y ? y.textContent.trim() : '', name: n ? n.textContent.trim() : '', photo: li.dataset.photo || '' };
+      }) : [];
+      var srvSec = getSection('services');
+      state.services = srvSec ? Array.from(srvSec.querySelectorAll('.cabinet-services li')).map(function(li){
+        var n = li.querySelector('.cabinet-service-name');
+        var p = li.querySelector('.cabinet-service-price');
+        return { name: n ? n.textContent.trim() : '', price: p ? p.textContent.trim() : '' };
+      }) : [];
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) { /* storage unavailable / quota — ignore */ }
+  }
+  function loadState() {
+    var raw;
+    try { raw = localStorage.getItem(STORAGE_KEY); } catch (e) {
+      StudRadar.syncHeaderPill(); return;
+    }
+    if (!raw) { StudRadar.syncHeaderPill(); return; }
+    var state;
+    try { state = JSON.parse(raw); } catch (e) {
+      StudRadar.syncHeaderPill(); return;
+    }
+
+    if (state.profile !== undefined) {
+      var nameEl = document.getElementById('heroName');
+      var photoEl = document.getElementById('heroPhoto');
+      var photoPh = document.getElementById('heroPhotoPh');
+      if (nameEl) nameEl.textContent = state.profile.name || 'Анна Петрова';
+      if (state.profile.photo) {
+        if (photoEl) { photoEl.setAttribute('src', state.profile.photo); photoEl.style.display = ''; }
+        if (photoPh) photoPh.style.display = 'none';
+      } else {
+        if (photoEl) photoEl.style.display = 'none';
+        if (photoPh) photoPh.style.display = '';
+      }
+      // City / university / direction
+      var cityEl = document.getElementById('heroCity');
+      var univEl = document.getElementById('heroUniversity');
+      var dirEl  = document.getElementById('heroDirection');
+      var dot1   = document.getElementById('heroDot1');
+      var dot2   = document.getElementById('heroDot2');
+      var metaEl = document.getElementById('heroMeta');
+      var city = state.profile.city || (cityEl ? cityEl.textContent : '');
+      var univ = state.profile.university || (univEl ? univEl.textContent : '');
+      var dir  = state.profile.direction  || (dirEl  ? dirEl.textContent  : '');
+      if (cityEl) cityEl.textContent = city;
+      if (univEl) univEl.textContent = univ;
+      if (dirEl)  dirEl.textContent  = dir;
+      if (dot1) dot1.style.display = (city && univ) ? '' : 'none';
+      if (dot2) dot2.style.display = ((city || univ) && dir) ? '' : 'none';
+      if (metaEl) metaEl.style.display = (city || univ || dir) ? '' : 'none';
+      StudRadar.syncHeaderPill('', state.profile.photo || '');
+    }
+    if (Array.isArray(state.about) && state.about.length > 0) {
+      var aboutSec = getSection('about');
+      if (aboutSec) {
+        aboutSec.querySelectorAll('.cabinet-text').forEach(function(p){ p.remove(); });
+        state.about.forEach(function(text){
+          var el = document.createElement('p');
+          el.className = 'cabinet-text';
+          el.textContent = text;
+          aboutSec.appendChild(el);
+        });
+      }
+    }
+    if (Array.isArray(state.skills) && state.skills.length > 0) {
+      var skillsSec = getSection('skills');
+      var tags = skillsSec && skillsSec.querySelector('.cabinet-tags');
+      if (tags) {
+        tags.innerHTML = '';
+        state.skills.forEach(function(s){
+          var span = document.createElement('span');
+          span.className = 'cabinet-tag';
+          span.textContent = s;
+          tags.appendChild(span);
+        });
+      }
+    }
+    if (Array.isArray(state.achievements) && state.achievements.length > 0) {
+      var achSec = getSection('achievements');
+      var ul = achSec && achSec.querySelector('.cabinet-achievements');
+      if (ul) {
+        ul.innerHTML = '';
+        state.achievements.forEach(function(a){
+          var li = document.createElement('li');
+          var nt = document.createElement('span');
+          nt.textContent = a.name || '';
+          var ny = document.createElement('span');
+          ny.className = 'cabinet-year';
+          ny.textContent = a.year || '—';
+          li.appendChild(nt);
+          li.appendChild(ny);
+          li.dataset.photo = a.photo || '';
+          applyAchievementPhoto(li, a.photo || '');
+          ul.appendChild(li);
+          bindAchievementItem(li);
+        });
+        updateAchievementsMore();
+      }
+    }
+    if (Array.isArray(state.services) && state.services.length > 0) {
+      var srvSec = getSection('services');
+      var sul = srvSec && srvSec.querySelector('.cabinet-services');
+      if (sul) {
+        sul.innerHTML = '';
+        state.services.forEach(function(s){
+          var li = document.createElement('li');
+          var n = document.createElement('span'); n.className = 'cabinet-service-name'; n.textContent = s.name || '';
+          var p = document.createElement('span'); p.className = 'cabinet-service-price'; p.textContent = s.price || '';
+          li.appendChild(n); li.appendChild(p);
+          sul.appendChild(li);
+        });
+        var srvMore = srvSec && srvSec.querySelector('.cabinet-more');
+        if (srvMore) srvMore.hidden = state.services.length < 4;
+      }
+    }
+  }
+
+  // Toggle active state on save button based on whether modal has content
+  function refreshSave(modal) {
+    var save = modal.querySelector('.modal-save');
+    if (!save) return;
+    var hasInput = false;
+    modal.querySelectorAll('textarea, input[type="text"]').forEach(function(el){
+      if (el.value && el.value.trim()) hasInput = true;
+    });
+    if (modal.id === 'modal-skills' && modal.querySelectorAll('.modal-skill-chip').length > 0) {
+      hasInput = true;
+    }
+    if (modal.id === 'modal-profile') {
+      var lbl = document.getElementById('profileUploadLabel');
+      if (lbl && lbl.classList.contains('has-file')) hasInput = true;
+    }
+    save.classList.toggle('is-active', hasInput);
+  }
+
+  // ===== Pre-fill modals from profile state =====
+  function fillProfile() {
+    var photoEl = document.getElementById('heroPhoto');
+    var hasPhoto = photoEl && photoEl.style.display !== 'none';
+    setProfilePhoto(hasPhoto ? photoEl.getAttribute('src') : '');
+  }
+
+  function setProfilePhoto(src) {
+    var label = document.getElementById('profileUploadLabel');
+    var icon  = document.getElementById('profileUploadIcon');
+    var text  = document.getElementById('profileUploadText');
+    var removeBtn = document.getElementById('profileRemoveBtn');
+    if (!label) return;
+    if (!src) {
+      label.classList.remove('has-file');
+      label.dataset.photo = '';
+      if (icon) icon.innerHTML = '<svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M11 4v14M4 11h14" stroke="rgba(2,3,39,0.4)" stroke-width="2" stroke-linecap="round"/></svg>';
+      if (text) text.innerHTML = '<strong>Перетащите фото или нажмите здесь</strong>JPG, PNG — до 10 МБ';
+      if (removeBtn) removeBtn.hidden = true;
+      return;
+    }
+    label.classList.add('has-file');
+    label.dataset.photo = src;
+    if (icon) {
+      icon.style.backgroundImage = 'url("' + src + '")';
+      icon.style.backgroundSize = 'cover';
+      icon.style.backgroundPosition = 'center';
+      icon.style.borderRadius = '12px';
+      icon.innerHTML = '';
+    }
+    if (text) text.innerHTML = '<strong>Фото загружено</strong>Нажмите ×, чтобы удалить';
+    if (removeBtn) {
+      removeBtn.hidden = false;
+      removeBtn.onclick = function(e) {
+        e.preventDefault(); e.stopPropagation();
+        setProfilePhoto('');
+        var fi = document.getElementById('profileFile');
+        if (fi) fi.value = '';
+        applyHeroPhoto('');
+        var nameEl = document.getElementById('heroName');
+        StudRadar.syncHeaderPill('', '');
+        saveState();
+        closeModal(document.getElementById('modal-profile'));
+      };
+    }
+  }
+
+  // Profile photo file input
+  var profileFile = document.getElementById('profileFile');
+  if (profileFile) {
+    profileFile.addEventListener('change', function(e){
+      var file = e.target.files && e.target.files[0];
+      if (!file) return;
+      if (!/^image\//.test(file.type)) {
+        alert('Можно загружать только изображения (JPG, PNG)');
+        profileFile.value = '';
+        return;
+      }
+      if (file.size > 10 * 1024 * 1024) {
+        alert('Файл слишком большой — максимум 10 МБ');
+        profileFile.value = '';
+        return;
+      }
+      var reader = new FileReader();
+      reader.onload = function(ev){
+        setProfilePhoto(ev.target.result);
+        refreshSave(document.getElementById('modal-profile'));
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function fillAbout() {
+    var section = getSection('about');
+    var paragraphs = Array.from(section.querySelectorAll('.cabinet-text')).map(function(p){
+      return p.textContent.trim().replace(/ /g, ' ');
+    });
+    var ta = document.querySelector('#modal-about .modal-textarea');
+    if (ta) ta.value = paragraphs.join('\n\n');
+  }
+
+  function fillSkills() {
+    var section = getSection('skills');
+    var current = Array.from(section.querySelectorAll('.cabinet-tag')).map(function(t){ return t.textContent.trim(); });
+    var inputWrap = document.querySelector('#modal-skills .modal-skills-input');
+    if (!inputWrap) return;
+    // Remove existing chips
+    inputWrap.querySelectorAll('.modal-skill-chip').forEach(function(c){ c.remove(); });
+    var input = inputWrap.querySelector('.modal-skill-input');
+    if (input) input.value = '';
+    // Insert chips before input
+    current.forEach(function(text){
+      var chip = createSkillChip(text);
+      inputWrap.insertBefore(chip, input);
+    });
+  }
+
+  function createSkillChip(text) {
+    var chip = document.createElement('span');
+    chip.className = 'modal-skill-chip';
+    chip.appendChild(document.createTextNode(text + ' '));
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.setAttribute('aria-label', 'Удалить');
+    btn.innerHTML = '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2l6 6M8 2l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+    btn.addEventListener('click', function(){
+      chip.remove();
+      var modal = document.getElementById('modal-skills');
+      refreshSave(modal);
+    });
+    chip.appendChild(btn);
+    return chip;
+  }
+
+  // Track which achievement <li> is being edited (null = "add new" mode)
+  var editingAchievement = null;
+
+  // ===== Modal open / close (delegated to handle dynamically shown buttons) =====
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('[data-modal]');
+    if (!btn || btn.closest('.modal')) return;
+    var id = btn.getAttribute('data-modal');
+    var modal = document.getElementById('modal-' + id);
+    if (!modal) return;
+    // Pre-fill
+    if (id === 'profile') fillProfile();
+    if (id === 'about') fillAbout();
+    if (id === 'skills') { fillSkills(); renderSkillOptions(''); }
+    if (id === 'achievements') {
+      editingAchievement = null;
+      var ta = modal.querySelector('.modal-textarea'); if (ta) ta.value = '';
+      var yr = modal.querySelector('.modal-input'); if (yr) yr.value = '';
+      var del = modal.querySelector('#achievementsDelete'); if (del) del.hidden = true;
+      clearAchievementPhotoUI();
+      if (achFileInput) achFileInput.value = '';
+      if (achLabel) achLabel.dataset.photo = '';
+    }
+    if (id === 'services') {
+      var ta2 = modal.querySelector('.modal-textarea'); if (ta2) ta2.value = '';
+      var pr = modal.querySelector('.modal-input'); if (pr) pr.value = '';
+    }
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    refreshSave(modal);
+  });
+
+  // Hide "Все достижения" when there are fewer than 4 items
+  function updateAchievementsMore() {
+    var section = getSection('achievements');
+    if (!section) return;
+    var count = section.querySelectorAll('.cabinet-achievements li').length;
+    var more = section.querySelector('.cabinet-more');
+    if (more) more.hidden = count < 4;
+  }
+  updateAchievementsMore();
+
+  // Click on existing achievement <li> → open modal in edit mode
+  function bindAchievementItem(li) {
+    li.addEventListener('click', function(){
+      var modal = document.getElementById('modal-achievements');
+      var year = li.querySelector('.cabinet-year');
+      var nameSpan = li.querySelector('span:not(.cabinet-year):not(.cabinet-achievement-photo)');
+      modal.querySelector('.modal-textarea').value = nameSpan ? nameSpan.textContent.trim() : '';
+      modal.querySelector('.modal-input').value = year ? year.textContent.trim() : '';
+      editingAchievement = li;
+      var del = modal.querySelector('#achievementsDelete'); if (del) del.hidden = false;
+      // Restore previously saved photo (if any)
+      clearAchievementPhotoUI();
+      if (achFileInput) achFileInput.value = '';
+      var savedPhoto = li.dataset.photo || '';
+      if (achLabel) achLabel.dataset.photo = savedPhoto;
+      if (savedPhoto) setAchievementPhoto(savedPhoto);
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+      refreshSave(modal);
+    });
+  }
+  document.querySelectorAll('[data-section="achievements"] .cabinet-achievements li').forEach(bindAchievementItem);
+
+  // ===== Achievement photo upload =====
+  var achLabel = document.getElementById('achievementUploadLabel');
+  var achFileInput = document.getElementById('achievementFile');
+
+  function setAchievementPhoto(dataUrl) {
+    if (!achLabel) return;
+    clearAchievementPhotoUI();
+    if (!dataUrl) return;
+    achLabel.classList.add('has-file');
+    var preview = document.createElement('div');
+    preview.className = 'modal-upload-preview';
+    preview.style.backgroundImage = 'url("' + dataUrl + '")';
+    achLabel.appendChild(preview);
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'modal-upload-remove';
+    btn.setAttribute('aria-label', 'Удалить фото');
+    btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      clearAchievementPhotoUI();
+      if (achFileInput) achFileInput.value = '';
+      achLabel.dataset.photo = '';
+    });
+    achLabel.appendChild(btn);
+    achLabel.dataset.photo = dataUrl;
+  }
+  function clearAchievementPhotoUI() {
+    if (!achLabel) return;
+    achLabel.classList.remove('has-file');
+    var p = achLabel.querySelector('.modal-upload-preview');
+    if (p) p.remove();
+    var r = achLabel.querySelector('.modal-upload-remove');
+    if (r) r.remove();
+  }
+
+  if (achFileInput) {
+    achFileInput.addEventListener('change', function(e){
+      var file = e.target.files && e.target.files[0];
+      if (!file) return;
+      if (!/^image\//.test(file.type)) {
+        alert('Можно загружать только изображения (JPG, PNG)');
+        achFileInput.value = '';
+        return;
+      }
+      if (file.size > 10 * 1024 * 1024) {
+        alert('Файл слишком большой — максимум 10 МБ');
+        achFileInput.value = '';
+        return;
+      }
+      var reader = new FileReader();
+      reader.onload = function(ev){
+        setAchievementPhoto(ev.target.result);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Delete button
+  var achDelete = document.getElementById('achievementsDelete');
+  if (achDelete) {
+    achDelete.addEventListener('click', function(){
+      if (editingAchievement && editingAchievement.parentNode) {
+        editingAchievement.remove();
+      }
+      editingAchievement = null;
+      updateAchievementsMore();
+      saveState();
+      closeModal(document.getElementById('modal-achievements'));
+    });
+  }
+
+  document.querySelectorAll('[data-close]').forEach(function(el){
+    el.addEventListener('click', function(){
+      var modal = el.closest('.modal');
+      if (modal) closeModal(modal);
+    });
+  });
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal:not([hidden])').forEach(function(m){ closeModal(m); });
+    }
+  });
+
+  // ===== Watch inputs to highlight save button =====
+  document.querySelectorAll('.modal').forEach(function(modal){
+    modal.addEventListener('input', function(){ refreshSave(modal); });
+  });
+
+  // ===== Skills suggestions list (~50 across spheres) =====
+  var MAX_SKILLS = 6;
+  var SKILLS = [
+    // Кириллица А–Я
+    'Академическое письмо','Адаптация сотрудников',
+    'Английский B1','Английский B2','Английский C1','Английский C2',
+    'Арабский A2',
+    'Бизнес-анализ','Брендинг','Бухгалтерия',
+    'Ведение мероприятий','Видеомонтаж','Визуализация данных','Волонтёрство',
+    'Декор мероприятий','Дикторское чтение',
+    'Иллюстрация','Испанский A2','Испанский B1','Испанский B2','Итальянский A2','Итальянский B1',
+    'Китайский HSK 3','Китайский HSK 4',
+    'Контекстная реклама','Контент-маркетинг','Координация мероприятий','Копирайтинг','Корейский TOPIK 2','Корректура',
+    'Локализация',
+    'Модерирование',
+    'Написание статей','Написание сценариев','Научные исследования',
+    'Немецкий A2','Немецкий B1','Немецкий B2',
+    'Обработка фото','Образовательный контент','Организация выставок','Организация конференций',
+    'Перевод субтитров','Письменный перевод','Подкасты','Португальский B1',
+    'Преподавание','Проведение интервью','Продуктовое мышление','Прототипирование',
+    'Разработка курсов','Регистрация участников','Редактура','Рекрутинг','Реферирование',
+    'Синхронный перевод','Составление отчётов','Сторителлинг','Сценарии для Reels','Съёмка видео',
+    'Тайм-менеджмент','Таргетированная реклама','Тексты для соцсетей','Техническая поддержка мероприятий',
+    'Тимбилдинг','Типографика','Транскрипция аудио','Тьюторство',
+    'Управление задачами','Управление проектами','Устный перевод',
+    'Финансовый анализ','Фотография','Французский A2','Французский B1','Французский B2',
+    'Хостес',
+    'Яндекс.Директ','Яндекс.Метрика','Японский N3','Японский N4',
+    // Латиница и цифры
+    '1C-Bitrix','1С',
+    'A/B-тестирование','After Effects','Agile / Scrum','Asana',
+    'Blender',
+    'Canva','CapCut','Cinema 4D','ClickUp','Confluence','CorelDRAW',
+    'DaVinci Resolve','Django','Docker',
+    'Email-маркетинг','Event-менеджмент','Excel',
+    'FastAPI','Figma','Flutter',
+    'Git','Google Ads','Google Analytics','Google Sheets','Google Workspace',
+    'HR-аналитика','HTML/CSS',
+    'Illustrator','InDesign','Influence-маркетинг',
+    'JavaScript','Jira',
+    'Kotlin',
+    'Linux',
+    'Memsource','Microsoft 365','Miro','MongoDB',
+    'Node.js','Notion',
+    'Photoshop','PostgreSQL','Power BI','PowerPoint','Premiere Pro','Python','Python (pandas)',
+    'R','React','REST API',
+    'SEO','Slack','SmartCat','SMM','SQL','Swift',
+    'Tableau','Tilda','Trados','Trello','TypeScript',
+    'UI-дизайн','UX-исследование',
+    'Vue.js',
+    'WordPress',
+    'Zoom'
+  ];
+
+  function getSelectedSkillTexts(modal) {
+    return Array.from(modal.querySelectorAll('.modal-skill-chip')).map(function(chip){
+      var t = ''; chip.childNodes.forEach(function(n){ if (n.nodeType === 3) t += n.textContent; });
+      return t.trim();
+    });
+  }
+
+  function renderSkillOptions(query) {
+    var modal = document.getElementById('modal-skills');
+    if (!modal) return;
+    var ul = modal.querySelector('.modal-skill-options');
+    if (!ul) return;
+    var selected = getSelectedSkillTexts(modal);
+    var q = (query || '').toLowerCase().trim();
+    var filtered = SKILLS.filter(function(s){
+      return !q || s.toLowerCase().indexOf(q) !== -1;
+    });
+    ul.innerHTML = '';
+    if (filtered.length === 0) {
+      var empty = document.createElement('li');
+      empty.style.cursor = 'default';
+      empty.style.color = 'rgba(2,3,39,0.4)';
+      empty.textContent = 'Ничего не найдено';
+      ul.appendChild(empty);
+      return;
+    }
+    filtered.forEach(function(text){
+      var li = document.createElement('li');
+      var isSelected = selected.indexOf(text) !== -1;
+      li.appendChild(document.createTextNode(text));
+      if (isSelected) {
+        li.classList.add('is-selected');
+        var ns = 'http://www.w3.org/2000/svg';
+        var svg = document.createElementNS(ns, 'svg');
+        svg.setAttribute('width', '14'); svg.setAttribute('height', '14');
+        svg.setAttribute('viewBox', '0 0 14 14'); svg.setAttribute('fill', 'none');
+        var path = document.createElementNS(ns, 'path');
+        path.setAttribute('d', 'M3 7l3 3 5-6');
+        path.setAttribute('stroke', '#1153B5');
+        path.setAttribute('stroke-width', '2');
+        path.setAttribute('stroke-linecap', 'round');
+        path.setAttribute('stroke-linejoin', 'round');
+        svg.appendChild(path);
+        li.appendChild(svg);
+      }
+      var atLimit = !isSelected && getSelectedSkillTexts(modal).length >= MAX_SKILLS;
+      if (atLimit) {
+        li.classList.add('is-disabled');
+      }
+      li.addEventListener('click', function(){
+        var input = modal.querySelector('.modal-skill-input');
+        if (isSelected) {
+          // Toggle off — remove the chip
+          Array.from(modal.querySelectorAll('.modal-skill-chip')).forEach(function(chip){
+            var t = ''; chip.childNodes.forEach(function(n){ if (n.nodeType === 3) t += n.textContent; });
+            if (t.trim() === text) chip.remove();
+          });
+        } else {
+          // Block adding past the limit
+          if (getSelectedSkillTexts(modal).length >= MAX_SKILLS) return;
+          var wrap = input.parentElement;
+          wrap.insertBefore(createSkillChip(text), input);
+        }
+        if (input) input.value = '';
+        renderSkillOptions('');
+        refreshSave(modal);
+      });
+      ul.appendChild(li);
+    });
+  }
+
+  // Skills: input filters suggestions; Enter / comma adds a free-form chip
+  var skillsInput = document.querySelector('#modal-skills .modal-skill-input');
+  if (skillsInput) {
+    skillsInput.addEventListener('input', function(){
+      renderSkillOptions(skillsInput.value);
+    });
+    skillsInput.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ',') {
+        e.preventDefault();
+        var v = skillsInput.value.trim().replace(/,$/, '');
+        if (!v) return;
+        var modal = document.getElementById('modal-skills');
+        var selected = getSelectedSkillTexts(modal);
+        if (selected.indexOf(v) === -1 && selected.length < MAX_SKILLS) {
+          var wrap = skillsInput.parentElement;
+          wrap.insertBefore(createSkillChip(v), skillsInput);
+        }
+        skillsInput.value = '';
+        renderSkillOptions('');
+        refreshSave(modal);
+      }
+    });
+  }
+
+  // ===== Save handlers =====
+  function saveAbout() {
+    var modal = document.getElementById('modal-about');
+    var save = modal.querySelector('.modal-save');
+    if (!save.classList.contains('is-active')) return;
+    var text = modal.querySelector('.modal-textarea').value.trim();
+    var section = getSection('about');
+    section.querySelectorAll('.cabinet-text').forEach(function(p){ p.remove(); });
+    var parts = text.split(/\n\n+/).filter(function(p){ return p.trim(); });
+    if (parts.length === 0 && text) parts = [text];
+    parts.forEach(function(p){
+      var el = document.createElement('p');
+      el.className = 'cabinet-text';
+      el.textContent = p.trim();
+      section.appendChild(el);
+    });
+    saveState();
+    closeModal(modal);
+  }
+
+  function saveSkills() {
+    var modal = document.getElementById('modal-skills');
+    var save = modal.querySelector('.modal-save');
+    if (!save.classList.contains('is-active')) return;
+    var section = getSection('skills');
+    var tags = section.querySelector('.cabinet-tags');
+    tags.innerHTML = '';
+    modal.querySelectorAll('.modal-skill-chip').forEach(function(chip){
+      var text = '';
+      chip.childNodes.forEach(function(n){ if (n.nodeType === 3) text += n.textContent; });
+      text = text.trim();
+      if (!text) return;
+      var span = document.createElement('span');
+      span.className = 'cabinet-tag';
+      span.textContent = text;
+      tags.appendChild(span);
+    });
+    saveState();
+    closeModal(modal);
+  }
+
+  function saveAchievement() {
+    var modal = document.getElementById('modal-achievements');
+    var save = modal.querySelector('.modal-save');
+    if (!save.classList.contains('is-active')) return;
+    var name = modal.querySelector('.modal-textarea').value.trim();
+    var year = modal.querySelector('.modal-input').value.trim();
+    if (!name) return;
+    var section = getSection('achievements');
+    var ul = section.querySelector('.cabinet-achievements');
+    var photo = (achLabel && achLabel.dataset.photo) || '';
+
+    if (editingAchievement) {
+      // Update existing item in place
+      var ySpan = editingAchievement.querySelector('.cabinet-year');
+      var tSpan = editingAchievement.querySelector('span:not(.cabinet-year):not(.cabinet-achievement-photo)');
+      if (ySpan) ySpan.textContent = year || '—';
+      if (tSpan) tSpan.textContent = name;
+      editingAchievement.dataset.photo = photo;
+      applyAchievementPhoto(editingAchievement, photo);
+    } else {
+      // Add new item at the top
+      var li = document.createElement('li');
+      var nt = document.createElement('span');
+      nt.textContent = name;
+      var ny = document.createElement('span');
+      ny.className = 'cabinet-year';
+      ny.textContent = year || '—';
+      li.appendChild(nt);
+      li.appendChild(ny);
+      li.dataset.photo = photo;
+      applyAchievementPhoto(li, photo);
+      ul.insertBefore(li, ul.firstChild);
+      bindAchievementItem(li);
+    }
+    editingAchievement = null;
+    updateAchievementsMore();
+    saveState();
+    closeModal(modal);
+  }
+
+  function applyAchievementPhoto(li, photo) {
+    var existing = li.querySelector('.cabinet-achievement-photo');
+    if (existing) existing.remove();
+    if (!photo) {
+      li.classList.remove('has-photo');
+      return;
+    }
+    var thumb = document.createElement('span');
+    thumb.className = 'cabinet-achievement-photo';
+    thumb.style.backgroundImage = 'url("' + photo + '")';
+    li.insertBefore(thumb, li.firstChild);
+    li.classList.add('has-photo');
+  }
+
+  function saveService() {
+    var modal = document.getElementById('modal-services');
+    var save = modal.querySelector('.modal-save');
+    if (!save.classList.contains('is-active')) return;
+    var name = modal.querySelector('.modal-textarea').value.trim();
+    var price = modal.querySelector('.modal-input').value.trim();
+    if (!name) return;
+    var section = getSection('services');
+    var ul = section.querySelector('.cabinet-services');
+    var li = document.createElement('li');
+    var n = document.createElement('span'); n.className = 'cabinet-service-name'; n.textContent = name;
+    var p = document.createElement('span'); p.className = 'cabinet-service-price'; p.textContent = price || '—';
+    li.appendChild(n); li.appendChild(p);
+    ul.appendChild(li);
+    saveState();
+    closeModal(modal);
+  }
+
+  function saveProfile() {
+    var modal = document.getElementById('modal-profile');
+    var save = modal.querySelector('.modal-save');
+    if (!save.classList.contains('is-active')) return;
+    var photoVal = ((document.getElementById('profileUploadLabel') || {}).dataset || {}).photo || '';
+    applyHeroPhoto(photoVal);
+    var nameEl = document.getElementById('heroName');
+    StudRadar.syncHeaderPill('', photoVal);
+    saveState();
+    closeModal(modal);
+  }
+
+  function applyHeroPhoto(src) {
+    var photoEl = document.getElementById('heroPhoto');
+    var photoPh = document.getElementById('heroPhotoPh');
+    if (src) {
+      if (photoEl) { photoEl.setAttribute('src', src); photoEl.style.display = ''; }
+      if (photoPh) photoPh.style.display = 'none';
+    } else {
+      if (photoEl) { photoEl.setAttribute('src', ''); photoEl.style.display = 'none'; }
+      if (photoPh) photoPh.style.display = '';
+    }
+  }
+
+  var savers = {
+    'modal-profile':      saveProfile,
+    'modal-about':        saveAbout,
+    'modal-skills':       saveSkills,
+    'modal-achievements': saveAchievement,
+    'modal-services':     saveService
+  };
+  document.querySelectorAll('.modal-save').forEach(function(btn){
+    var modal = btn.closest('.modal');
+    if (!modal) return;
+    var fn = savers[modal.id];
+    if (fn) btn.addEventListener('click', fn);
+  });
+
+  // Fix corrupted localStorage profile data (written when files had encoding issue)
+  (function() {
+    var raw; try { raw = localStorage.getItem(STORAGE_KEY); } catch(e) { return; }
+    if (!raw || raw.indexOf('�') === -1) return;
+    var state; try { state = JSON.parse(raw); } catch(e) { return; }
+    if (!state.profile) return;
+    var bad = function(s) { return s && s.indexOf('�') !== -1; };
+    if (bad(state.profile.name))      state.profile.name      = 'Мария Иванова';
+    if (bad(state.profile.city))      state.profile.city      = 'Ханты-Мансийск';
+    if (bad(state.profile.university)) state.profile.university = 'ЮГУ';
+    if (bad(state.profile.direction)) state.profile.direction  = 'Лингвистика, 2 курс';
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+  })();
+
+  // Restore profile state from previous session
+  loadState();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1592 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Разместить задачу — СтудРадар</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&family=Manrope:wght@400;500;600;700;800&family=Tektur:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script src="mobile-drawer.js" defer></script>
+  <script src="city-picker.js" defer></script>
+  <style>
+    html, body { background: #fff; }
+    body { min-height: 100vh; }
+
+    .flow-wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 48px 32px 80px;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 72px;
+      align-items: start;
+    }
+
+    /* ===== Left: form column ===== */
+    .flow-main { min-width: 0; }
+
+    .flow-progress-label {
+      font-family: 'Manrope', sans-serif;
+      font-size: 15px;
+      color: rgba(2,3,39,0.55);
+      margin-bottom: 12px;
+    }
+    .flow-progress-label.is-complete { color: #020327; }
+    .flow-progress-track {
+      height: 6px;
+      background: var(--line);
+      border-radius: 100px;
+      overflow: hidden;
+      margin-bottom: 56px;
+    }
+    .flow-progress-fill {
+      height: 100%;
+      background: var(--orange);
+      border-radius: 100px;
+      width: 0;
+      transition: width .4s cubic-bezier(.4,0,.2,1);
+    }
+
+    .flow-q {
+      font-family: 'Tektur', sans-serif;
+      font-weight: 700;
+      font-size: 44px;
+      line-height: 1.05;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin: 0 0 36px;
+      letter-spacing: -0.01em;
+    }
+    .flow-sub {
+      font-family: 'Manrope', sans-serif;
+      font-size: 19px;
+      line-height: 1.5;
+      color: rgba(2,3,39,0.6);
+      margin: 0 0 36px;
+      max-width: 560px;
+    }
+    .flow-body { max-width: 620px; }
+
+    .flow-label {
+      font-family: 'Manrope', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: #020327;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .flow-input {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1.5px solid transparent;
+      background: hsla(238, 90%, 8%, 0.06);
+      border-radius: 12px;
+      height: 78px;
+      padding: 12px 16px 12px 26px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 18px;
+      font-weight: 500;
+      color: #020327;
+      outline: none;
+      transition: border-color .18s;
+    }
+    .flow-input::placeholder { color: rgba(2,3,39,0.40); }
+    .flow-input:focus { border-color: #020327; }
+    textarea.flow-input { height: auto; min-height: 150px; padding: 18px 16px 18px 26px; line-height: 1.5; resize: vertical; }
+
+    .flow-inline-link {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-top: 22px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 17px;
+    }
+    .flow-inline-link .k { color: rgba(2,3,39,0.55); }
+    .flow-inline-link button {
+      font-family: 'Manrope', sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--ink);
+      border: 0;
+      background: none;
+      padding: 0 0 2px;
+      cursor: pointer;
+      border-bottom: 1.5px dashed rgba(2,3,39,0.35);
+    }
+    .flow-inline-link button:hover { color: var(--orange); border-color: var(--orange); }
+    .flow-subcat { position: relative; display: block; margin-top: 10px; }
+    .flow-subcat-trigger {
+      width: 100%;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: hsla(238, 90%, 8%, 0.06);
+      border: 1.5px solid transparent;
+      border-radius: 12px;
+      height: 78px;
+      padding: 12px 18px 12px 26px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 18px;
+      font-weight: 500;
+      color: #020327;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color .18s;
+    }
+    .flow-subcat-trigger:hover { border-color: rgba(2,3,39,0.22); }
+    .flow-subcat.is-open .flow-subcat-trigger { border-color: #020327; }
+    .flow-subcat-caret { flex: none; color: rgba(2,3,39,0.5); transition: transform .18s; }
+    .flow-subcat.is-open .flow-subcat-caret { transform: rotate(180deg); }
+    .flow-subcat-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      background: #fff;
+      border: 1px solid rgba(2,3,39,0.10);
+      border-radius: 14px;
+      box-shadow: 0 14px 36px rgba(2,3,39,0.16);
+      padding: 6px;
+      display: none;
+      z-index: 40;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .flow-subcat-menu.is-open { display: block; }
+    .flow-subcat-menu .flow-subcat-opt {
+      display: block;
+      width: 100%;
+      text-align: left;
+      font-family: 'Manrope', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--ink);
+      background: none;
+      border: 0;
+      border-radius: 9px;
+      padding: 13px 14px;
+      cursor: pointer;
+    }
+    .flow-subcat-menu .flow-subcat-opt:hover { background: hsla(238,90%,8%,0.06); color: var(--ink); }
+    .flow-subcat-menu .flow-subcat-opt.is-active { color: var(--orange); font-weight: 600; }
+    .flow-skills { margin-top: 22px; }
+    .flow-skills-wrap { position: relative; margin-top: 10px; }
+    .flow-skills-box {
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+      background: hsla(238, 90%, 8%, 0.06);
+      border: 1.5px solid transparent;
+      border-radius: 12px;
+      padding: 12px 14px 12px 24px;
+      min-height: 56px;
+      cursor: text;
+      transition: border-color .18s;
+    }
+    .flow-skills-box:focus-within { border-color: #020327; }
+    .flow-skill-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #fff;
+      border: 1px solid rgba(2,3,39,0.12);
+      border-radius: 999px;
+      padding: 6px 8px 6px 13px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 14px; font-weight: 600;
+      color: var(--ink);
+    }
+    .flow-skill-chip button {
+      border: 0; background: none; cursor: pointer;
+      width: 18px; height: 18px; border-radius: 50%;
+      display: grid; place-items: center;
+      color: rgba(2,3,39,0.5); font-size: 15px; line-height: 1;
+    }
+    .flow-skill-chip button:hover { background: rgba(2,3,39,0.08); color: var(--ink); }
+    .flow-skill-input {
+      flex: 1; min-width: 140px;
+      border: 0; background: none; outline: none;
+      font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 500;
+      color: #020327; padding: 6px 2px;
+    }
+    .flow-skill-input::placeholder { color: rgba(2,3,39,0.40); }
+    .flow-skill-limit {
+      font-family: 'Manrope', sans-serif;
+      font-size: 14px; font-weight: 500;
+      color: rgba(2,3,39,0.45);
+      padding: 6px 2px;
+    }
+    .flow-skill-menu {
+      position: absolute; top: calc(100% + 8px); left: 0; right: 0;
+      background: #fff; border: 1px solid rgba(2,3,39,0.10);
+      border-radius: 14px; box-shadow: 0 14px 36px rgba(2,3,39,0.16);
+      padding: 6px; z-index: 40; display: none;
+      max-height: 248px; overflow-y: auto;
+    }
+    .flow-skill-menu.is-open { display: block; }
+    .flow-skill-opt {
+      display: block; width: 100%; text-align: left;
+      font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 500;
+      color: var(--ink); background: none; border: 0; border-radius: 9px;
+      padding: 10px 12px; cursor: pointer;
+    }
+    .flow-skill-opt:hover, .flow-skill-opt.is-active { background: hsla(238,90%,8%,0.06); }
+    .flow-skill-opt .add { color: rgba(2,3,39,0.45); font-weight: 600; }
+
+    /* Radio options */
+    .flow-options { display: flex; flex-direction: column; gap: 22px; }
+    .flow-radio {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 20px;
+      color: var(--ink);
+      cursor: pointer;
+      user-select: none;
+    }
+    .flow-radio .dot {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      border: 2px solid #C7C7CE;
+      flex: none;
+      position: relative;
+      transition: border-color .15s;
+    }
+    .flow-radio:hover .dot { border-color: var(--orange); }
+    .flow-radio.is-active .dot { border-color: var(--orange); }
+    .flow-radio.is-active .dot::after {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      border-radius: 50%;
+      background: var(--orange);
+    }
+
+    /* Select / date / time */
+    .flow-select-wrap { position: relative; margin-bottom: 16px; }
+    .flow-select {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #D7D7DD;
+      background: #fff;
+      border-radius: 14px;
+      padding: 20px 50px 20px 32px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 19px;
+      color: var(--ink);
+      outline: none;
+      appearance: none;
+      cursor: pointer;
+    }
+    .flow-select:focus { border-color: var(--orange); }
+    .flow-select-wrap::after {
+      content: "";
+      position: absolute;
+      right: 22px; top: 50%;
+      width: 11px; height: 11px;
+      border-right: 2px solid rgba(2,3,39,0.45);
+      border-bottom: 2px solid rgba(2,3,39,0.45);
+      transform: translateY(-70%) rotate(45deg);
+      pointer-events: none;
+    }
+
+    .flow-datetime {
+      display: grid;
+      grid-template-columns: 1fr 180px;
+      border: 1px solid var(--orange);
+      border-radius: 14px;
+      overflow: visible;
+      box-shadow: 0 0 0 3px rgba(221,84,68,0.13);
+      position: relative;
+    }
+    .flow-dt-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 22px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 19px;
+      color: var(--ink);
+      cursor: pointer;
+      background: #fff;
+    }
+    .flow-dt-cell:first-child { border-radius: 14px 0 0 14px; }
+    .flow-dt-cell:last-child { border-radius: 0 14px 14px 0; border-left: 1px solid #ECECEF; }
+    .flow-dt-cell svg { flex: none; color: rgba(2,3,39,0.4); }
+    .flow-dt-cell .ph { color: rgba(2,3,39,0.32); }
+    .flow-dt-cell input {
+      border: 0; outline: 0; background: none;
+      font-family: 'Manrope', sans-serif;
+      font-size: 19px; color: var(--ink); width: 100%;
+    }
+    .flow-dt-cell input::placeholder { color: rgba(2,3,39,0.32); }
+
+    .flow-quick {
+      display: flex;
+      gap: 24px;
+      margin-top: 18px;
+    }
+    .flow-quick button {
+      font-family: 'Manrope', sans-serif;
+      font-size: 16px;
+      color: rgba(2,3,39,0.55);
+      background: none;
+      border: 0;
+      padding: 0 0 3px;
+      cursor: pointer;
+      border-bottom: 1.5px dashed rgba(2,3,39,0.3);
+    }
+    .flow-quick button:hover,
+    .flow-quick button.is-active { color: var(--orange); border-color: var(--orange); }
+
+    /* Calendar */
+    .flow-cal {
+      position: absolute;
+      bottom: calc(100% + 12px);
+      left: 0;
+      width: 360px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 18px 48px rgba(2,3,39,0.18);
+      padding: 22px;
+      z-index: 30;
+      display: none;
+    }
+    .flow-cal.open { display: block; }
+    .flow-cal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+    .flow-cal-title {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      font-size: 19px;
+      color: var(--ink);
+    }
+    .flow-cal-nav {
+      display: flex; gap: 6px;
+    }
+    .flow-cal-nav button {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      border: 0;
+      background: none;
+      color: var(--ink);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+    .flow-cal-nav button:hover { background: #F2F2F4; }
+    .flow-cal-nav button:disabled { color: rgba(2,3,39,0.2); cursor: default; }
+    .flow-cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+    .flow-cal-dow {
+      font-family: 'Manrope', sans-serif;
+      font-size: 13px;
+      color: rgba(2,3,39,0.4);
+      text-align: center;
+      padding: 6px 0 10px;
+      text-transform: uppercase;
+    }
+    .flow-cal-day {
+      aspect-ratio: 1;
+      border: 0;
+      background: none;
+      border-radius: 50%;
+      font-family: 'Manrope', sans-serif;
+      font-size: 16px;
+      color: var(--ink);
+      cursor: pointer;
+    }
+    .flow-cal-day:hover:not(:disabled) { background: #F2F2F4; }
+    .flow-cal-day:disabled { color: rgba(2,3,39,0.25); cursor: default; }
+    .flow-cal-day.is-today { background: var(--orange); color: #fff; font-weight: 700; }
+    .flow-cal-day.is-sel { background: var(--ink); color: #fff; font-weight: 700; }
+
+    /* Photo dropzone */
+    .flow-dropzone {
+      margin-top: 18px;
+      border: 1.5px dashed #C7C7CE;
+      border-radius: 14px;
+      padding: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--ink);
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+    }
+    .flow-dropzone:hover { border-color: var(--orange); background: rgba(221,84,68,0.04); }
+    .flow-dropzone svg { color: rgba(2,3,39,0.5); }
+    .flow-photos { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+    .flow-photo {
+      width: 92px; height: 92px;
+      border-radius: 12px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+    .flow-photo button {
+      position: absolute; top: -7px; right: -7px;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: #fff;
+      border: 0;
+      cursor: pointer;
+      font-size: 13px;
+      line-height: 1;
+      display: grid;
+      place-items: center;
+    }
+
+    /* Summary */
+    .flow-summary { display: flex; flex-direction: column; }
+    .flow-sum-row {
+      display: grid;
+      grid-template-columns: 210px 1fr;
+      gap: 20px;
+      padding: 16px 0;
+      border-bottom: 1px solid #ECECEF;
+    }
+    .flow-sum-row .k {
+      font-family: 'Manrope', sans-serif;
+      font-size: 16px;
+      color: rgba(2,3,39,0.55);
+    }
+    .flow-sum-row .v {
+      font-family: 'Manrope', sans-serif;
+      font-size: 18px;
+      color: var(--ink);
+      font-weight: 600;
+      word-break: break-word;
+    }
+
+    /* Actions */
+    .flow-actions {
+      display: flex;
+      gap: 16px;
+      margin-top: 56px;
+      max-width: 620px;
+    }
+    .flow-btn {
+      min-height: 64px;
+      padding: 12px 20px;
+      border-radius: 14px;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      font-size: 19px;
+      line-height: 1.2;
+      cursor: pointer;
+      border: 0;
+      transition: background .15s, opacity .15s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .flow-btn--next {
+      flex: 1;
+      background: var(--orange);
+      color: #fff;
+    }
+    .flow-btn--next:hover { background: var(--ink); }
+    .flow-btn--next:disabled { background: rgba(2,3,39,0.15); cursor: not-allowed; pointer-events: none; }
+    .flow-next-wrap { position: relative; flex: 1; display: flex; }
+    .flow-next-wrap .flow-btn--next { flex: 1; width: 100%; }
+    .flow-next-tip {
+      position: absolute;
+      bottom: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #020327;
+      color: #fff;
+      font-family: 'Manrope', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 14px;
+      border-radius: 10px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .15s;
+      z-index: 50;
+    }
+    .flow-next-tip::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: #020327;
+    }
+    .flow-next-wrap.is-locked:hover .flow-next-tip,
+    .flow-next-wrap.is-locked.show-tip .flow-next-tip { opacity: 1; }
+    .flow-invalid,
+    .flow-invalid:focus-within {
+      border-color: #E05548 !important;
+      box-shadow: 0 0 0 3px rgba(224,85,72,0.16) !important;
+    }
+    .flow-btn--back {
+      width: 150px;
+      background: #fff;
+      color: var(--ink);
+      border: 1px solid #D7D7DD;
+    }
+    .flow-btn--back:hover { background: #F7F7F8; }
+
+    /* ===== Right: promo card ===== */
+    .flow-aside {
+      position: sticky;
+      top: 32px;
+      background: #F4F4F6;
+      border-radius: 22px;
+      padding: 36px 34px 40px;
+      overflow: hidden;
+    }
+    .flow-aside-avatars { display: flex; margin-bottom: 26px; }
+    .flow-aside-avatars span {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background-size: cover;
+      background-position: center;
+      border: 3px solid #F4F4F6;
+      margin-left: -16px;
+      background-color: #DADAE0;
+    }
+    .flow-aside-avatars span:first-child { margin-left: 0; }
+    .flow-aside h3 {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 800;
+      font-size: 24px;
+      line-height: 1.25;
+      color: var(--ink);
+      margin: 0 0 12px;
+    }
+    .flow-aside p {
+      font-family: 'Manrope', sans-serif;
+      font-size: 17px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: rgba(2,3,39,0.6);
+      margin: 0 0 26px;
+    }
+    .flow-aside-btn {
+      display: inline-flex;
+      align-items: center;
+      height: 48px;
+      padding: 0 24px;
+      background: #fff;
+      border: 1px solid #E0E0E5;
+      border-radius: 100px;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 600;
+      font-size: 16px;
+      color: var(--ink);
+      cursor: pointer;
+    }
+    .flow-aside-btn:hover { border-color: #B9B9C1; }
+
+    /* Done screen */
+    .flow-done { max-width: 620px; padding-top: 12px; }
+    .flow-done-ico {
+      width: 96px; height: 96px;
+      background: rgba(221,84,68,0.14);
+      color: var(--orange);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 50px;
+      margin-bottom: 28px;
+    }
+    .flow-done h2 {
+      font-family: 'Tektur', sans-serif;
+      font-weight: 700;
+      font-size: 44px;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin: 0 0 14px;
+    }
+    .flow-done p {
+      font-family: 'Manrope', sans-serif;
+      font-size: 19px;
+      line-height: 1.5;
+      color: rgba(2,3,39,0.6);
+      margin: 0 0 32px;
+    }
+    .flow-done a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 62px;
+      padding: 0 36px;
+      background: var(--orange);
+      color: #fff;
+      border-radius: 14px;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      font-size: 19px;
+      text-decoration: none;
+    }
+    .flow-done a:hover { background: var(--ink); }
+
+    .flow-done { position: relative; }
+    @keyframes fdPop { 0% { transform: scale(0); } 60% { transform: scale(1.12); } 100% { transform: scale(1); } }
+    @keyframes fdRing { 0% { transform: scale(0.65); opacity: 0.5; } 100% { transform: scale(1.9); opacity: 0; } }
+    @keyframes fdDraw { to { stroke-dashoffset: 0; } }
+    @keyframes fdUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+    @keyframes fdConfetti {
+      0% { transform: translate3d(0,0,0) rotate(0deg); opacity: 1; }
+      100% { transform: translate3d(var(--cx,0), var(--cy,0), 0) rotate(var(--cr,360deg)); opacity: 0; }
+    }
+    .flow-done-ico { position: relative; animation: fdPop .5s cubic-bezier(.2,.8,.2,1) both; }
+    .flow-done-ico::after {
+      content: ""; position: absolute; inset: -6px;
+      border-radius: 50%; border: 3px solid var(--orange);
+      animation: fdRing .9s ease-out .15s both; pointer-events: none;
+    }
+    .flow-done-check { width: 54px; height: 54px; display: block; }
+    .flow-done-check .fdc-circle {
+      fill: none; stroke: var(--orange); stroke-width: 3;
+      stroke-dasharray: 151; stroke-dashoffset: 151;
+      animation: fdDraw .5s ease-out .15s forwards;
+    }
+    .flow-done-check .fdc-tick {
+      fill: none; stroke: var(--orange); stroke-width: 4;
+      stroke-linecap: round; stroke-linejoin: round;
+      stroke-dasharray: 40; stroke-dashoffset: 40;
+      animation: fdDraw .35s ease-out .55s forwards;
+    }
+    .flow-done h2 { animation: fdUp .5s ease-out .4s both; }
+    .flow-done p  { animation: fdUp .5s ease-out .5s both; }
+    .flow-done a  { animation: fdUp .5s ease-out .6s both; }
+    .flow-confetti { position: absolute; left: 50%; top: 50%; width: 0; height: 0; pointer-events: none; z-index: 5; }
+    .flow-confetti i {
+      position: absolute; left: 0; top: 0;
+      width: 9px; height: 14px; border-radius: 2px;
+      background: var(--c, var(--orange));
+      animation: fdConfetti var(--d, 1100ms) cubic-bezier(.15,.6,.3,1) forwards;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .flow-done-ico, .flow-done-ico::after,
+      .flow-done-check .fdc-circle, .flow-done-check .fdc-tick,
+      .flow-done h2, .flow-done p, .flow-done a, .flow-confetti i { animation: none !important; }
+      .flow-done-check .fdc-circle, .flow-done-check .fdc-tick { stroke-dashoffset: 0; }
+    }
+
+    @media (max-width: 1000px) {
+      .flow-wrap { grid-template-columns: 1fr; gap: 40px; }
+      .flow-aside { position: static; order: 1; }
+    }
+    @media (max-width: 640px) {
+      .flow-wrap { padding: 28px 18px 60px; }
+      .flow-q { font-size: 30px; }
+      .flow-sub { font-size: 17px; }
+      .flow-datetime { grid-template-columns: 1fr; }
+      .flow-dt-cell:last-child { border-left: 0; border-top: 1px solid #ECECEF; }
+      .flow-cal { width: 100%; }
+      .flow-actions { flex-direction: column-reverse; }
+      .flow-btn--back { width: 100%; }
+      .flow-sum-row { grid-template-columns: 1fr; gap: 4px; }
+    }
+
+    /* ===== Employer cabinet header (same as личный кабинет) ===== */
+    .ec-hd {
+      --ec-accent: #DD5444; --ec-ink: #020327;
+      --ec-fill-04: hsla(238, 90%, 8%, 0.04); --ec-fill-06: hsla(238, 90%, 8%, 0.06);
+      --ec-ink-72: hsla(238, 90%, 8%, 0.72);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 40px; background: #F2F2F2;
+    }
+    .ec-hd-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+    .ec-hd-logo img { width: 40px; height: 40px; flex-shrink: 0; }
+    .ec-hd-logo span {
+      font-family: 'Tektur', sans-serif; font-weight: 600; font-size: 19px;
+      color: #000; letter-spacing: 0; white-space: nowrap;
+    }
+    .ec-hd-menu { display: flex; align-items: center; gap: 10px; }
+    .ec-hd .ec-chip {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 24px; border-radius: 80px;
+      background: var(--ec-fill-04); color: var(--ec-ink);
+      font-size: 16px; font-weight: 400; text-decoration: none;
+      border: 0; cursor: pointer; transition: background .15s;
+    }
+    .ec-hd .ec-chip:hover { background: var(--ec-fill-06); }
+    .ec-hd .ec-chip svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .ec-hd .ec-chip .ic-accent { color: var(--ec-accent); }
+    .ec-hd-user { position: relative; }
+    .ec-user {
+      display: flex; align-items: center; gap: 16px;
+      padding: 4px 28px 4px 4px; border-radius: 100px;
+      background: #E9E9EB; border: 1px solid hsla(0, 0%, 0%, 0.30); cursor: pointer;
+    }
+    .ec-user-ava {
+      width: 46px; height: 46px; border-radius: 50%; overflow: hidden; flex-shrink: 0;
+      background: #C9D4EA; display: flex; align-items: center; justify-content: center; color: #1153B5;
+    }
+    .ec-user-ava svg { width: 60%; height: 60%; }
+    .ec-user-name { font-size: 16px; color: var(--ec-ink); white-space: nowrap; }
+    .ec-user > svg { width: 20px; height: 20px; color: var(--ec-ink-72); }
+    @media (max-width: 980px) {
+      .ec-hd { padding: 16px 20px; }
+      .ec-hd-menu .ec-chip span { display: none; }
+    }
+  </style>
+</head>
+<body class="orange-theme" data-screen-label="Новая задача">
+<script>(function(){
+  try {
+    var s = localStorage.getItem('studradar_session');
+    var h = s && JSON.parse(s).role;
+    // Guests are allowed to fill the task — registration is the last step.
+    if (h === 'student') { window.location.replace('catalog.html'); return; }
+  } catch(e){}
+})();</script>
+
+<!-- ===== GUEST HEADER ===== -->
+<header class="header" data-header="guest">
+  <a href="employer.html" class="logo">
+    <span class="logo-mark" style="background:transparent"><img src="assets/logo.svg" alt=""/></span>СТУДРАДАР
+  </a>
+
+  <nav class="toggle orange" aria-label="Я ищу">
+    <span class="toggle-pill"></span>
+    <a href="for-students.html">Студентам</a>
+    <a href="employer.html" class="active">Заказчику</a>
+  </nav>
+
+  <nav class="menu">
+    <a href="students.html">Студенты</a>
+    <a href="for-students.html#how">О платформе</a>
+    <a href="blog.html">Блог</a>
+  </nav>
+
+  <a href="#location" class="location" title="Сменить город">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.6a6.7 6.7 0 0 0-6.7 6.7c0 5 6.7 10.1 6.7 10.1s6.7-5.1 6.7-10.1A6.7 6.7 0 0 0 10 1.6Zm0 9.1a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8Z"/></svg>
+    Ханты-Мансийск
+  </a>
+
+  <div class="header-right">
+    <a href="#login" class="link-login">Войти</a>
+    <a href="#menu" class="burger" aria-label="Меню">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="currentColor"><rect x="3" y="6" width="16" height="2" rx="1"/><rect x="3" y="14" width="16" height="2" rx="1"/></svg>
+    </a>
+  </div>
+</header>
+
+<!-- ===== LOGGED-IN HEADER (employer cabinet) ===== -->
+<header class="ec-hd" data-header="logged-in">
+  <a href="employer-dashboard.html" class="ec-hd-logo">
+    <img src="assets/logo.svg" alt=""/>
+    <span>СтудРадар</span>
+  </a>
+  <nav class="ec-hd-menu" aria-label="Меню">
+    <a href="students.html" class="ec-chip">
+      <svg class="ic-accent" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M64.12,147.8a4,4,0,0,1-4,4.2H16a8,8,0,0,1-7.8-6.17,8.35,8.35,0,0,1,1.62-6.93A67.79,67.79,0,0,1,37,117.51a40,40,0,1,1,66.46-35.8,3.94,3.94,0,0,1-2.27,4.18A64.08,64.08,0,0,0,64,144C64,145.27,64,146.54,64.12,147.8Zm182-8.91A67.76,67.76,0,0,0,219,117.51a40,40,0,1,0-66.46-35.8,3.94,3.94,0,0,0,2.27,4.18A64.08,64.08,0,0,1,192,144c0,1.27,0,2.54-.12,3.8a4,4,0,0,0,4,4.2H240a8,8,0,0,0,7.8-6.17A8.33,8.33,0,0,0,246.17,138.89Zm-89,43.18a48,48,0,1,0-58.37,0A72.13,72.13,0,0,0,65.07,212,8,8,0,0,0,72,224H184a8,8,0,0,0,6.93-12A72.15,72.15,0,0,0,157.16,182.07Z"/></svg>
+      <span>Студенты</span>
+    </a>
+    <a href="employer-dashboard.html" class="ec-chip">
+      <svg class="ic-accent" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,24a16,16,0,0,0-7.16,1.69l-88,44a16,16,0,0,0,0,28.62l88,44a16,16,0,0,0,14.32,0l88-44a16,16,0,0,0,0-28.62l-88-44A16,16,0,0,0,128,24Z"/><path d="M219.16,152.84,128,198.42,36.84,152.84a8,8,0,1,0-7.16,14.31l92,46a8,8,0,0,0,7.16,0l92-46a8,8,0,1,0-7.16-14.31Z"/><path d="M219.16,190.84,128,236.42,36.84,190.84a8,8,0,1,0-7.16,14.31l92,46a8,8,0,0,0,7.16,0l92-46a8,8,0,1,0-7.16-14.31Z"/></svg>
+      <span>Мой кабинет</span>
+    </a>  </nav>
+  <div class="ec-hd-user">
+    <div class="ec-notif" id="ecNotif">
+      <button type="button" class="ec-notif-btn" id="notifBtn" aria-label="Уведомления" aria-haspopup="menu" aria-expanded="false">
+        <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216Z"/></svg>
+        <span class="ec-notif-dot">3</span>
+      </button>
+      <div class="ec-notif-menu" id="notifMenu" role="menu" hidden>
+        <div class="ec-notif-head">Уведомления</div>
+        <a class="ec-notif-item unread" href="employer-dashboard.html#responses" role="menuitem">
+          <span class="ec-notif-ic"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M232.07,186.76a80,80,0,0,0-62.5-114.17A80,80,0,1,0,23.93,138.76l-7.27,24.71a16,16,0,0,0,19.87,19.87l24.71-7.27a80.39,80.39,0,0,0,25.18,7.35,80,80,0,0,0,108.94,40.45l24.71,7.27a16,16,0,0,0,19.87-19.86Z"/></svg></span>
+          <span class="ec-notif-tx"><span class="t">Новый отклик</span><span class="s">«Лендинг для образовательного курса» — 3 кандидата</span></span>
+        </a>
+        <a class="ec-notif-item unread" href="employer-chat.html?id=1" role="menuitem">
+          <span class="ec-notif-ic"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Z"/></svg></span>
+          <span class="ec-notif-tx"><span class="t">Сообщение от Ксении Р.</span><span class="s">по задаче «Сопровождение гостей форума «Югра-Экспо»»</span></span>
+        </a>
+        <a class="ec-notif-item" href="employer-finance.html" role="menuitem">
+          <span class="ec-notif-ic"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M216,64H56a8,8,0,0,1,0-16H192a8,8,0,0,0,0-16H56A24,24,0,0,0,32,56V184a24,24,0,0,0,24,24H216a16,16,0,0,0,16-16V80A16,16,0,0,0,216,64Zm-36,80a12,12,0,1,1,12-12A12,12,0,0,1,180,144Z"/></svg></span>
+          <span class="ec-notif-tx"><span class="t">Средства заморожены по эскроу</span><span class="s">5 175 ₽ по задаче «Югра-Экспо»</span></span>
+        </a>
+        <a class="ec-notif-all" href="chats.html">Все уведомления</a>
+      </div>
+    </div>
+    <button type="button" class="ec-user" id="userBtn" aria-haspopup="menu" aria-expanded="false">
+      <span class="ec-user-ava" aria-hidden="true">
+        <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128,24a104,104,0,1,0,104,104A104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"/></svg>
+      </span>
+      <span class="ec-user-name" id="ecUserName">Ивент-агентство Югра 360</span>
+      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="feed-user-menu" role="menu" id="userMenu" hidden>
+      <a href="employer-profile.html" role="menuitem">Профиль</a>
+      <a href="settings.html" role="menuitem">Настройки</a>
+      <button type="button" class="feed-user-menu-logout" data-logout>Выйти</button>
+    </div>
+  </div>
+</header>
+<script src="shared.js"></script>
+<script src="registration.js"></script>
+<script>
+// Guest-header "Я ищу" toggle pill positioning.
+(function() {
+  var toggle = document.querySelector('[data-header="guest"] .toggle');
+  if (!toggle) return;
+  var pill = toggle.querySelector('.toggle-pill');
+  if (!pill) return;
+  function movePill(link) {
+    var t = toggle.getBoundingClientRect();
+    var l = link.getBoundingClientRect();
+    pill.style.transition = 'none';
+    pill.offsetHeight;
+    pill.style.width = l.width + 'px';
+    pill.style.transform = 'translateX(' + (l.left - t.left - 6) + 'px)';
+    pill.offsetHeight;
+    pill.style.transition = '';
+  }
+  function place() { var a = toggle.querySelector('a.active'); if (a) movePill(a); }
+  place();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+  window.addEventListener('resize', place);
+})();
+</script>
+
+<main class="flow-wrap">
+  <div class="flow-main">
+    <div class="flow-progress-label" id="flowProgressLabel">Задание заполнено на 0%</div>
+    <div class="flow-progress-track"><div class="flow-progress-fill" id="flowProgressFill"></div></div>
+    <div id="flowCard"></div>
+  </div>
+
+  <aside class="flow-aside">
+    <div class="flow-aside-avatars">
+      <span style="background-image:url('assets/Студенты/1 (19).png')"></span>
+      <span style="background-image:url('assets/Студенты/1 (20).png')"></span>
+      <span style="background-image:url('assets/Студенты/1 (21).png')"></span>
+      <span style="background-image:url('assets/Студенты/1 (22).png')"></span>
+      <span style="background-image:url('assets/Студенты/i.webp')"></span>
+    </div>
+    <h3>400 исполнителей могут вам помочь</h3>
+    <p>Ответьте на вопросы, чтобы получить отклики. Это займёт не больше трёх минут.</p>
+  </aside>
+</main>
+
+<input type="file" id="flowPhotoInput" accept="image/*" multiple hidden/>
+
+<script>
+(function() {
+  var card  = document.getElementById('flowCard');
+  var pFill  = document.getElementById('flowProgressFill');
+  var pLabel = document.getElementById('flowProgressLabel');
+  var photoInput = document.getElementById('flowPhotoInput');
+
+  var SUBCATS = ['Дизайн','IT-разработка','Контент','Тексты','SMM','Маркетинг','Реклама','Видео','Фото','3D-графика','Музыка и аудио','Аналитика','Презентации','Ивенты','Переводы','Переводчики','Атташе','Репетиторство','Финансы','Юриспруденция','Другое'];
+
+  var SKILL_SUGGEST = {
+    'Дизайн': ['Figma','Photoshop','Illustrator','UI/UX','Брендинг','Иллюстрация','Прототипирование','After Effects','Веб-дизайн','Логотип','Гайдлайны','Дизайн-система','Типографика','Анимация','Иконки','Mockup','Adobe XD','Sketch'],
+    'IT-разработка': ['JavaScript','TypeScript','Python','React','Vue','Node.js','HTML/CSS','SQL','REST API','Тестирование','Django','PHP','Laravel','Docker','Git','PostgreSQL','MongoDB','Flutter','Kotlin','Swift','C#','Go','GraphQL','CI/CD'],
+    'Контент': ['Копирайтинг','SEO','Редактура','Сторителлинг','Рерайт','Контент-план','Контент-стратегия','Тексты для соцсетей','Email-рассылки','Лонгриды','Корректура','Рубрикатор','UX-тексты'],
+    'Тексты': ['Копирайтинг','Рерайт','Редактура','SEO-тексты','Сценарии','Нейминг','Слоганы','Продающие тексты','Описания товаров','Статьи','Пресс-релизы','Корректура','Транскрибация'],
+    'SMM': ['Instagram','Telegram','ВКонтакте','Таргет','Контент-план','Reels','Аналитика','TikTok','YouTube','Сторис','Комьюнити','Инфлюенсеры','Модерация','Дзен','Чат-боты'],
+    'Маркетинг': ['Стратегия','Аналитика','Email','Воронки','Гипотезы','UTM-разметка','CRM','Юнит-экономика','A/B-тесты','Позиционирование','CJM','Лидогенерация','Перформанс','Брендинг'],
+    'Реклама': ['Яндекс.Директ','Google Ads','Таргет','Креативы','A/B-тесты','Ретаргетинг','VK Реклама','Telegram Ads','Медийная реклама','Контекст','Маркетплейсы','Аналитика','Посевы'],
+    'Видео': ['Монтаж','Premiere Pro','After Effects','Съёмка','Цветокоррекция','Motion-дизайн','DaVinci Resolve','Сценарий','Озвучка','Субтитры','Reels/Shorts','Графика','Хромакей','Сторителлинг'],
+    'Фото': ['Съёмка','Lightroom','Photoshop','Ретушь','Предметная съёмка','Портрет','Репортаж','Студийный свет','Обработка','Каталожная съёмка','Фуд-фото','Тревел','Цветокоррекция'],
+    '3D-графика': ['Blender','3ds Max','Cinema 4D','Моделирование','Рендеринг','Текстурирование','ZBrush','Substance','Анимация','Визуализация','Скульптинг','Риггинг','Unreal Engine','Houdini'],
+    'Музыка и аудио': ['Сведение','Мастеринг','Озвучка','Саунд-дизайн','Аранжировка','Подкаст','Запись вокала','Битмейкинг','Реставрация звука','Джинглы','FL Studio','Ableton','Звукорежиссура'],
+    'Аналитика': ['SQL','Excel','Power BI','Python','Дашборды','Google Analytics','Tableau','Яндекс.Метрика','A/B-тесты','Pandas','Визуализация','Прогнозирование','ETL','Статистика'],
+    'Презентации': ['PowerPoint','Keynote','Figma','Инфографика','Сторителлинг','Дизайн слайдов','Pitch deck','Tilda','Структура','Анимация слайдов','Шаблоны','Защита проекта'],
+    'Ивенты': ['Организация','Логистика','Координация','Декор','Ведущий','Промо','Сценарий','Тайминг','Подрядчики','Регистрация гостей','Тимбилдинг','Онлайн-трансляция','Кейтеринг'],
+    'Переводы': ['Английский','Китайский','Немецкий','Технический перевод','Локализация','Редактура','Французский','Испанский','Устный перевод','Субтитры','Юридический перевод','Корректура','Носитель языка'],
+    'Переводчики': ['Английский','Китайский','Немецкий','Французский','Испанский','Итальянский','Арабский','Устный перевод','Синхронный перевод','Последовательный перевод','Письменный перевод','Технический перевод','Юридический перевод','Медицинский перевод','Локализация','Субтитры','Транскрибация','Редактура перевода','Носитель языка','Деловая переписка'],
+    'Атташе': ['Английский','Деловой этикет','Сопровождение гостей','Устный перевод','Протокол мероприятий','Организация','Координация','Трансфер и логистика','Гид-сопровождение','Знание города','Коммуникабельность','Стрессоустойчивость','Дресс-код','Работа с делегациями','Тайм-менеджмент','Второй иностранный язык'],
+    'Репетиторство': ['Математика','Английский','Физика','Подготовка к ЕГЭ','Программирование','Химия','Биология','Русский язык','ОГЭ','История','Информатика','Олимпиады','Обществознание','Подготовка к вузу'],
+    'Финансы': ['Excel','Финмодель','Бухгалтерия','Налоги','Бюджетирование','1С','Финанализ','Инвестиции','Отчётность','Управленческий учёт','Дашборды','Прогноз ДДС','Аудит'],
+    'Юриспруденция': ['Договоры','Консультация','Претензии','Регистрация бизнеса','Документы','Право','Налоговое право','Трудовое право','Защита прав','Интеллектуальная собственность','Суды','Due diligence','GDPR'],
+    'Другое': ['Excel','Аналитика','Презентации','Notion','Тайм-менеджмент','Коммуникация','Google Sheets','Research','Поддержка','Модерация','Транскрибация','Управление проектами','Парсинг данных','Автоматизация']
+  };
+
+  var TOTAL = 6;
+  var step = 1;
+  var data = {
+    title: '',
+    subcategory: 'Другое',
+    place: 'remote',
+    address: '',
+    whenType: 'date',
+    date: '',          // ISO yyyy-mm-dd (дата начала / срок / начало периода)
+    dateEnd: '',       // ISO yyyy-mm-dd (конец периода / «закончить до»)
+    time: '',
+    description: '',
+    skills: [],
+    photos: [],
+    budget: '',
+    payType: 'За проект',
+    people: 1
+  };
+
+  var MONTHS = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+  var MONTHS_NOM = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+  var DOW_SHORT = ['пн','вт','ср','чт','пт','сб','вс'];
+  var DOW_LONG  = ['вс','пн','вт','ср','чт','пт','сб'];
+
+  function esc(s){ return ('' + (s == null ? '' : s)).replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
+  function todayISO(){ var d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+  function parseISO(s){ if(!s) return null; var p = s.split('-'); return new Date(+p[0], +p[1]-1, +p[2]); }
+  function fmtDate(s){
+    var d = parseISO(s);
+    if (!d) return '';
+    return d.getDate() + ' ' + MONTHS[d.getMonth()] + ', ' + DOW_LONG[d.getDay()];
+  }
+
+  function updateProgress() {
+    var pct = Math.round((step) / TOTAL * 100);
+    if (step > TOTAL) pct = 100;
+    pFill.style.width = pct + '%';
+    var name = data.title ? '«' + esc(data.title) + '» ' : '';
+    pLabel.innerHTML = 'Задание ' + name + 'заполнено на ' + pct + '%';
+    pLabel.classList.toggle('is-complete', pct === 100);
+  }
+
+  function actions(isFirst, nextLabel, canNext, hint, targets) {
+    return '<div class="flow-actions">'
+      + (isFirst ? '' : '<button type="button" class="flow-btn flow-btn--back" data-back>Назад</button>')
+      + '<span class="flow-next-wrap' + (canNext ? '' : ' is-locked') + '" data-targets="' + esc(targets || '') + '">'
+      +   '<button type="button" class="flow-btn flow-btn--next" data-next ' + (canNext ? '' : 'disabled') + '>' + (nextLabel || 'Далее') + '</button>'
+      +   '<span class="flow-next-tip">' + esc(hint || 'Заполните поле, чтобы продолжить') + '</span>'
+      + '</span>'
+      + '</div>';
+  }
+  function setNext(ok) {
+    var btn = card.querySelector('[data-next]');
+    var wrap = card.querySelector('.flow-next-wrap');
+    if (btn) btn.disabled = !ok;
+    if (wrap) wrap.classList.toggle('is-locked', !ok);
+  }
+
+  function render() {
+    updateProgress();
+    if (step === 1) return renderTitle();
+    if (step === 2) return renderPlace();
+    if (step === 3) return renderWhen();
+    if (step === 4) return renderDetails();
+    if (step === 5) return renderBudget();
+    if (step === 6) return renderReview();
+    return renderDone();
+  }
+
+  // ── Step 1: Название ──
+  function renderTitle() {
+    card.innerHTML = ''
+      + '<h1 class="flow-q">Как назвать задание?</h1>'
+      + '<div class="flow-body">'
+      +   '<label class="flow-label">Название задания</label>'
+      +   '<input type="text" class="flow-input" id="fTitle" placeholder="Например, разработать дизайн" value="' + esc(data.title) + '"/>'
+      +   '<label class="flow-label" style="margin-top:18px">Подкатегория</label>'
+      +   '<div class="flow-subcat">'
+      +     '<button type="button" class="flow-subcat-trigger" id="fSubcat" aria-haspopup="listbox" aria-expanded="false">'
+      +       '<span id="fSubcatLabel">' + esc(data.subcategory) + '</span>'
+      +       '<svg class="flow-subcat-caret" width="14" height="9" viewBox="0 0 14 9" fill="none"><path d="M1 1l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      +     '</button>'
+      +     '<div class="flow-subcat-menu" id="fSubcatMenu" role="listbox">'
+      +       SUBCATS.map(function(o){ return '<button type="button" class="flow-subcat-opt' + (o === data.subcategory ? ' is-active' : '') + '" data-val="' + esc(o) + '">' + esc(o) + '</button>'; }).join('')
+      +     '</div>'
+      +   '</div>'
+      + '</div>'
+      + actions(true, 'Далее', data.title.trim().length >= 3, 'Введите название — минимум 3 символа', '#fTitle');
+
+    var input = document.getElementById('fTitle');
+    var nextBtn = card.querySelector('[data-next]');
+    input.addEventListener('input', function() {
+      data.title = input.value;
+      setNext(input.value.trim().length >= 3);
+      updateProgress();
+    });
+    var subBtn = document.getElementById('fSubcat');
+    var subWrap = subBtn.closest('.flow-subcat');
+    var subMenu = document.getElementById('fSubcatMenu');
+    var subLabel = document.getElementById('fSubcatLabel');
+    function closeSub() {
+      subMenu.classList.remove('is-open');
+      subWrap.classList.remove('is-open');
+      subBtn.setAttribute('aria-expanded', 'false');
+      document.removeEventListener('click', onSubDoc);
+    }
+    function onSubDoc(e) {
+      if (!e.target.closest('.flow-subcat')) closeSub();
+    }
+    subBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var open = subMenu.classList.toggle('is-open');
+      subWrap.classList.toggle('is-open', open);
+      subBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      document.removeEventListener('click', onSubDoc);
+      if (open) setTimeout(function() { document.addEventListener('click', onSubDoc); }, 0);
+    });
+    subMenu.addEventListener('click', function(e) {
+      var opt = e.target.closest('.flow-subcat-opt');
+      if (!opt) return;
+      data.subcategory = opt.getAttribute('data-val');
+      subLabel.textContent = data.subcategory;
+      subMenu.querySelectorAll('.flow-subcat-opt').forEach(function(x) {
+        x.classList.toggle('is-active', x === opt);
+      });
+      closeSub();
+    });
+    nextBtn.addEventListener('click', goNext);
+    input.focus();
+  }
+
+  // ── Step 2: Место ──
+  function renderPlace() {
+    function opt(val, label) {
+      return '<label class="flow-radio' + (data.place === val ? ' is-active' : '') + '" data-place="' + val + '">'
+        + '<span class="dot"></span>' + label + '</label>';
+    }
+    card.innerHTML = ''
+      + '<h1 class="flow-q">Место оказания услуги</h1>'
+      + '<div class="flow-body">'
+      +   '<div class="flow-options">'
+      +     opt('remote', 'Можно выполнить удалённо')
+      +     opt('onsite', 'Нужно присутствие по адресу')
+      +   '</div>'
+      +   '<div id="fAddrWrap" style="margin-top:24px;' + (data.place === 'onsite' ? '' : 'display:none') + '">'
+      +     '<label class="flow-label">Адрес</label>'
+      +     '<input type="text" class="flow-input" id="fAddr" placeholder="Город, улица, дом" value="' + esc(data.address) + '"/>'
+      +   '</div>'
+      + '</div>'
+      + actions(false, 'Далее', true, 'Укажите адрес — минимум 3 символа', '#fAddr');
+
+    var addrWrap = document.getElementById('fAddrWrap');
+    function syncNext() {
+      var ok = data.place === 'remote' || (data.address.trim().length >= 3);
+      setNext(ok);
+    }
+    card.querySelectorAll('[data-place]').forEach(function(el) {
+      el.addEventListener('click', function() {
+        data.place = el.dataset.place;
+        card.querySelectorAll('[data-place]').forEach(function(x){ x.classList.toggle('is-active', x === el); });
+        addrWrap.style.display = data.place === 'onsite' ? '' : 'none';
+        syncNext();
+      });
+    });
+    var addr = document.getElementById('fAddr');
+    if (addr) addr.addEventListener('input', function(){ data.address = addr.value; syncNext(); });
+    card.querySelector('[data-back]').addEventListener('click', goBack);
+    card.querySelector('[data-next]').addEventListener('click', goNext);
+    syncNext();
+  }
+
+  // ── Step 3: Когда ──
+  var calView; // {y, m}
+  var whenDocHandler;
+  function renderWhen() {
+    var wt = data.whenType;
+    var calIcon = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="4.5" width="14" height="13" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 8h14M7 3v3M13 3v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
+    function dateCellHtml(cellId, calId, txtId, iso, ph) {
+      return '<div class="flow-dt-cell" id="' + cellId + '">'
+        + calIcon
+        + '<span id="' + txtId + '" class="' + (iso ? '' : 'ph') + '">' + (iso ? esc(fmtDate(iso)) : ph) + '</span>'
+        + '<div class="flow-cal" id="' + calId + '"></div>'
+        + '</div>';
+    }
+
+    var block = '';
+    if (wt === 'date' || wt === 'deadline') {
+      block = '<div class="flow-datetime">'
+        +   dateCellHtml('fDateCell', 'fCal', 'fDateText', data.date, wt === 'deadline' ? 'Закончить до' : 'Дата')
+        +   '<div class="flow-dt-cell">'
+        +     '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M10 6v4l3 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>'
+        +     '<input type="text" id="fTime" inputmode="numeric" placeholder="Время" maxlength="5" value="' + esc(data.time) + '"/>'
+        +   '</div>'
+        + '</div>'
+        + '<div class="flow-quick">'
+        +   '<button type="button" data-quick="0">сегодня</button>'
+        +   '<button type="button" data-quick="1">завтра</button>'
+        + '</div>';
+    } else if (wt === 'period') {
+      block = '<div class="flow-datetime">'
+        +   dateCellHtml('fDateCell', 'fCal', 'fDateText', data.date, 'Начало')
+        +   dateCellHtml('fEndCell', 'fCalEnd', 'fEndText', data.dateEnd, 'Конец')
+        + '</div>';
+    }
+
+    card.innerHTML = ''
+      + '<h1 class="flow-q">Когда нужно приступить к работе?</h1>'
+      + '<p class="flow-sub">Укажите точную дату, срок или период, когда нужно выполнить работу.</p>'
+      + '<div class="flow-body">'
+      +   '<div class="flow-select-wrap">'
+      +     '<select class="flow-select" id="fWhenType">'
+      +       '<option value="date"' + (wt==='date'?' selected':'') + '>Начать работу в определённый день</option>'
+      +       '<option value="deadline"' + (wt==='deadline'?' selected':'') + '>Закончить до</option>'
+      +       '<option value="period"' + (wt==='period'?' selected':'') + '>Выбрать период</option>'
+      +       '<option value="asap"' + (wt==='asap'?' selected':'') + '>Как можно скорее</option>'
+      +       '<option value="unknown"' + (wt==='unknown'?' selected':'') + '>Пока не знаю</option>'
+      +     '</select>'
+      +   '</div>'
+      +   '<div id="fDtBlock">' + block + '</div>'
+      + '</div>'
+      + actions(false, 'Далее', true,
+          wt === 'period' ? 'Выберите начало и конец периода' : 'Выберите дату',
+          wt === 'period' ? '#fDateCell,#fEndCell' : '#fDateCell');
+
+    var sel = document.getElementById('fWhenType');
+    function syncNext() {
+      var ok = true;
+      if (data.whenType === 'date' || data.whenType === 'deadline') ok = !!data.date;
+      else if (data.whenType === 'period') ok = !!data.date && !!data.dateEnd && data.dateEnd >= data.date;
+      setNext(ok);
+    }
+    sel.addEventListener('change', function() {
+      data.whenType = sel.value;
+      renderWhen();
+    });
+
+    function drawCal(cal, field, minIso) {
+      var first = new Date(calView.y, calView.m, 1);
+      var startDow = (first.getDay() + 6) % 7; // Monday=0
+      var daysIn = new Date(calView.y, calView.m + 1, 0).getDate();
+      var t = new Date(); t.setHours(0,0,0,0);
+      var html = ''
+        + '<div class="flow-cal-head">'
+        +   '<div class="flow-cal-title">' + MONTHS_NOM[calView.m] + ' ' + calView.y + '</div>'
+        +   '<div class="flow-cal-nav">'
+        +     '<button type="button" data-mv="-1" aria-label="Назад"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>'
+        +     '<button type="button" data-mv="1" aria-label="Вперёд"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>'
+        +   '</div>'
+        + '</div>'
+        + '<div class="flow-cal-grid">';
+      DOW_SHORT.forEach(function(d){ html += '<div class="flow-cal-dow">' + d + '</div>'; });
+      for (var i = 0; i < startDow; i++) html += '<div></div>';
+      for (var day = 1; day <= daysIn; day++) {
+        var cur = new Date(calView.y, calView.m, day);
+        var iso = calView.y + '-' + String(calView.m+1).padStart(2,'0') + '-' + String(day).padStart(2,'0');
+        var blocked = cur < t || (minIso && iso < minIso);
+        var cls = 'flow-cal-day';
+        if (cur.getTime() === t.getTime()) cls += ' is-today';
+        if (iso === data[field]) cls += ' is-sel';
+        html += '<button type="button" class="' + cls + '" data-iso="' + iso + '"' + (blocked ? ' disabled' : '') + '>' + day + '</button>';
+      }
+      html += '</div>';
+      cal.innerHTML = html;
+
+      cal.querySelectorAll('[data-mv]').forEach(function(b) {
+        b.addEventListener('click', function(ev) {
+          ev.stopPropagation();
+          calView.m += parseInt(b.dataset.mv, 10);
+          if (calView.m < 0) { calView.m = 11; calView.y--; }
+          if (calView.m > 11) { calView.m = 0; calView.y++; }
+          drawCal(cal, field, minIso);
+        });
+      });
+      cal.querySelectorAll('[data-iso]').forEach(function(b) {
+        b.addEventListener('click', function(ev) {
+          ev.stopPropagation();
+          if (b.disabled) return;
+          data[field] = b.dataset.iso;
+          var txt = cal.parentNode.querySelector('span');
+          txt.textContent = fmtDate(data[field]);
+          txt.classList.remove('ph');
+          cal.classList.remove('open');
+          card.querySelectorAll('[data-quick]').forEach(function(q){ q.classList.remove('is-active'); });
+          if (field === 'date' && data.dateEnd && data.dateEnd < data.date) {
+            data.dateEnd = '';
+            var endTxt = document.getElementById('fEndText');
+            if (endTxt) { endTxt.textContent = 'Конец'; endTxt.classList.add('ph'); }
+          }
+          syncNext();
+        });
+      });
+    }
+
+    function wireCell(cellId, calId, field, minField) {
+      var cell = document.getElementById(cellId);
+      if (!cell) return;
+      var cal = document.getElementById(calId);
+      cell.addEventListener('click', function(e) {
+        if (e.target.closest('.flow-cal')) return;
+        card.querySelectorAll('.flow-cal.open').forEach(function(c){ if (c !== cal) c.classList.remove('open'); });
+        var willOpen = !cal.classList.contains('open');
+        cal.classList.toggle('open', willOpen);
+        if (willOpen) {
+          var base = parseISO(data[field]) || (minField && parseISO(data[minField])) || new Date();
+          calView = { y: base.getFullYear(), m: base.getMonth() };
+          drawCal(cal, field, minField ? data[minField] : null);
+        }
+      });
+    }
+
+    wireCell('fDateCell', 'fCal', 'date', null);
+    wireCell('fEndCell', 'fCalEnd', 'dateEnd', 'date');
+
+    document.removeEventListener('click', whenDocHandler);
+    whenDocHandler = function(e) {
+      if (!e.target.closest('.flow-dt-cell')) {
+        card.querySelectorAll('.flow-cal.open').forEach(function(c){ c.classList.remove('open'); });
+      }
+    };
+    document.addEventListener('click', whenDocHandler);
+
+    card.querySelectorAll('[data-quick]').forEach(function(q) {
+      q.addEventListener('click', function() {
+        var d = new Date(); d.setDate(d.getDate() + parseInt(q.dataset.quick, 10));
+        data.date = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+        var txt = document.getElementById('fDateText');
+        txt.textContent = fmtDate(data.date);
+        txt.classList.remove('ph');
+        card.querySelectorAll('[data-quick]').forEach(function(x){ x.classList.toggle('is-active', x === q); });
+        syncNext();
+      });
+    });
+
+    var time = document.getElementById('fTime');
+    if (time) {
+      time.addEventListener('input', function() {
+        var v = time.value.replace(/[^\d:]/g, '');
+        if (v.length === 2 && data.time.length === 1) v += ':';
+        time.value = v.slice(0,5);
+        data.time = time.value;
+      });
+    }
+
+    card.querySelector('[data-back]').addEventListener('click', function() { document.removeEventListener('click', whenDocHandler); goBack(); });
+    card.querySelector('[data-next]').addEventListener('click', function() { document.removeEventListener('click', whenDocHandler); goNext(); });
+    syncNext();
+  }
+
+  // ── Step 4: Детали ──
+  function renderDetails() {
+    card.innerHTML = ''
+      + '<h1 class="flow-q">Уточните детали</h1>'
+      + '<div class="flow-body">'
+      +   '<label class="flow-label">Описание</label>'
+      +   '<textarea class="flow-input" id="fDesc" placeholder="Например: разработать дизайн главной страницы сайта, 3–4 экрана, есть референсы и брендбук.">' + esc(data.description) + '</textarea>'
+      +   '<div class="flow-skills"><label class="flow-label">Навыки</label>'
+      +     '<div class="flow-skills-wrap">'
+      +       '<div class="flow-skills-box" id="fSkillsBox"></div>'
+      +       '<div class="flow-skill-menu" id="fSkillMenu"></div>'
+      +     '</div>'
+      +   '</div>'
+      +   '<div class="flow-inline-link" style="margin-top:16px"><button type="button" id="fPrivacy">Приватная информация</button></div>'
+      +   '<div class="flow-dropzone" id="fDrop">'
+      +     '<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="13" r="3.2" stroke="currentColor" stroke-width="1.7"/><path d="M8 6l1.4-2.2h5.2L16 6" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>'
+      +     'Добавить фото'
+      +   '</div>'
+      +   '<div class="flow-photos" id="fPhotos"></div>'
+      + '</div>'
+      + actions(false, 'Далее', data.description.trim().length >= 20, 'Опишите задачу — минимум 20 символов', '#fDesc');
+
+    var ta = document.getElementById('fDesc');
+    var nextBtn = card.querySelector('[data-next]');
+    ta.addEventListener('input', function() {
+      data.description = ta.value;
+      setNext(ta.value.trim().length >= 20);
+    });
+    document.getElementById('fPrivacy').addEventListener('click', function() {
+      alert('Контакты и платёжные данные видны только выбранному исполнителю после старта задачи.');
+    });
+
+    var photosWrap = document.getElementById('fPhotos');
+    function drawPhotos() {
+      photosWrap.innerHTML = data.photos.map(function(src, i) {
+        return '<div class="flow-photo" style="background-image:url(' + src + ')"><button type="button" data-rm="' + i + '" aria-label="Удалить">×</button></div>';
+      }).join('');
+      photosWrap.querySelectorAll('[data-rm]').forEach(function(b) {
+        b.addEventListener('click', function() {
+          data.photos.splice(parseInt(b.dataset.rm, 10), 1);
+          drawPhotos();
+        });
+      });
+    }
+    drawPhotos();
+    document.getElementById('fDrop').addEventListener('click', function(){ photoInput.click(); });
+    photoInput.onchange = function() {
+      Array.prototype.slice.call(photoInput.files).forEach(function(file) {
+        var r = new FileReader();
+        r.onload = function(e){ data.photos.push(e.target.result); drawPhotos(); };
+        r.readAsDataURL(file);
+      });
+      photoInput.value = '';
+    };
+
+    // ── Навыки (теги) ──
+    var SKILL_MAX = 4;
+    var SKILL_POOL = (SKILL_SUGGEST[data.subcategory] || [])
+      .concat(SKILL_SUGGEST['Другое'])
+      .filter(function(v, i, a) { return a.indexOf(v) === i; });
+    var skBox = document.getElementById('fSkillsBox');
+    var skMenu = document.getElementById('fSkillMenu');
+
+    function onSkDoc(e) { if (!e.target.closest('.flow-skills-wrap')) closeSkMenu(); }
+    function openSkMenu() {
+      skMenu.classList.add('is-open');
+      document.removeEventListener('click', onSkDoc);
+      setTimeout(function() { document.addEventListener('click', onSkDoc); }, 0);
+    }
+    function closeSkMenu() {
+      skMenu.classList.remove('is-open');
+      document.removeEventListener('click', onSkDoc);
+    }
+    function addSkill(name) {
+      name = ('' + (name || '')).trim().replace(/,+$/, '').trim();
+      if (!name) return;
+      var dup = data.skills.some(function(s) { return s.toLowerCase() === name.toLowerCase(); });
+      if (!dup && data.skills.length >= SKILL_MAX) return;
+      if (!dup) data.skills.push(name);
+      drawSkills(true);
+      drawSkMenu('');
+    }
+    function removeSkill(i) { data.skills.splice(i, 1); drawSkills(true); }
+    function drawSkMenu(q) {
+      if (data.skills.length >= SKILL_MAX) { closeSkMenu(); return; }
+      q = ('' + (q || '')).trim().toLowerCase();
+      var items = SKILL_POOL.filter(function(s) {
+        return !data.skills.some(function(d) { return d.toLowerCase() === s.toLowerCase(); })
+          && (q === '' || s.toLowerCase().indexOf(q) > -1);
+      });
+      var html = items.map(function(s) {
+        return '<button type="button" class="flow-skill-opt" data-add="' + esc(s) + '">' + esc(s) + '</button>';
+      }).join('');
+      var known = SKILL_POOL.concat(data.skills).some(function(s) { return s.toLowerCase() === q; });
+      if (q && !known) {
+        html = '<button type="button" class="flow-skill-opt" data-add="' + esc(q) + '"><span class="add">Добавить:</span> «' + esc(q) + '»</button>' + html;
+      }
+      if (!html) { closeSkMenu(); return; }
+      skMenu.innerHTML = html;
+      openSkMenu();
+    }
+    function drawSkills(keepFocus) {
+      var chips = data.skills.map(function(s, i) {
+        return '<span class="flow-skill-chip">' + esc(s) + '<button type="button" data-rm="' + i + '" aria-label="Удалить">×</button></span>';
+      }).join('');
+      var atMax = data.skills.length >= SKILL_MAX;
+      skBox.innerHTML = chips + (atMax
+        ? '<span class="flow-skill-limit">Максимум ' + SKILL_MAX + ' навыка</span>'
+        : '<input type="text" class="flow-skill-input" id="fSkillInput" autocomplete="off" placeholder="'
+          + (data.skills.length ? 'Добавить навык' : 'Например: Figma, Python, копирайтинг') + '"/>');
+      skBox.querySelectorAll('[data-rm]').forEach(function(b) {
+        b.addEventListener('click', function(e) { e.stopPropagation(); removeSkill(parseInt(b.dataset.rm, 10)); });
+      });
+      var inp = document.getElementById('fSkillInput');
+      if (!inp) { closeSkMenu(); return; }
+      inp.addEventListener('input', function() { drawSkMenu(inp.value); });
+      inp.addEventListener('focus', function() { drawSkMenu(inp.value); });
+      inp.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ',') {
+          if (inp.value.trim()) { e.preventDefault(); addSkill(inp.value); }
+        } else if (e.key === 'Backspace' && inp.value === '' && data.skills.length) {
+          removeSkill(data.skills.length - 1);
+        } else if (e.key === 'Escape') {
+          closeSkMenu();
+        }
+      });
+      if (keepFocus) inp.focus();
+    }
+    skBox.addEventListener('click', function(e) {
+      if (e.target === skBox) { var inp = document.getElementById('fSkillInput'); if (inp) inp.focus(); }
+    });
+    skMenu.addEventListener('click', function(e) {
+      var b = e.target.closest('.flow-skill-opt');
+      if (!b) return;
+      addSkill(b.getAttribute('data-add'));
+    });
+    drawSkills();
+
+    card.querySelector('[data-back]').addEventListener('click', function() { closeSkMenu(); goBack(); });
+    nextBtn.addEventListener('click', function() { closeSkMenu(); goNext(); });
+  }
+
+  // ── Step 5: Бюджет ──
+  function renderBudget() {
+    card.innerHTML = ''
+      + '<h1 class="flow-q">Сколько готовы заплатить?</h1>'
+      + '<p class="flow-sub">Укажите бюджет, который получит исполнитель. Адекватная цена ускоряет отклики.</p>'
+      + '<div class="flow-body">'
+      +   '<label class="flow-label">Бюджет, ₽</label>'
+      +   '<input type="text" class="flow-input" id="fBudget" inputmode="numeric" placeholder="Например, 8 000" value="' + esc(data.budget) + '"/>'
+      +   '<div class="flow-select-wrap" style="margin-top:20px">'
+      +     '<select class="flow-select" id="fPayType">'
+      +       ['За проект','За час','За смену','В месяц'].map(function(o){ return '<option' + (data.payType===o?' selected':'') + '>' + o + '</option>'; }).join('')
+      +     '</select>'
+      +   '</div>'
+      +   '<label class="flow-label" style="margin-top:20px">Сколько нужно исполнителей</label>'
+      +   '<input type="number" class="flow-input" id="fPeople" min="1" value="' + esc(data.people) + '"/>'
+      + '</div>'
+      + actions(false, 'Далее', parseInt(data.budget||'0',10) >= 100, 'Укажите бюджет — минимум 100 ₽', '#fBudget');
+
+    var b = document.getElementById('fBudget');
+    var nextBtn = card.querySelector('[data-next]');
+    b.addEventListener('input', function() {
+      var digits = b.value.replace(/\D/g, '');
+      data.budget = digits;
+      b.value = digits ? parseInt(digits,10).toLocaleString('ru-RU') : '';
+      setNext(parseInt(digits||'0',10) >= 100);
+    });
+    if (data.budget) b.value = parseInt(data.budget,10).toLocaleString('ru-RU');
+    document.getElementById('fPayType').addEventListener('change', function(){ data.payType = this.value; });
+    document.getElementById('fPeople').addEventListener('input', function(){ data.people = Math.max(1, parseInt(this.value||'1',10)); });
+    card.querySelector('[data-back]').addEventListener('click', goBack);
+    nextBtn.addEventListener('click', goNext);
+  }
+
+  // ── Step 6: Подтверждение ──
+  function renderReview() {
+    var whenStr = data.whenType === 'asap' ? 'Как можно скорее'
+      : data.whenType === 'unknown' ? 'Пока не определено'
+      : data.whenType === 'deadline' ? (data.date ? 'Закончить до ' + fmtDate(data.date) : '—')
+      : data.whenType === 'period' ? ((data.date && data.dateEnd) ? fmtDate(data.date) + ' — ' + fmtDate(data.dateEnd) : '—')
+      : (data.date ? fmtDate(data.date) + (data.time ? ', ' + data.time : '') : '—');
+    var rows = [
+      ['Название', data.title],
+      ['Подкатегория', data.subcategory],
+      ['Место', data.place === 'remote' ? 'Удалённо' : ('По адресу: ' + (data.address || '—'))],
+      ['Начать', whenStr],
+      ['Описание', data.description],
+      ['Навыки', data.skills.join(', ')],
+      ['Бюджет', (parseInt(data.budget||'0',10).toLocaleString('ru-RU')) + ' ₽ · ' + data.payType],
+      ['Исполнителей', data.people]
+    ];
+    card.innerHTML = ''
+      + '<h1 class="flow-q">Проверьте и опубликуйте</h1>'
+      + '<p class="flow-sub">Всё верно? Опубликуем задание прямо сейчас — оно станет видно исполнителям.</p>'
+      + '<div class="flow-summary">'
+      +   rows.map(function(r){ return '<div class="flow-sum-row"><div class="k">' + r[0] + '</div><div class="v">' + esc(r[1] || '—') + '</div></div>'; }).join('')
+      + '</div>'
+      + '<div class="flow-actions"><button type="button" class="flow-btn flow-btn--back" data-back>Назад</button>'
+      + '<button type="button" class="flow-btn flow-btn--next" data-publish>Опубликовать задание</button></div>';
+
+    card.querySelector('[data-back]').addEventListener('click', goBack);
+    var pubBtn = card.querySelector('[data-publish]');
+    var isEmployer = false;
+    try { isEmployer = (JSON.parse(localStorage.getItem('studradar_session') || 'null') || {}).role === 'employer'; } catch (_) {}
+    pubBtn.innerHTML = isEmployer ? 'Опубликовать задание' : 'Зарегистрироваться<br/>и&nbsp;опубликовать';
+    pubBtn.addEventListener('click', function() {
+      saveTask();
+      if (isEmployer) {
+        step = TOTAL + 1;
+        render();
+      } else if (window.StudRadarReg && window.StudRadarReg.open) {
+        // Registration is the final step of placing a task.
+        window.StudRadarReg.open({ role: 'employer', next: 'employer-new-task.html#done' });
+      } else {
+        step = TOTAL + 1;
+        render();
+      }
+    });
+  }
+
+  function saveTask() {
+    try {
+      var stored = JSON.parse(localStorage.getItem('studradar_employer_tasks') || '[]');
+      stored.unshift(Object.assign({ id: Date.now(), createdAt: new Date().toISOString() }, data));
+      localStorage.setItem('studradar_employer_tasks', JSON.stringify(stored));
+    } catch (_) {}
+  }
+
+  // ── Done ──
+  function renderDone() {
+    pFill.style.width = '100%';
+    pLabel.textContent = 'Задание опубликовано';
+    card.innerHTML = ''
+      + '<div class="flow-done">'
+      +   '<div class="flow-done-ico">'
+      +     '<svg class="flow-done-check" viewBox="0 0 52 52" aria-hidden="true">'
+      +       '<circle class="fdc-circle" cx="26" cy="26" r="24"/>'
+      +       '<path class="fdc-tick" d="M14.5 27.5l7.5 7.5 15.5-16"/>'
+      +     '</svg>'
+      +     '<span class="flow-confetti" id="fConfetti"></span>'
+      +   '</div>'
+      +   '<h2>Задание опубликовано!</h2>'
+      +   '<p>Мы покажем его исполнителям с подходящими навыками. Первый отклик в среднем приходит за 5 минут — следите за чатами.</p>'
+      +   '<a href="employer-dashboard.html">В личный кабинет</a>'
+      + '</div>';
+
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var box = document.getElementById('fConfetti');
+    if (box && !reduce) {
+      var colors = ['#DD5444', '#1153B5', '#020327', '#F2B705', '#2BB673'];
+      var html = '';
+      for (var i = 0; i < 28; i++) {
+        var ang = Math.random() * Math.PI * 2;
+        var dist = 90 + Math.random() * 140;
+        var cx = Math.round(Math.cos(ang) * dist);
+        var cy = Math.round(Math.sin(ang) * dist - 40); // slight upward bias
+        var cr = Math.round(360 + Math.random() * 540) * (Math.random() < 0.5 ? -1 : 1);
+        var dur = 900 + Math.round(Math.random() * 700);
+        var del = Math.round(Math.random() * 120);
+        var col = colors[i % colors.length];
+        var w = 6 + Math.round(Math.random() * 6);
+        html += '<i style="'
+          + '--cx:' + cx + 'px;--cy:' + cy + 'px;--cr:' + cr + 'deg;--c:' + col + ';'
+          + '--d:' + dur + 'ms;width:' + w + 'px;height:' + (w + 5) + 'px;'
+          + 'animation-delay:' + del + 'ms;"></i>';
+      }
+      box.innerHTML = html;
+      setTimeout(function() { if (box) box.innerHTML = ''; }, 2200);
+    }
+  }
+
+  function goNext() { if (step < TOTAL) { step++; render(); window.scrollTo({top:0,behavior:'smooth'}); } else if (step === TOTAL) { /* handled by publish */ } }
+  function goBack() { if (step > 1) { step--; render(); window.scrollTo({top:0,behavior:'smooth'}); } }
+
+  function showDone() {
+    step = TOTAL + 1;
+    renderDone();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Returning here after the final registration step → show success.
+  // (registration may navigate same-page via hash, so listen for that too.)
+  window.addEventListener('hashchange', function() {
+    if (location.hash === '#done') showDone();
+  });
+
+  function flowHighlight(wrap, on) {
+    if (!wrap) return;
+    (wrap.dataset.targets || '').split(',').forEach(function(sel) {
+      sel = sel.trim();
+      if (!sel) return;
+      card.querySelectorAll(sel).forEach(function(el) { el.classList.toggle('flow-invalid', on); });
+    });
+  }
+  card.addEventListener('mouseover', function(e) {
+    var wrap = e.target.closest('.flow-next-wrap');
+    if (wrap && wrap.classList.contains('is-locked')) {
+      wrap.classList.add('show-tip');
+      flowHighlight(wrap, true);
+    }
+  });
+  card.addEventListener('mouseout', function(e) {
+    var wrap = e.target.closest('.flow-next-wrap');
+    if (wrap && !wrap.contains(e.relatedTarget)) {
+      wrap.classList.remove('show-tip');
+      flowHighlight(wrap, false);
+    }
+  });
+
+  if (location.hash === '#done') {
+    showDone();
+  } else {
+    render();
+  }
+})();
+</script>
+</body>
+</html>

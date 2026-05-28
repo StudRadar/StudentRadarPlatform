@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>СтудРадар</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700&family=Tektur:wght@700&display=swap" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Manrope', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background: #020327;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100%;
+      overflow: hidden;
+      padding-bottom: 65px;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ── Radar bg image ── */
+    .radar {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      display: grid;
+      place-items: center;
+    }
+    .radar img {
+      width: calc(min(110vw, 110vh) + 150px);
+      height: calc(min(110vw, 110vh) + 150px);
+      object-fit: contain;
+      transform: translateY(-120px);
+    }
+    .radar-beam-wrap {
+      position: absolute;
+      width: calc(min(110vw, 110vh) + 60px);
+      height: calc(min(110vw, 110vh) + 60px);
+      transform: translateY(0px);
+    }
+    .radar-beam {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 0deg,
+        transparent 320deg,
+        rgba(17,83,181,0.28) 352deg,
+        transparent 360deg
+      );
+      animation: sweep 5s linear infinite, beam-color 5s linear infinite;
+    }
+    @keyframes sweep {
+      to { transform: rotate(360deg); }
+    }
+    /* ── Radar dots canvas ── */
+    .radar-dots {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    @keyframes beam-color {
+      0%   { filter: hue-rotate(0deg); }
+      22%  { filter: hue-rotate(0deg); }
+      28%  { filter: hue-rotate(150deg); }
+      72%  { filter: hue-rotate(150deg); }
+      78%  { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(0deg); }
+    }
+
+    /* ── Logo ── */
+    .logo {
+      position: fixed;
+      top: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Tektur', sans-serif;
+      font-size: 20px;
+      letter-spacing: -0.02em;
+      color: #fff;
+      opacity: 0.9;
+      z-index: 10;
+      white-space: nowrap;
+    }
+    .logo img { filter: brightness(0) invert(1); }
+    .logo img { width: 32px; height: 36px; object-fit: contain; }
+
+    /* ── Heading ── */
+    .start-heading {
+      font-family: 'Tektur', sans-serif;
+      font-size: 68px;
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: 0;
+      line-height: 1.1;
+      color: #fff;
+      position: relative;
+      z-index: 2;
+      margin-bottom: 40px;
+    }
+
+    /* ── Center block ── */
+    .center {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ── Buttons ── */
+    .choice-btn {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 12px;
+      width: 360px;
+      padding: 0 28px 0 36px;
+      height: 72px;
+      border-radius: 16px;
+      font-family: 'Tektur', sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      transition:
+        transform 0.35s cubic-bezier(0.34,1.56,0.64,1),
+        box-shadow 0.35s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Shimmer sweep on hover */
+    .choice-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -120%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(
+        105deg,
+        transparent 20%,
+        rgba(255,255,255,0.22) 50%,
+        transparent 80%
+      );
+      transition: left 0.55s ease;
+      pointer-events: none;
+    }
+    .choice-btn:hover::before { left: 160%; }
+
+    /* Bright inner border on hover */
+    .choice-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      border: 1.5px solid rgba(255,255,255,0);
+      transition: border-color 0.35s ease;
+      pointer-events: none;
+    }
+    .choice-btn:hover::after { border-color: rgba(255,255,255,0.35); }
+
+    .choice-btn:hover { transform: scale(1.06) translateY(-3px); }
+    .choice-btn:active {
+      transform: scale(0.97);
+      transition-duration: 0.1s;
+    }
+
+    /* Arrow icon */
+    .arrow {
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      transition: transform 0.42s cubic-bezier(0.25, 1, 0.5, 1);
+      will-change: transform;
+    }
+
+    /* Blue — student */
+    .choice-btn--blue {
+      background: linear-gradient(135deg, #1153B5, #1a6de0);
+      box-shadow:
+        0 4px 20px rgba(17,83,181,0.4),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+    .choice-btn--blue:hover {
+      box-shadow:
+        0 0 0 3px rgba(100,160,255,0.25),
+        0 12px 60px rgba(17,83,181,0.9),
+        0 24px 80px rgba(17,83,181,0.5),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+    }
+
+    /* Orange — employer */
+    .choice-btn--orange {
+      background: linear-gradient(135deg, #DD5444, #f06454);
+      box-shadow:
+        0 4px 20px rgba(221,84,68,0.4),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+    .choice-btn--orange:hover {
+      box-shadow:
+        0 0 0 3px rgba(255,140,120,0.25),
+        0 12px 60px rgba(221,84,68,0.9),
+        0 24px 80px rgba(221,84,68,0.5),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+    }
+
+    /* ── Separator ── */
+    .sep {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.3;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .sep::before, .sep::after {
+      content: '';
+      width: 60px;
+      height: 1px;
+      background: rgba(255,255,255,0.2);
+    }
+
+    /* ── Radar Loader ── */
+    #rl {
+      position: fixed;
+      inset: 0;
+      background: #020327;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.07s ease;
+    }
+    #rl.on { opacity: 1; pointer-events: all; }
+    .rl-ring {
+      position: relative;
+      width: 220px;
+      height: 220px;
+    }
+    #rl-sweep {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 0deg,
+        transparent 295deg,
+        rgba(17,83,181,0.4) 345deg,
+        rgba(80,160,255,0.9) 360deg
+      );
+    }
+    #rl-sweep.spin {
+      animation: rl-spin 0.46s linear forwards;
+    }
+    @keyframes rl-spin { to { transform: rotate(360deg); } }
+    .rl-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+    }
+
+    @media (max-width: 768px) {
+      .start-heading {
+        font-size: 36px;
+        margin-bottom: 28px;
+        padding: 0 20px;
+      }
+      .center {
+        flex-direction: column;
+        gap: 12px;
+        padding: 0 20px;
+        width: 100%;
+      }
+      .choice-btn {
+        width: 100%;
+        max-width: 420px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .start-heading {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Radar Loader Overlay -->
+  <div id="rl" aria-hidden="true">
+    <div class="rl-ring">
+      <svg width="220" height="220" viewBox="0 0 220 220" fill="none" style="position:absolute;inset:0;">
+        <circle cx="110" cy="110" r="107" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
+        <circle cx="110" cy="110" r="71"  stroke="rgba(255,255,255,0.09)" stroke-width="1"/>
+        <circle cx="110" cy="110" r="35"  stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+        <line x1="110" y1="3"  x2="110" y2="217" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+        <line x1="3"   y1="110" x2="217" y2="110" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+        <circle cx="110" cy="110" r="3.5" fill="rgba(80,160,255,0.9)"/>
+      </svg>
+      <div id="rl-sweep"></div>
+    </div>
+    <span class="rl-label">Сканирование…</span>
+  </div>
+
+  <!-- Radar decoration -->
+  <div class="radar" aria-hidden="true">
+    <img src="assets/radar-white.svg" alt="" />
+    <div class="radar-beam-wrap"><div class="radar-beam"></div></div>
+    <canvas class="radar-dots" id="radar-dots"></canvas>
+  </div>
+
+  <!-- Logo -->
+  <a href="index.html" class="logo">
+    <img src="assets/logo.svg" alt="" />
+    СТУДРАДАР
+  </a>
+
+  <!-- Heading -->
+  <h1 class="start-heading">МЕСТО ВСТРЕЧИ<br>СТУДЕНТОВ И БИЗНЕСА</h1>
+
+  <!-- Buttons -->
+  <div class="center">
+
+    <a href="for-students.html" class="choice-btn choice-btn--blue">
+      <span class="btn-label">Я СТУДЕНТ</span>
+      <span class="arrow"><img src="assets/Button-icon.svg" width="24" height="24" alt="" /></span>
+    </a>
+
+
+    <a href="employer.html" class="choice-btn choice-btn--orange" id="employerBtn">
+      <span class="btn-label">Я ЗАКАЗЧИК</span>
+      <span class="arrow"><img src="assets/Button-icon.svg" width="24" height="24" alt="" /></span>
+    </a>
+
+  </div>
+
+<script>
+(function() {
+  var canvas = document.getElementById('radar-dots');
+  var ctx = canvas.getContext('2d');
+  var dots = [];
+
+  function getRadarInfo() {
+    var displaySize = Math.min(window.innerWidth * 1.1, window.innerHeight * 1.1) + 150;
+    var scale = displaySize / 698;
+    return {
+      cx: window.innerWidth / 2,
+      cy: window.innerHeight / 2 - 120,
+      maxR: 322 * scale
+    };
+  }
+
+  function buildDots() {
+    var info = getRadarInfo();
+    dots = [];
+    var attempts = 0;
+    while (dots.length < 18 && attempts < 3000) {
+      attempts++;
+      var angle = Math.random() * Math.PI * 2;
+      var r = Math.random() * info.maxR;
+      var x = info.cx + Math.cos(angle) * r;
+      var y = info.cy + Math.sin(angle) * r;
+      var ok = true;
+      for (var j = 0; j < dots.length; j++) {
+        var ddx = dots[j].x - x, ddy = dots[j].y - y;
+        if (ddx*ddx + ddy*ddy < 60*60) { ok = false; break; }
+      }
+      if (ok) dots.push({
+        x: x, y: y,
+        r: 1.5 + Math.random(),
+        period: 3000 + Math.random() * 2000,
+        offset: Math.random() * 6000
+      });
+    }
+  }
+
+  function opacity(dot, now) {
+    var t = ((now + dot.offset) % dot.period) / dot.period;
+    if (t < 0.04) return t / 0.04;
+    if (t < 0.07) return 1;
+    if (t < 0.32) return 1 - (t - 0.07) / 0.25;
+    return 0;
+  }
+
+  function draw() {
+    var w = window.innerWidth, h = window.innerHeight;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w; canvas.height = h;
+      buildDots();
+    }
+    ctx.clearRect(0, 0, w, h);
+    var now = performance.now();
+    dots.forEach(function(d) {
+      var op = opacity(d, now);
+      if (op <= 0) return;
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255,255,255,' + op + ')';
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  buildDots();
+  draw();
+})();
+</script>
+
+<script>
+  document.querySelectorAll('.choice-btn').forEach(function(btn) {
+    var arrow = btn.querySelector('.arrow');
+    btn.addEventListener('mouseenter', function() {
+      var btnR = btn.getBoundingClientRect();
+      var arrowR = arrow.getBoundingClientRect();
+      var tx = btnR.right - 28 - arrowR.right;
+      arrow.style.transform = 'translateX(' + tx + 'px)';
+    });
+    btn.addEventListener('mouseleave', function() {
+      arrow.style.transform = 'translateX(0)';
+    });
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      var href = btn.getAttribute('href');
+      // Выбор роли на стартовом экране — входим как гость выбранной стороны
+      try { localStorage.removeItem('studradar_session'); } catch(_e) {}
+      var loader = document.getElementById('rl');
+      var sweep = document.getElementById('rl-sweep');
+      sweep.classList.remove('spin');
+      void sweep.offsetWidth;
+      loader.classList.add('on');
+      sweep.classList.add('spin');
+      setTimeout(function() { window.location.href = href; }, 500);
+    });
+  });
+</script>
+</body>
+</html>

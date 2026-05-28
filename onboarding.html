@@ -1,0 +1,1095 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Добро пожаловать — СтудРадар</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&family=Manrope:wght@400;500;600;700&family=Tektur:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ===== Onboarding layout ===== */
+    .onb-header {
+      position: sticky; top: 0; z-index: 100;
+      background: #fff;
+      padding: 0 40px;
+      height: 68px;
+      display: flex; align-items: center;
+      border-bottom: 1px solid rgba(2,3,39,0.07);
+    }
+    .onb-logo {
+      display: flex; align-items: center; gap: 8px;
+      font-family: 'Tektur', sans-serif; font-weight: 700; font-size: 20px;
+      color: var(--ink); text-decoration: none;
+    }
+    .onb-logo img { width: 30px; height: 34px; object-fit: contain; display: block; }
+
+    /* ===== Progress stepper above card ===== */
+    .onb-stepper {
+      padding: 6px 40px 22px;
+      margin-bottom: 12px;
+      max-width: 560px; width: 100%; box-sizing: border-box;
+    }
+    .onb-stepper-row {
+      display: flex; align-items: center;
+      position: relative;
+    }
+    .onb-stepper-cell {
+      display: flex; flex-direction: column; align-items: center;
+      flex-shrink: 0; position: relative;
+      min-width: 36px;
+    }
+    .onb-stepper-conn {
+      flex: 1; height: 2px;
+      background: rgba(2,3,39,0.10);
+      margin-bottom: 26px; /* aligns line with bubble center, leaving label below */
+      transition: background .25s ease;
+    }
+    .onb-stepper-conn.is-done { background: #1153B5; }
+    .onb-stepper-bubble {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(2,3,39,0.08);
+      color: rgba(2,3,39,0.30);
+      border: 2px solid transparent;
+      transition: background .2s, color .2s, border-color .2s;
+    }
+    .onb-stepper-cell.is-done .onb-stepper-bubble {
+      background: #1153B5; color: #fff;
+    }
+    .onb-stepper-cell.is-skipped .onb-stepper-bubble {
+      background: #E8A700; color: #fff;
+    }
+    .onb-stepper-cell.is-current .onb-stepper-bubble {
+      background: #fff; border-color: #1153B5;
+    }
+    .onb-stepper-cell.is-current .onb-stepper-bubble::after {
+      content: ''; width: 10px; height: 10px; border-radius: 50%;
+      background: #1153B5; display: block;
+    }
+    .onb-stepper-label {
+      margin-top: 10px;
+      font-family: 'Manrope', sans-serif; font-size: 14px; font-weight: 500;
+      color: rgba(2,3,39,0.55);
+      white-space: nowrap;
+    }
+    .onb-stepper-cell.is-done .onb-stepper-label,
+    .onb-stepper-cell.is-current .onb-stepper-label {
+      color: #020327;
+    }
+    .onb-stepper-cell.is-skipped .onb-stepper-label {
+      color: #B07400;
+    }
+    .onb-stepper-conn.is-skipped { background: #E8A700; }
+
+    /* ===== Learn-more link (Step 2) ===== */
+    .onb-learn-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 600;
+      color: #1153B5; text-decoration: none;
+      margin: -6px 0 22px; padding: 4px 0;
+    }
+    .onb-learn-link:hover { text-decoration: underline; }
+
+    /* ===== Info modal: Подробнее о самозанятости ===== */
+    .onb-info-modal {
+      position: fixed; inset: 0; z-index: 900;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity .22s;
+    }
+    .onb-info-modal.is-open { opacity: 1; pointer-events: auto; }
+    .onb-info-backdrop {
+      position: absolute; inset: 0;
+      background: rgba(2,3,39,0.55);
+    }
+    .onb-info-window {
+      position: relative; z-index: 1;
+      background: #fff; border-radius: 24px;
+      padding: 32px 36px 28px; width: min(480px, calc(100vw - 32px));
+      max-height: 80vh; overflow-y: auto;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.18);
+      transform: translateY(10px); transition: transform .25s;
+    }
+    .onb-info-modal.is-open .onb-info-window { transform: translateY(0); }
+    .onb-info-head {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
+    }
+    .onb-info-title {
+      font-family: 'Tektur', sans-serif; font-size: 20px; font-weight: 600; color: #020327; margin: 0;
+      text-transform: uppercase; letter-spacing: -0.01em;
+    }
+    .onb-info-close {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--bg); border: 0; cursor: pointer;
+      display: grid; place-items: center; padding: 0;
+      color: #020327; transition: background .2s, transform .2s;
+    }
+    .onb-info-close:hover { background: var(--line); transform: rotate(90deg); }
+    .onb-info-content { line-height: 1.6; }
+    .onb-info-content h3 {
+      font-family: 'Tektur', sans-serif; font-size: 17px; font-weight: 600;
+      color: #020327; margin: 20px 0 8px;
+    }
+    .onb-info-content h3:first-child { margin-top: 0; }
+    .onb-info-content p {
+      font-family: 'Manrope', sans-serif; font-size: 15px;
+      color: rgba(2,3,39,0.7); margin: 0 0 12px;
+    }
+    .onb-info-content ul { margin: 0 0 12px; padding-left: 18px; }
+    .onb-info-content li {
+      font-family: 'Manrope', sans-serif; font-size: 15px;
+      color: rgba(2,3,39,0.7); margin-bottom: 6px;
+    }
+    .onb-info-cta {
+      display: inline-flex; align-items: center; gap: 6px;
+      height: 48px; padding: 0 20px; margin-top: 12px;
+      background: #1153B5; color: #fff; border-radius: 12px;
+      text-decoration: none;
+      font-family: 'Tektur', sans-serif; font-size: 14px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.03em;
+      transition: background .18s;
+    }
+    .onb-info-cta:hover { background: #0d439a; }
+
+    /* ===== Body ===== */
+    .onb-body {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 40px 20px 80px;
+    }
+    .onb-card {
+      background: #fff; border-radius: 32px; padding: 44px 48px;
+      max-width: 560px; width: 100%;
+      box-shadow: 0 4px 32px rgba(2,3,39,0.07);
+      position: relative;
+      display: flex; flex-direction: column;
+      min-height: 560px;
+    }
+    .onb-card.has-back { padding-top: 84px; }
+    /* Action buttons always pinned to the bottom of the card */
+    .onb-card .onb-btn-primary { margin-top: auto; }
+    .onb-back-btn {
+      position: absolute; top: 20px; left: 20px;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(2,3,39,0.06); border: none; padding: 0; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(2,3,39,0.55);
+      transition: background .15s, color .15s;
+    }
+    .onb-back-btn:hover { background: rgba(2,3,39,0.10); color: #020327; }
+
+    .onb-step-title {
+      font-family: 'Tektur', sans-serif; font-size: 26px; font-weight: 700;
+      color: #020327; margin-bottom: 8px; line-height: 1.1;
+      text-transform: uppercase; letter-spacing: -0.01em;
+    }
+    .onb-step-desc {
+      font-family: 'Manrope', sans-serif; font-size: 15px; color: rgba(2,3,39,0.58);
+      line-height: 1.6; margin-bottom: 24px;
+    }
+
+    /* Upload */
+    .onb-upload-area {
+      border: 2px dashed rgba(2,3,39,0.18); border-radius: 20px; padding: 28px 20px;
+      text-align: center; cursor: pointer; transition: border-color .18s, background .18s;
+      margin-bottom: 14px;
+    }
+    .onb-upload-area:hover, .onb-upload-area.is-drag {
+      border-color: #1153B5; background: hsla(216,83%,39%,0.03);
+    }
+    .onb-upload-area.has-file { border-style: solid; border-color: rgba(2,3,39,0.14); cursor: default; }
+    .onb-upload-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: hsla(238,90%,8%,0.06);
+      display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;
+    }
+    .onb-upload-text { font-family: 'Manrope'; font-size: 15px; color: rgba(2,3,39,0.55); line-height: 1.5; }
+    .onb-upload-text strong { color: #1153B5; }
+    .onb-upload-sub { font-size: 12px; color: rgba(2,3,39,0.38); margin-top: 4px; }
+
+    /* File row */
+    .onb-file-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 14px; background: hsla(216,83%,39%,0.06);
+      border-radius: 14px; margin-bottom: 14px;
+    }
+    .onb-file-icon {
+      width: 34px; height: 34px; border-radius: 10px;
+      background: hsla(216,83%,39%,0.12); display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0;
+    }
+    .onb-file-info { flex: 1; min-width: 0; }
+    .onb-file-name {
+      font-family: 'Manrope'; font-size: 13px; font-weight: 600; color: #020327;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .onb-file-status { font-family: 'Manrope'; font-size: 12px; color: rgba(2,3,39,0.45); margin-top: 2px; }
+    .onb-file-remove {
+      width: 28px; height: 28px; border-radius: 8px; border: none;
+      background: rgba(2,3,39,0.08); color: rgba(2,3,39,0.50);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; flex-shrink: 0; transition: background .15s;
+    }
+    .onb-file-remove:hover { background: rgba(2,3,39,0.14); }
+
+    /* Badge */
+    .onb-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 10px; border-radius: 100px;
+      font-family: 'Manrope'; font-size: 12px; font-weight: 600;
+    }
+    .onb-badge--waiting { background: hsla(38,100%,50%,0.12); color: #B07400; }
+    .onb-badge--review { background: hsla(216,83%,39%,0.10); color: #1153B5; }
+    .onb-badge--ok { background: hsla(142,60%,38%,0.10); color: #1F8050; }
+
+    /* Buttons */
+    .onb-btn-primary {
+      width: 100%; height: 62px; border: none; border-radius: 16px;
+      background: #1153B5; color: #fff;
+      font-family: 'Tektur', sans-serif; font-size: 16px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.04em;
+      cursor: pointer; transition: background .18s;
+    }
+    .onb-btn-primary:hover { background: #0d439a; }
+    .onb-btn-primary:disabled {
+      background: hsla(216,83%,39%,0.08); color: hsla(216,83%,39%,0.38); cursor: default;
+    }
+    .onb-btn-primary:disabled:hover { background: hsla(216,83%,39%,0.08); }
+    .onb-btn-secondary {
+      width: 100%; height: 62px; border: none; border-radius: 16px;
+      background: rgba(2,3,39,0.05); color: rgba(2,3,39,0.55);
+      font-family: 'Tektur', sans-serif; font-size: 16px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.04em;
+      cursor: pointer; transition: background .18s; margin-top: 10px;
+    }
+    .onb-btn-secondary:hover { background: rgba(2,3,39,0.09); }
+    .onb-btn-option {
+      width: 100%; padding: 16px 18px; border: 2px solid #E3E4E7; border-radius: 16px;
+      background: #fff; color: #020327;
+      font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 600;
+      cursor: pointer; text-align: left; transition: border-color .18s, background .18s;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .onb-btn-option:hover { border-color: #1153B5; background: hsla(216,83%,39%,0.03); }
+    .onb-btn-option.is-selected { border-color: #1153B5; background: hsla(216,83%,39%,0.06); color: #1153B5; }
+    .onb-btn-option-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: hsla(238,90%,8%,0.06); display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .onb-btn-option.is-selected .onb-btn-option-icon { background: hsla(216,83%,39%,0.12); }
+    .onb-btn-option-text { flex: 1; }
+    .onb-btn-option-sub { font-size: 12px; font-weight: 400; color: rgba(2,3,39,0.45); display: block; margin-top: 2px; }
+    .onb-btn-option.is-selected .onb-btn-option-sub { color: rgba(17,83,181,0.55); }
+    .onb-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+
+    /* Floating label field */
+    .onb-float-field {
+      position: relative; background: hsla(238,90%,8%,0.06);
+      border: 1.5px solid transparent; border-radius: 12px; height: 66px;
+      margin-bottom: 12px; transition: border-color .18s;
+    }
+    .onb-float-field:focus-within { border-color: #020327; }
+    .onb-float-label {
+      position: absolute; top: 50%; transform: translateY(-50%); left: 16px;
+      font-family: 'Manrope'; font-size: 15px; font-weight: 500;
+      color: rgba(2,3,39,0.40); pointer-events: none; user-select: none;
+      transition: top .15s, font-size .15s, transform .15s;
+    }
+    .onb-float-field.is-filled .onb-float-label,
+    .onb-float-field:focus-within .onb-float-label { top: 14px; transform: none; font-size: 12px; }
+    .onb-float-input {
+      position: absolute; inset: 0; padding: 26px 16px 8px; box-sizing: border-box;
+      border: none; outline: none; background: transparent; border-radius: 12px;
+      font-family: 'Manrope'; font-size: 15px; font-weight: 600; color: #020327; width: 100%;
+    }
+    .onb-field-hint { font-family: 'Manrope'; font-size: 13px; color: rgba(2,3,39,0.45); margin-bottom: 14px; }
+    .onb-field-error { font-family: 'Manrope'; font-size: 13px; color: #DD5444; margin-bottom: 14px; display: none; }
+
+    /* Textarea */
+    .onb-textarea {
+      width: 100%; min-height: 120px; padding: 14px 16px;
+      border: 1.5px solid transparent; background: hsla(238,90%,8%,0.06);
+      border-radius: 12px; font-family: 'Manrope'; font-size: 15px; color: #020327;
+      resize: vertical; outline: none; margin-bottom: 14px; transition: border-color .18s;
+      line-height: 1.55;
+    }
+    .onb-textarea:focus { border-color: #020327; }
+    .onb-textarea::placeholder { color: rgba(2,3,39,0.38); }
+
+    /* Plain input */
+    .onb-input {
+      width: 100%; height: 52px; padding: 0 14px;
+      border: 1.5px solid transparent; background: hsla(238,90%,8%,0.06);
+      border-radius: 12px; font-family: 'Manrope'; font-size: 15px; color: #020327;
+      outline: none; margin-bottom: 10px; transition: border-color .18s;
+    }
+    .onb-input:focus { border-color: #020327; }
+    .onb-input::placeholder { color: rgba(2,3,39,0.38); }
+
+    /* Tags */
+    .onb-tags-wrap { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; min-height: 0; }
+    .onb-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 12px; background: hsla(216,83%,39%,0.09);
+      border-radius: 100px; font-family: 'Manrope'; font-size: 13px; font-weight: 600; color: #1153B5;
+    }
+    .onb-tag-del { border: none; background: none; color: rgba(17,83,181,0.55); cursor: pointer; padding: 0; line-height: 1; }
+    .onb-tag-add-row { display: flex; gap: 8px; margin-bottom: 14px; }
+    .onb-tag-add-row .onb-input { flex: 1; margin-bottom: 0; }
+    .onb-tag-add-btn {
+      height: 52px; padding: 0 18px; border: none; border-radius: 12px;
+      background: hsla(216,83%,39%,0.09); color: #1153B5;
+      font-family: 'Manrope'; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: background .15s; white-space: nowrap;
+    }
+    .onb-tag-add-btn:hover { background: hsla(216,83%,39%,0.15); }
+
+    /* Services list */
+    .onb-srv-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+    .onb-srv-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 14px; background: hsla(238,90%,8%,0.04); border-radius: 12px;
+    }
+    .onb-srv-name { flex: 1; font-family: 'Manrope'; font-size: 14px; color: #020327; }
+    .onb-srv-price { font-family: 'Manrope'; font-size: 14px; font-weight: 600; color: rgba(2,3,39,0.50); }
+    .onb-srv-del { border: none; background: none; color: rgba(2,3,39,0.38); cursor: pointer; }
+    .onb-srv-inputs { display: flex; gap: 8px; margin-bottom: 10px; }
+    .onb-srv-inputs .onb-input { flex: 1; margin-bottom: 0; }
+    .onb-srv-inputs .onb-input--price { max-width: 150px; }
+
+    /* Confirmed row */
+    .onb-confirmed {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px; background: hsla(142,60%,38%,0.08); border-radius: 14px;
+      margin-bottom: 16px;
+    }
+    .onb-confirmed-icon {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: hsla(142,60%,38%,0.14); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .onb-confirmed-text strong { font-family: 'Manrope'; font-size: 14px; color: #020327; display: block; margin-bottom: 2px; }
+    .onb-confirmed-text span { font-family: 'Manrope'; font-size: 13px; color: rgba(2,3,39,0.55); }
+
+    /* Divider */
+    .onb-divider { height: 1px; background: var(--line); margin: 20px 0; }
+  </style>
+</head>
+<body class="cabinet-body">
+
+<header class="onb-header">
+  <a href="for-students.html" class="onb-logo">
+    <img src="assets/logo.svg" alt=""/>
+    <span>СтудРадар</span>
+  </a>
+</header>
+
+<!-- Card -->
+<main class="onb-body">
+  <div class="onb-stepper" id="onbStepper"><!-- rendered by JS --></div>
+  <div class="onb-card" id="onbCard">
+    <!-- rendered by JS -->
+  </div>
+</main>
+
+<input type="file" id="onbFileInput" hidden accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"/>
+
+<!-- ===== Info modal: Подробнее о самозанятости ===== -->
+<div class="onb-info-modal" id="onbSelfInfoModal" role="dialog" aria-modal="true" aria-labelledby="onbSelfInfoTitle">
+  <div class="onb-info-backdrop" data-onb-info-close></div>
+  <div class="onb-info-window">
+    <div class="onb-info-head">
+      <h2 class="onb-info-title" id="onbSelfInfoTitle">Статус самозанятого</h2>
+      <button type="button" class="onb-info-close" data-onb-info-close aria-label="Закрыть">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="onb-info-content">
+      <h3>Что такое самозанятость?</h3>
+      <p>Самозанятость — это специальный налоговый режим, который позволяет легально работать и получать оплату без регистрации ИП. Налог составляет 4% при работе с физлицами и 6% с организациями.</p>
+      <h3>Преимущества</h3>
+      <ul>
+        <li>Официальные выплаты от заказчиков — всё по закону</li>
+        <li>Чек для заказчика — они могут списать расходы</li>
+        <li>Нет обязательных страховых взносов</li>
+        <li>Простая регистрация — буквально 10 минут в приложении</li>
+      </ul>
+      <h3>Как оформить?</h3>
+      <p>Скачайте приложение «Мой налог» от ФНС России и зарегистрируйтесь через Госуслуги или паспорт. Всё займёт не более 15 минут.</p>
+      <a href="https://npd.nalog.ru/" target="_blank" rel="noopener" class="onb-info-cta">
+        Перейти на сайт ФНС
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 8h8M9 5l3 3-3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  var ONB_KEY = 'studradar_onboarding_v1';
+  var PROFILE_KEY = 'studradar_profile_v1';
+  var SESSION_KEY = 'studradar_session';
+
+  var STEPS = [
+    { label: 'Справка' },
+    { label: 'Самозанятость' },
+    { label: 'Почта' }
+  ];
+
+  // ─── State ────────────────────────────────────────────────
+  var state = loadState() || {
+    step: 1,
+    certFileName: null,
+    certSent: false,
+    selfChoice: null,   // null | 'already' | 'skip'
+    inn: '',
+    innConfirmed: false,
+    email: '',
+    about: '',
+    skills: [],
+    achName: '', achYear: '',
+    srvList: []
+  };
+
+  // Redirect if already finished
+  if (state.step > 3) {
+    window.location.href = 'profile.html';
+    return;
+  }
+
+  // ─── Persistence ─────────────────────────────────────────
+  function saveState() {
+    try { localStorage.setItem(ONB_KEY, JSON.stringify(state)); } catch(e) {}
+  }
+  function loadState() {
+    try {
+      var r = localStorage.getItem(ONB_KEY);
+      return r ? JSON.parse(r) : null;
+    } catch(e) { return null; }
+  }
+  function saveProfileField(field, value) {
+    var d = {};
+    try { var r = localStorage.getItem(PROFILE_KEY); if (r) d = JSON.parse(r); } catch(e) {}
+    d[field] = value;
+    try { localStorage.setItem(PROFILE_KEY, JSON.stringify(d)); } catch(e) {}
+  }
+
+  // ─── Render ───────────────────────────────────────────────
+  function render() {
+    renderCard();
+    renderStepper();
+  }
+
+  function isStepSkipped(i) {
+    if (i >= state.step) return false; // only past steps can be skipped
+    if (i === 1) return !state.certSent;
+    if (i === 2) return !state.innConfirmed;
+    if (i === 3) return !state.email;
+    return false;
+  }
+
+  function renderStepper() {
+    var host = document.getElementById('onbStepper');
+    if (!host) return;
+    var checkSvg = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">'
+      + '<path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>'
+      + '</svg>';
+    var warnSvg = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">'
+      + '<path d="M8 4v5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>'
+      + '<circle cx="8" cy="12" r="1.1" fill="currentColor"/>'
+      + '</svg>';
+    var html = '<div class="onb-stepper-row">';
+    for (var i = 1; i <= STEPS.length; i++) {
+      var cls = 'onb-stepper-cell';
+      var skipped = isStepSkipped(i);
+      if (i < state.step) cls += skipped ? ' is-skipped' : ' is-done';
+      else if (i === state.step) cls += ' is-current';
+      if (i > 1) {
+        var prevSkipped = isStepSkipped(i - 1);
+        var connDone = i <= state.step;
+        var connCls = 'onb-stepper-conn'
+          + (connDone ? (prevSkipped ? ' is-skipped' : ' is-done') : '');
+        html += '<div class="' + connCls + '"></div>';
+      }
+      html += '<div class="' + cls + '">';
+      var icon = '';
+      if (i < state.step) icon = skipped ? warnSvg : checkSvg;
+      html +=   '<div class="onb-stepper-bubble">' + icon + '</div>';
+      html +=   '<div class="onb-stepper-label">' + STEPS[i - 1].label + '</div>';
+      html += '</div>';
+    }
+    html += '</div>';
+    host.innerHTML = html;
+  }
+
+
+  function renderCard() {
+    var card = document.getElementById('onbCard');
+    var builders = [null, s1, s2, s3];
+    var hasBack = state.step > 1;
+    var backBtn = '';
+    if (hasBack) {
+      backBtn = '<button type="button" class="onb-back-btn" id="onbBackBtn" aria-label="Назад">'
+              +   '<svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">'
+              +     '<path d="M12 4L6 10L12 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'
+              +   '</svg>'
+              + '</button>';
+    }
+    card.classList.toggle('has-back', hasBack);
+    card.innerHTML = backBtn + builders[state.step]();
+    bindCard();
+    var backEl = document.getElementById('onbBackBtn');
+    if (backEl) backEl.addEventListener('click', prevStep);
+  }
+
+  function prevStep() {
+    if (state.step <= 1) return;
+    state.step -= 1;
+    saveState();
+    render();
+  }
+
+  // ─── Step 1: Справка ──────────────────────────────────────
+  function s1() {
+    var html = '<h2 class="onb-step-title">Справка об обучении</h2>';
+    html += '<p class="onb-step-desc">Загрузите справку из университета, подтверждающую статус студента. Документ проверяется модераторами в течение 1–2 дней.</p>';
+
+    if (state.certSent) {
+      html += fileRow(state.certFileName, true);
+      html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;">';
+      html += '<span class="onb-badge onb-badge--review">' + svgClock() + ' На проверке</span>';
+      html += '<span style="font-family:Manrope;font-size:13px;color:rgba(2,3,39,0.45);">Мы уведомим вас по email</span>';
+      html += '</div>';
+      html += '<button class="onb-btn-primary" id="s1Next">Продолжить</button>';
+      html += '<button class="onb-btn-secondary" id="s1Skip">Пропустить этот шаг</button>';
+
+    } else if (state.certFileName) {
+      html += fileRow(state.certFileName, false);
+      html += '<div style="margin-bottom:14px;">';
+      html += '<span class="onb-badge onb-badge--waiting">' + svgClock() + ' Загружено, ожидает отправки</span>';
+      html += '</div>';
+      html += '<button class="onb-btn-primary" id="s1Send">Отправить на проверку</button>';
+      html += '<button class="onb-btn-secondary" id="s1Skip">Пропустить этот шаг</button>';
+
+    } else {
+      html += '<div class="onb-upload-area" id="s1DropZone">';
+      html += '  <div class="onb-upload-icon">' + svgUpload() + '</div>';
+      html += '  <div class="onb-upload-text"><strong>Нажмите, чтобы выбрать файл</strong><br>или перетащите сюда</div>';
+      html += '  <div class="onb-upload-sub">PDF, JPG, PNG, DOC — до 10 МБ</div>';
+      html += '</div>';
+      html += '<button class="onb-btn-primary" disabled>Отправить на проверку</button>';
+      html += '<button class="onb-btn-secondary" id="s1Skip">Пропустить этот шаг</button>';
+    }
+    return html;
+  }
+
+  function fileRow(name, sent) {
+    var removeBtn = sent ? '' : '<button class="onb-file-remove" id="s1Remove" aria-label="Удалить файл">' + svgX(12) + '</button>';
+    return '<div class="onb-file-row">'
+      + '<div class="onb-file-icon">' + svgDoc() + '</div>'
+      + '<div class="onb-file-info">'
+      + '  <div class="onb-file-name">' + escHtml(name) + '</div>'
+      + '  <div class="onb-file-status">' + (sent ? 'Отправлено на проверку' : 'Готово к отправке') + '</div>'
+      + '</div>'
+      + removeBtn
+      + '</div>';
+  }
+
+  // ─── Step 2: Самозанятость ────────────────────────────────
+  function s2() {
+    var html = '<h2 class="onb-step-title">Статус самозанятого</h2>';
+    html += '<p class="onb-step-desc">Для получения оплаты на платформе необходим статус самозанятого. Вы можете подтвердить его сейчас или пропустить этот шаг.</p>';
+    html += '<a href="#" class="onb-learn-link" id="s2LearnMore">'
+         +    'Подробнее о самозанятости'
+         +    '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 8h8M9 5l3 3-3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+         +  '</a>';
+
+    if (state.innConfirmed) {
+      html += '<div class="onb-confirmed">';
+      html += '  <div class="onb-confirmed-icon">' + svgCheck(16) + '</div>';
+      html += '  <div class="onb-confirmed-text"><strong>Статус подтверждён</strong><span>ИНН ' + maskInn(state.inn) + '</span></div>';
+      html += '</div>';
+      html += '<button class="onb-btn-primary" id="s2Next">Продолжить</button>';
+
+    } else if (state.selfChoice === 'already') {
+      html += '<div class="onb-options">';
+      html += optionBtn('already', true, svgIdCard(), 'Уже самозанятый', 'Введите ИНН для подтверждения');
+      html += '</div>';
+      // INN field
+      html += '<div class="onb-float-field' + (state.inn ? ' is-filled' : '') + '" id="innWrap">';
+      html += '  <label class="onb-float-label" for="innInput">ИНН (12 цифр)</label>';
+      html += '  <input class="onb-float-input" id="innInput" type="text" inputmode="numeric" maxlength="12" value="' + escAttr(state.inn) + '"/>';
+      html += '</div>';
+      html += '<div class="onb-field-hint" id="innHint">Найдите ИНН в приложении «Мой налог» или на сайте ФНС</div>';
+      html += '<div class="onb-field-error" id="innError">ИНН должен состоять из 12 цифр</div>';
+      html += '<button class="onb-btn-primary" id="s2Confirm" ' + (isValidInn(state.inn) ? '' : 'disabled') + '>Подтвердить статус</button>';
+      html += '<button class="onb-btn-secondary" id="s2Skip">Пропустить этот шаг</button>';
+
+    } else {
+      html += '<div class="onb-options">';
+      html += optionBtn('already', false, svgIdCard(), 'Уже самозанятый', 'Введите ИНН для подтверждения');
+      html += '</div>';
+      html += '<button class="onb-btn-primary" disabled id="s2Next">Продолжить</button>';
+      html += '<button class="onb-btn-secondary" id="s2Skip">Пропустить этот шаг</button>';
+    }
+    return html;
+  }
+
+  function optionBtn(value, selected, icon, title, sub) {
+    return '<button class="onb-btn-option' + (selected ? ' is-selected' : '') + '" data-option="' + value + '">'
+      + '<div class="onb-btn-option-icon">' + icon + '</div>'
+      + '<div class="onb-btn-option-text">' + title + '<span class="onb-btn-option-sub">' + sub + '</span></div>'
+      + '</button>';
+  }
+
+  // ─── Step 3: Email ────────────────────────────────────────
+  function s3() {
+    var html = '<h2 class="onb-step-title">Электронная почта</h2>';
+    html += '<p class="onb-step-desc">Укажите email — мы будем отправлять уведомления о статусе документов, новых задачах и сообщениях.</p>';
+    html += '<div class="onb-float-field' + (state.email ? ' is-filled' : '') + '" id="emailWrap">';
+    html += '  <label class="onb-float-label" for="emailInput">Email</label>';
+    html += '  <input class="onb-float-input" id="emailInput" type="email" value="' + escAttr(state.email) + '"/>';
+    html += '</div>';
+    html += '<button class="onb-btn-primary" id="s3Next" ' + (state.email ? '' : 'disabled') + '>Продолжить</button>';
+    html += '<button class="onb-btn-secondary" id="s3Skip">Пропустить</button>';
+    return html;
+  }
+
+  // ─── Step 4: О себе ───────────────────────────────────────
+  function s4() {
+    var html = '<h2 class="onb-step-title">О себе</h2>';
+    html += '<p class="onb-step-desc">Расскажите о своём опыте и чем вы занимаетесь. Это помогает заказчикам выбрать вас среди других студентов.</p>';
+    html += '<textarea class="onb-textarea" id="aboutInput" placeholder="Чем занимаетесь, какой опыт уже накопили, какие задачи вам интересны.">' + escHtml(state.about) + '</textarea>';
+    html += '<button class="onb-btn-primary" id="s4Next" ' + (state.about ? '' : 'disabled') + '>Сохранить и продолжить</button>';
+    html += '<button class="onb-btn-secondary" id="s4Skip">Пропустить</button>';
+    return html;
+  }
+
+  // ─── Step 5: Навыки ───────────────────────────────────────
+  function s5() {
+    var html = '<h2 class="onb-step-title">Навыки</h2>';
+    html += '<p class="onb-step-desc">Добавьте навыки, которыми владеете. Они отображаются на вашей странице и помогают заказчикам найти вас через поиск.</p>';
+    html += '<div class="onb-tags-wrap" id="skillsTags">';
+    (state.skills || []).forEach(function(s) {
+      html += tagChip(s);
+    });
+    html += '</div>';
+    html += '<div class="onb-tag-add-row">';
+    html += '  <input class="onb-input" id="skillInput" placeholder="Введите навык…" style="margin-bottom:0"/>';
+    html += '  <button class="onb-tag-add-btn" id="addSkillBtn">Добавить</button>';
+    html += '</div>';
+    html += '<button class="onb-btn-primary" id="s5Next" ' + ((state.skills && state.skills.length) ? '' : 'disabled') + '>Сохранить и продолжить</button>';
+    html += '<button class="onb-btn-secondary" id="s5Skip">Пропустить</button>';
+    return html;
+  }
+
+  function tagChip(text) {
+    return '<span class="onb-tag">' + escHtml(text)
+      + ' <button class="onb-tag-del" data-skill="' + escAttr(text) + '" aria-label="Удалить">'
+      + '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2l6 6M8 2l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>'
+      + '</button></span>';
+  }
+
+  // ─── Step 6: Достижения ───────────────────────────────────
+  function s6() {
+    var html = '<h2 class="onb-step-title">Достижения</h2>';
+    html += '<p class="onb-step-desc">Укажите награды, сертификаты, конкурсы или стажировки. Можно добавить несколько достижений позже в профиле.</p>';
+    html += '<textarea class="onb-textarea" id="achName" placeholder="Название достижения или мероприятия">' + escHtml(state.achName) + '</textarea>';
+    html += '<input class="onb-input" id="achYear" type="text" inputmode="numeric" maxlength="4" placeholder="Год" value="' + escAttr(state.achYear) + '"/>';
+    var hasAch = state.achName && state.achName.trim();
+    html += '<button class="onb-btn-primary" id="s6Next" ' + (hasAch ? '' : 'disabled') + '>Сохранить и продолжить</button>';
+    html += '<button class="onb-btn-secondary" id="s6Skip">Пропустить</button>';
+    return html;
+  }
+
+  // ─── Step 7: Услуги ───────────────────────────────────────
+  function s7() {
+    var html = '<h2 class="onb-step-title">Услуги и цены</h2>';
+    html += '<p class="onb-step-desc">Опишите, что вы предлагаете и по какой цене. Услуги отображаются на вашей странице для заказчиков.</p>';
+    if (state.srvList && state.srvList.length) {
+      html += '<div class="onb-srv-list" id="srvList">';
+      state.srvList.forEach(function(s, i) {
+        html += '<div class="onb-srv-item">'
+          + '<span class="onb-srv-name">' + escHtml(s.name) + '</span>'
+          + '<span class="onb-srv-price">' + escHtml(s.price) + '</span>'
+          + '<button class="onb-srv-del" data-srvidx="' + i + '" aria-label="Удалить">' + svgX(14) + '</button>'
+          + '</div>';
+      });
+      html += '</div>';
+    }
+    html += '<div class="onb-srv-inputs">';
+    html += '  <input class="onb-input" id="srvName" placeholder="Название услуги" style="margin-bottom:0"/>';
+    html += '  <input class="onb-input onb-input--price" id="srvPrice" placeholder="Цена" style="margin-bottom:0"/>';
+    html += '</div>';
+    html += '<button class="onb-btn-primary" id="s7Add" style="margin-bottom:10px;" disabled>Добавить услугу</button>';
+    html += '<div class="onb-divider"></div>';
+    html += '<button class="onb-btn-primary" id="s7Finish" ' + ((state.srvList && state.srvList.length) ? '' : 'disabled') + '>Завершить и перейти в профиль</button>';
+    html += '<button class="onb-btn-secondary" id="s7Skip">Пропустить</button>';
+    return html;
+  }
+
+  // ─── Bind ────────────────────────────────────────────────
+  function bindCard() {
+    if (state.step === 1) bindS1();
+    if (state.step === 2) bindS2();
+    if (state.step === 3) bindS3();
+  }
+
+  function bindS1() {
+    var zone = document.getElementById('s1DropZone');
+    var fileInput = document.getElementById('onbFileInput');
+    var send = document.getElementById('s1Send');
+    var next = document.getElementById('s1Next');
+    var remove = document.getElementById('s1Remove');
+
+    if (zone) {
+      zone.addEventListener('click', function() { fileInput.click(); });
+      zone.addEventListener('dragover', function(e) { e.preventDefault(); zone.classList.add('is-drag'); });
+      zone.addEventListener('dragleave', function() { zone.classList.remove('is-drag'); });
+      zone.addEventListener('drop', function(e) {
+        e.preventDefault(); zone.classList.remove('is-drag');
+        var file = e.dataTransfer.files[0];
+        if (file) handleCertFile(file);
+      });
+    }
+    if (fileInput) {
+      fileInput.value = '';
+      fileInput.addEventListener('change', function() {
+        if (fileInput.files[0]) handleCertFile(fileInput.files[0]);
+      });
+    }
+    if (send) send.addEventListener('click', function() {
+      state.certSent = true;
+      saveState();
+      render();
+    });
+    var skip = document.getElementById('s1Skip');
+    if (next) next.addEventListener('click', nextStep);
+    if (skip) skip.addEventListener('click', nextStep);
+    if (remove) remove.addEventListener('click', function() {
+      state.certFileName = null;
+      state.certSent = false;
+      saveState();
+      render();
+    });
+  }
+
+  function handleCertFile(file) {
+    if (file.size > 10 * 1024 * 1024) { alert('Файл слишком большой — максимум 10 МБ'); return; }
+    state.certFileName = file.name;
+    state.certSent = false;
+    saveState();
+    render();
+  }
+
+  function bindS2() {
+    var options = document.querySelectorAll('[data-option]');
+    options.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var val = btn.getAttribute('data-option');
+        if (val === 'skip') {
+          state.selfChoice = 'skip';
+          saveState();
+          nextStep();
+        } else {
+          state.selfChoice = val;
+          saveState();
+          render();
+        }
+      });
+    });
+
+    var s2LearnMore = document.getElementById('s2LearnMore');
+    if (s2LearnMore) s2LearnMore.addEventListener('click', function (e) {
+      e.preventDefault();
+      openSelfInfo();
+    });
+
+    var innInput = document.getElementById('innInput');
+    var innError = document.getElementById('innError');
+    var innHint = document.getElementById('innHint');
+    var confirmBtn = document.getElementById('s2Confirm');
+    var s2Next = document.getElementById('s2Next');
+
+    if (innInput) {
+      innInput.addEventListener('input', function() {
+        var v = innInput.value.replace(/\D/g, '').slice(0, 12);
+        innInput.value = v;
+        state.inn = v;
+        var wrap = document.getElementById('innWrap');
+        if (wrap) wrap.classList.toggle('is-filled', v.length > 0);
+        if (confirmBtn) confirmBtn.disabled = !isValidInn(v);
+        if (innError) innError.style.display = v.length === 12 || v.length === 0 ? 'none' : 'block';
+      });
+      innInput.focus();
+    }
+    if (confirmBtn) confirmBtn.addEventListener('click', function() {
+      if (!isValidInn(state.inn)) return;
+      state.innConfirmed = true;
+      state.selfChoice = 'already';
+      saveState();
+      // also update session
+      updateSession({ selfEmployed: 'confirmed', inn: state.inn });
+      render();
+    });
+    if (s2Next) s2Next.addEventListener('click', nextStep);
+    var s2Skip = document.getElementById('s2Skip');
+    if (s2Skip) s2Skip.addEventListener('click', function() {
+      state.selfChoice = 'skip';
+      saveState();
+      nextStep();
+    });
+  }
+
+  function bindS3() {
+    var input = document.getElementById('emailInput');
+    var nextBtn = document.getElementById('s3Next');
+    var skipBtn = document.getElementById('s3Skip');
+    var wrap = document.getElementById('emailWrap');
+
+    if (input) {
+      input.addEventListener('input', function() {
+        state.email = input.value.trim();
+        if (wrap) wrap.classList.toggle('is-filled', state.email.length > 0);
+        if (nextBtn) nextBtn.disabled = !isValidEmail(state.email);
+      });
+      input.focus();
+    }
+    if (nextBtn) nextBtn.addEventListener('click', function() {
+      saveProfileField('email', state.email);
+      saveState();
+      nextStep();
+    });
+    if (skipBtn) skipBtn.addEventListener('click', nextStep);
+  }
+
+  function bindS4() {
+    var ta = document.getElementById('aboutInput');
+    var nextBtn = document.getElementById('s4Next');
+    var skipBtn = document.getElementById('s4Skip');
+    if (ta) {
+      ta.addEventListener('input', function() {
+        state.about = ta.value;
+        if (nextBtn) nextBtn.disabled = !ta.value.trim();
+      });
+    }
+    if (nextBtn) nextBtn.addEventListener('click', function() {
+      var parts = state.about.split(/\n\n+/).filter(function(p){ return p.trim(); });
+      if (!parts.length && state.about) parts = [state.about];
+      saveProfileField('about', parts);
+      saveState();
+      nextStep();
+    });
+    if (skipBtn) skipBtn.addEventListener('click', nextStep);
+  }
+
+  function bindS5() {
+    var input = document.getElementById('skillInput');
+    var addBtn = document.getElementById('addSkillBtn');
+    var nextBtn = document.getElementById('s5Next');
+    var skipBtn = document.getElementById('s5Skip');
+
+    function addSkill() {
+      var v = input.value.trim();
+      if (!v) return;
+      if (!state.skills) state.skills = [];
+      if (state.skills.indexOf(v) === -1) {
+        state.skills.push(v);
+        var wrap = document.getElementById('skillsTags');
+        if (wrap) { var chip = document.createElement('span'); chip.innerHTML = tagChip(v); wrap.appendChild(chip.firstElementChild); }
+        bindSkillDelBtns();
+        if (nextBtn) nextBtn.disabled = false;
+      }
+      input.value = '';
+    }
+    if (addBtn) addBtn.addEventListener('click', addSkill);
+    if (input) input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); addSkill(); }
+    });
+
+    function bindSkillDelBtns() {
+      document.querySelectorAll('.onb-tag-del').forEach(function(btn) {
+        btn.onclick = function() {
+          var sk = btn.getAttribute('data-skill');
+          state.skills = (state.skills || []).filter(function(s) { return s !== sk; });
+          btn.closest('.onb-tag').remove();
+          if (nextBtn) nextBtn.disabled = !(state.skills && state.skills.length);
+        };
+      });
+    }
+    bindSkillDelBtns();
+
+    if (nextBtn) nextBtn.addEventListener('click', function() {
+      saveProfileField('skills', state.skills || []);
+      saveState();
+      nextStep();
+    });
+    if (skipBtn) skipBtn.addEventListener('click', nextStep);
+  }
+
+  function bindS6() {
+    var achName = document.getElementById('achName');
+    var achYear = document.getElementById('achYear');
+    var nextBtn = document.getElementById('s6Next');
+    var skipBtn = document.getElementById('s6Skip');
+    if (achName) {
+      achName.addEventListener('input', function() {
+        state.achName = achName.value;
+        if (nextBtn) nextBtn.disabled = !achName.value.trim();
+      });
+    }
+    if (achYear) achYear.addEventListener('input', function() { state.achYear = achYear.value.replace(/\D/g,''); achYear.value = state.achYear; });
+    if (nextBtn) nextBtn.addEventListener('click', function() {
+      var existing = [];
+      try { var d = JSON.parse(localStorage.getItem(PROFILE_KEY) || '{}'); existing = d.achievements || []; } catch(e) {}
+      existing.unshift({ name: state.achName.trim(), year: state.achYear, photo: '' });
+      saveProfileField('achievements', existing);
+      saveState();
+      nextStep();
+    });
+    if (skipBtn) skipBtn.addEventListener('click', nextStep);
+  }
+
+  function bindS7() {
+    var nameIn = document.getElementById('srvName');
+    var priceIn = document.getElementById('srvPrice');
+    var addBtn = document.getElementById('s7Add');
+    var finishBtn = document.getElementById('s7Finish');
+    var skipBtn = document.getElementById('s7Skip');
+
+    function refreshAddBtn() {
+      if (addBtn) addBtn.disabled = !(nameIn && nameIn.value.trim());
+    }
+    if (nameIn) nameIn.addEventListener('input', refreshAddBtn);
+    if (priceIn) priceIn.addEventListener('input', refreshAddBtn);
+
+    if (addBtn) addBtn.addEventListener('click', function() {
+      var n = nameIn ? nameIn.value.trim() : '';
+      var p = priceIn ? priceIn.value.trim() : '';
+      if (!n) return;
+      if (!state.srvList) state.srvList = [];
+      state.srvList.push({ name: n, price: p });
+      if (nameIn) nameIn.value = '';
+      if (priceIn) priceIn.value = '';
+      saveState();
+      render();
+    });
+
+    document.querySelectorAll('[data-srvidx]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var idx = parseInt(btn.getAttribute('data-srvidx'), 10);
+        state.srvList.splice(idx, 1);
+        saveState();
+        render();
+      });
+    });
+
+    if (finishBtn) finishBtn.addEventListener('click', function() {
+      saveProfileField('services', state.srvList || []);
+      saveState();
+      finish();
+    });
+    if (skipBtn) skipBtn.addEventListener('click', finish);
+  }
+
+  // ─── Navigation ───────────────────────────────────────────
+  function nextStep() {
+    state.step++;
+    saveState();
+    if (state.step > 3) { finish(); return; }
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function finish() {
+    state.step = 4;
+    saveState();
+
+    // Initialize empty profile (cert confirm in documents.html will fill name/city/etc)
+    var profileData = {
+      profile: { name: '', photo: '', city: '', university: '', direction: '' },
+      about: [], skills: [], achievements: [], services: []
+    };
+    try { localStorage.setItem(PROFILE_KEY, JSON.stringify(profileData)); } catch(e) {}
+
+    // Update session with cert and self-employment status
+    var sessionUpdate = { certUploaded: state.certSent };
+    if (state.innConfirmed) {
+      sessionUpdate.selfEmployed = 'confirmed';
+      sessionUpdate.inn = state.inn;
+    } else {
+      sessionUpdate.selfEmployed = state.selfChoice === 'already' ? null : (state.selfChoice === 'skip' ? 'skipped' : null);
+    }
+    updateSession(sessionUpdate);
+
+    window.location.href = 'profile.html';
+  }
+
+  function updateSession(extra) {
+    try {
+      var s = JSON.parse(localStorage.getItem(SESSION_KEY) || '{}');
+      for (var k in extra) { if (Object.prototype.hasOwnProperty.call(extra, k)) s[k] = extra[k]; }
+      localStorage.setItem(SESSION_KEY, JSON.stringify(s));
+    } catch(e) {}
+  }
+
+  // ─── Validation ───────────────────────────────────────────
+  function isValidInn(v) { return /^\d{12}$/.test(v || ''); }
+  function isValidEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v || ''); }
+  function maskInn(v) { return v ? v.slice(0,6) + '******' : ''; }
+
+  // ─── SVG helpers ─────────────────────────────────────────
+  function svgUpload() {
+    return '<svg width="24" height="24" viewBox="0 0 256 256" fill="none"><rect width="256" height="256" rx="40" fill="transparent"/><path d="M200 152v40a16 16 0 01-16 16H72a16 16 0 01-16-16v-40" stroke="rgba(2,3,39,0.40)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path d="M128 32v112M96 76l32-44 32 44" stroke="rgba(2,3,39,0.40)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  }
+  function svgDoc() {
+    return '<svg width="18" height="18" viewBox="0 0 256 256" fill="#1153B5"><path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Z"/></svg>';
+  }
+  function svgX(size) {
+    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+  }
+  function svgCheck(size) {
+    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-7" stroke="#1F8050" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  }
+  function svgClock() {
+    return '<svg width="12" height="12" viewBox="0 0 256 256" fill="currentColor"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm64-88a8,8,0,0,1-8,8H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48A8,8,0,0,1,192,128Z"/></svg>';
+  }
+  function svgIdCard() {
+    return '<svg width="18" height="18" viewBox="0 0 256 256" fill="rgba(2,3,39,0.55)"><path d="M232,48H24A16,16,0,0,0,8,64V192a16,16,0,0,0,16,16H232a16,16,0,0,0,16-16V64A16,16,0,0,0,232,48ZM24,192V64H232V192ZM88,112A24,24,0,1,1,64,88,24,24,0,0,1,88,112Zm-8,24H72a40,40,0,0,0-40,40,8,8,0,0,0,8,8H96a8,8,0,0,0,8-8A40,40,0,0,0,80,136Zm88-16H144a8,8,0,0,1,0-16h24a8,8,0,0,1,0,16Zm24,32H144a8,8,0,0,1,0-16h48a8,8,0,0,1,0,16Z"/></svg>';
+  }
+  function svgSkip() {
+    return '<svg width="18" height="18" viewBox="0 0 256 256" fill="rgba(2,3,39,0.55)"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm-8-80V104a8,8,0,0,1,16,0v32a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,172Z"/></svg>';
+  }
+
+  // ─── Utils ────────────────────────────────────────────────
+  function escHtml(s) {
+    return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  function escAttr(s) {
+    return (s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+  }
+
+  // ─── Self-employment info modal ──────────────────────────
+  function openSelfInfo() {
+    var m = document.getElementById('onbSelfInfoModal');
+    if (m) m.classList.add('is-open');
+  }
+  function closeSelfInfo() {
+    var m = document.getElementById('onbSelfInfoModal');
+    if (m) m.classList.remove('is-open');
+  }
+  document.querySelectorAll('[data-onb-info-close]').forEach(function (el) {
+    el.addEventListener('click', closeSelfInfo);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeSelfInfo();
+  });
+
+  // ─── Init ────────────────────────────────────────────────
+  render();
+})();
+</script>
+</body>
+</html>

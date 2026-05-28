@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Личный кабинет — СтудРадар</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Tektur:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root {
+      --ec-blue: #1153B5;
+      --ec-blue-08: hsla(216, 83%, 39%, 0.08);
+      --ec-accent: #DD5444;
+      --ec-ink: #020327;
+      --ec-ink-72: hsla(238, 90%, 8%, 0.72);
+      --ec-ink-40: hsla(238, 90%, 8%, 0.40);
+      --ec-fill-04: hsla(238, 90%, 8%, 0.04);
+      --ec-fill-06: hsla(238, 90%, 8%, 0.06);
+    }
+    body { background: #F2F2F2; font-family: 'Manrope', sans-serif; }
+
+    /* ===== Header ===== */
+    .ec-hd {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 40px; background: #F2F2F2;
+    }
+    .ec-hd-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+    .ec-hd-logo img { width: 40px; height: 40px; flex-shrink: 0; }
+    .ec-hd-logo span {
+      font-family: 'Tektur', sans-serif; font-weight: 600; font-size: 19px;
+      color: #000; letter-spacing: 0; white-space: nowrap;
+    }
+    .ec-hd-menu { display: flex; align-items: center; gap: 10px; }
+    .ec-chip {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 24px; border-radius: 80px;
+      background: var(--ec-fill-04); color: var(--ec-ink);
+      font-size: 16px; font-weight: 400; text-decoration: none;
+      border: 0; cursor: pointer; transition: background .15s;
+    }
+    .ec-chip:hover { background: var(--ec-fill-06); }
+    .ec-chip svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .ec-chip .ic-accent { color: var(--ec-accent); }
+    .ec-hd-user { position: relative; }
+    .ec-user {
+      display: flex; align-items: center; gap: 16px;
+      padding: 4px 28px 4px 4px; border-radius: 100px;
+      background: #E9E9EB; border: 1px solid hsla(0, 0%, 0%, 0.30);
+      cursor: pointer;
+    }
+    .ec-user-ava {
+      width: 46px; height: 46px; border-radius: 50%; overflow: hidden;
+      flex-shrink: 0; background: #C9D4EA;
+      display: flex; align-items: center; justify-content: center; color: #1153B5;
+    }
+    .ec-user-ava img { width: 100%; height: 100%; object-fit: cover; }
+    .ec-user-ava svg { width: 60%; height: 60%; }
+    .ec-user-name { font-size: 16px; color: var(--ec-ink); white-space: nowrap; }
+    .ec-user svg { width: 20px; height: 20px; color: var(--ec-ink-72); }
+
+    /* ===== Layout ===== */
+    .ec-wrap {
+      max-width: 1206px; margin: 0 auto; padding: 24px 40px 80px;
+      display: flex; align-items: flex-start; gap: 24px;
+    }
+    .ec-col-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 18px; }
+    .ec-aside { width: 290px; flex-shrink: 0; display: flex; flex-direction: column; gap: 0; }
+
+    /* ===== Sidebar nav ===== */
+    .ec-nav-item {
+      display: flex; align-items: center; width: 290px; box-sizing: border-box;
+      padding: 16px 24px; border-radius: 10px; gap: 10px;
+      font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 500;
+      color: var(--ec-ink); background: transparent; border: 0; cursor: pointer;
+      text-align: left; text-decoration: none; transition: background .15s, color .15s;
+    }
+    .ec-nav-item:hover { background: var(--ec-fill-04); }
+    .ec-nav-item.is-active { background: var(--ec-blue-08); color: var(--ec-blue); }
+
+    /* ===== Card (canonical .task-card from styles.css) ===== */
+    /* status badge colour variants — dashboard-specific */
+    .task-card .task-badge--work { background: rgba(17,83,181,0.08); color: #1153B5; }
+    .task-card .task-badge--responses { background: rgba(221,84,68,0.10); color: #DD5444; }
+    .task-card .task-badge--done { background: rgba(2,3,39,0.06); color: rgba(2,3,39,0.72); }
+    .task-card .task-icon-btn:hover { color: #DD5444; }
+
+    /* footer: keep red button + note left, time right */
+    .ec-ft-left { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+    .ec-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      height: 44px; padding: 0 22px; border-radius: 12px;
+      font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 14px;
+      text-decoration: none; cursor: pointer; border: 0;
+      background: var(--ec-accent); color: #fff; transition: background .15s;
+    }
+    .ec-btn:hover { background: var(--ec-ink); }
+    .ec-btn-count {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 24px; height: 24px; padding: 0 6px; border-radius: 999px;
+      background: #fff; color: var(--ec-accent); font-weight: 700; font-size: 13px;
+    }
+    .ec-ft-note { font-size: 14px; color: var(--ec-ink-72); }
+    .ec-ft-note--accent { color: var(--ec-accent); font-weight: 700; }
+
+    /* ===== Post-task button ===== */
+    .ec-post {
+      display: flex; align-items: center; justify-content: center; gap: 14px;
+      height: 54px; border-radius: 16px;
+      background: rgba(221,84,68,0.08); color: var(--ec-accent); text-decoration: none;
+      font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 16px;
+      transition: background .15s;
+    }
+    .ec-post:hover { background: rgba(221,84,68,0.16); }
+    .ec-post svg { width: 20px; height: 20px; }
+
+    .ec-empty {
+      background: #fff; border-radius: 32px; padding: 48px 24px; text-align: center;
+      font-size: 15px; color: var(--ec-ink-72);
+    }
+
+    @media (max-width: 980px) {
+      .ec-hd { padding: 16px 20px; }
+      .ec-hd-menu .ec-chip span { display: none; }
+      .ec-wrap { flex-direction: column; padding: 20px 16px 60px; }
+      .ec-aside { width: 100%; flex-direction: row; overflow-x: auto; gap: 8px; }
+      .ec-nav-item { width: auto; white-space: nowrap; }
+      .ec-col-main { width: 100%; }
+    }
+  </style>
+</head>
+<body class="orange-theme" data-screen-label="Личный кабинет работодателя">
+<script>(function(){
+  try {
+    var s = localStorage.getItem('studradar_session');
+    var h = s && JSON.parse(s).role;
+    if (!h) { window.location.replace('employer.html'); return; }
+    if (h === 'student') { window.location.replace('catalog.html'); return; }
+  } catch(e){}
+})();</script>
+
+<!-- ===== HEADER ===== -->
+<header class="ec-hd">
+  <a href="employer-dashboard.html" class="ec-hd-logo">
+    <img src="assets/logo.svg" alt=""/>
+    <span>СтудРадар</span>
+  </a>
+
+  <nav class="ec-hd-menu" aria-label="Меню">
+    <a href="students.html" class="ec-chip">
+      <svg class="ic-accent" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M64.12,147.8a4,4,0,0,1-4,4.2H16a8,8,0,0,1-7.8-6.17,8.35,8.35,0,0,1,1.62-6.93A67.79,67.79,0,0,1,37,117.51a40,40,0,1,1,66.46-35.8,3.94,3.94,0,0,1-2.27,4.18A64.08,64.08,0,0,0,64,144C64,145.27,64,146.54,64.12,147.8Zm182-8.91A67.76,67.76,0,0,0,219,117.51a40,40,0,1,0-66.46-35.8,3.94,3.94,0,0,0,2.27,4.18A64.08,64.08,0,0,1,192,144c0,1.27,0,2.54-.12,3.8a4,4,0,0,0,4,4.2H240a8,8,0,0,0,7.8-6.17A8.33,8.33,0,0,0,246.17,138.89Zm-89,43.18a48,48,0,1,0-58.37,0A72.13,72.13,0,0,0,65.07,212,8,8,0,0,0,72,224H184a8,8,0,0,0,6.93-12A72.15,72.15,0,0,0,157.16,182.07Z"/></svg>
+      <span>Студенты</span>
+    </a>
+    <a href="employer-dashboard.html" class="ec-chip">
+      <svg class="ic-accent" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,24a16,16,0,0,0-7.16,1.69l-88,44a16,16,0,0,0,0,28.62l88,44a16,16,0,0,0,14.32,0l88-44a16,16,0,0,0,0-28.62l-88-44A16,16,0,0,0,128,24Z"/><path d="M219.16,152.84,128,198.42,36.84,152.84a8,8,0,1,0-7.16,14.31l92,46a8,8,0,0,0,7.16,0l92-46a8,8,0,1,0-7.16-14.31Z"/><path d="M219.16,190.84,128,236.42,36.84,190.84a8,8,0,1,0-7.16,14.31l92,46a8,8,0,0,0,7.16,0l92-46a8,8,0,1,0-7.16-14.31Z"/></svg>
+      <span>Мой кабинет</span>
+    </a>  </nav>
+
+  <div class="ec-hd-user">
+    <div class="ec-notif" id="ecNotif">
+      <button type="button" class="ec-notif-btn" id="notifBtn" aria-label="Уведомления" aria-haspopup="menu" aria-expanded="false">
+        <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216Z"/></svg>
+        <span class="ec-notif-dot">3</span>
+      </button>
+      <div class="ec-notif-menu" id="notifMenu" role="menu" hidden>
+        <div class="ec-notif-head">Уведомления</div>
+        <a class="ec-notif-item unread" href="employer-dashboard.html#responses" role="menuitem">
+          <span class="ec-notif-ic"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M232.07,186.76a80,80,0,0,0-62.5-114.17A80,80,0,1,0,23.93,138.76l-7.27,24.71a16,16,0,0,0,19.87,19.87l24.71-7.27a80.39,80.39,0,0,0,25.18,7.35,80,80,0,0,0,108.94,40.45l24.71,7.27a16,16,0,0,0,19.87-19.86Z"/></svg></span>
+          <span class="ec-notif-tx"><span class="t">Новый отклик</span><span class="s">«Лендинг для образовательного курса» — 3 кандидата</span></span>
+        </a>
+        <a class="ec-notif-item unread" href="employer-chat.html?id=1" role="menuitem">
+          <span class="ec-notif-ic"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Z"/></svg></span>
+          <span class="ec-notif-tx"><span class="t">Сообщение от Ксении Р.</span><span class="s">по задаче «Сопровождение гостей форума «Югра-Экспо»»</span></span>
+        </a>
+        <a class="ec-notif-item" href="employer-finance.html" role="menuitem">
+          <span class="ec-notif-ic"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M216,64H56a8,8,0,0,1,0-16H192a8,8,0,0,0,0-16H56A24,24,0,0,0,32,56V184a24,24,0,0,0,24,24H216a16,16,0,0,0,16-16V80A16,16,0,0,0,216,64Zm-36,80a12,12,0,1,1,12-12A12,12,0,0,1,180,144Z"/></svg></span>
+          <span class="ec-notif-tx"><span class="t">Средства заморожены по эскроу</span><span class="s">5 175 ₽ по задаче «Югра-Экспо»</span></span>
+        </a>
+        <a class="ec-notif-all" href="chats.html">Все уведомления</a>
+      </div>
+    </div>
+    <button type="button" class="ec-user" id="userBtn" aria-haspopup="menu" aria-expanded="false">
+      <span class="ec-user-ava" aria-hidden="true">
+        <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128,24a104,104,0,1,0,104,104A104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"/></svg>
+      </span>
+      <span class="ec-user-name" id="ecUserName">Ивент-агентство Югра 360</span>
+      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="feed-user-menu" role="menu" id="userMenu" hidden>
+      <a href="employer-profile.html" role="menuitem">Профиль</a>
+      <a href="settings.html" role="menuitem">Настройки</a>
+      <button type="button" class="feed-user-menu-logout" data-logout>Выйти</button>
+    </div>
+  </div>
+</header>
+<script src="shared.js"></script>
+
+<!-- ===== CABINET ===== -->
+<div class="ec-wrap">
+
+  <aside class="ec-aside" aria-label="Разделы кабинета">
+    <button type="button" class="ec-nav-item is-active" data-filter="work">В работе</button>
+    <button type="button" class="ec-nav-item" data-filter="responses">Сбор откликов</button>
+    <button type="button" class="ec-nav-item" data-filter="done">Завершенные задачи</button>
+    <a class="ec-nav-item" href="employer-documents.html">Документы</a>
+    <a class="ec-nav-item" href="employer-finance.html">Финансы</a>
+    <a class="ec-nav-item" href="employer-profile.html">Профиль</a>
+  </aside>
+
+  <main class="ec-col-main">
+    <a class="ec-post" href="employer-new-task.html">
+      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      Разместить задачу
+    </a>
+    <div id="ecTaskList"></div>
+  </main>
+
+</div>
+
+<script>
+(function() {
+  // ── Data ──
+  var TASKS = [
+    { id:1, title:'Сопровождение гостей форума «Югра-Экспо»', cat:'Ивенты', status:'work',
+      people:'10 человек', place:'Студенческая улица, 19', when:'12–13 июня 2026 (10:00–18:00)',
+      price:'4 500 ₽', priceNote:'За задание', who:'Мария Кузьмина', time:'2 часа назад' },
+    { id:3, title:'Telegram-бот для сети кофеен', cat:'IT-разработка', status:'work',
+      people:'1 человек', place:'Удалённо', when:'до 5 июня 2026',
+      price:'25 000 ₽', priceNote:'За проект', who:'Кирилл Захаров', time:'вчера' },
+    { id:9, title:'Контент-план и посты для кофейни', cat:'SMM', status:'work',
+      people:'1 человек', place:'Удалённо', when:'весь май 2026',
+      price:'12 000 ₽', priceNote:'За месяц', who:'Алина Русова', time:'3 дня назад' },
+    { id:7, title:'Лендинг для образовательного курса', cat:'Дизайн', status:'responses',
+      people:'1 человек', place:'Удалённо', when:'до 20 июня 2026',
+      price:'18 000 ₽', priceNote:'За проект', resp:3, time:'1 час назад' },
+    { id:5, title:'Reels-серия для бренда одежды', cat:'Видео', status:'responses',
+      people:'1 человек', place:'Ханты-Мансийск', when:'до 28 мая 2026',
+      price:'9 000 ₽', priceNote:'За задание', resp:8, time:'30 минут назад' },
+    { id:21, title:'Фирменный стиль для онлайн-курса', cat:'Дизайн', status:'done',
+      people:'1 человек', place:'Удалённо', when:'закрыта 5 мая 2026',
+      price:'15 000 ₽', priceNote:'За проект', who:'Олеся Чернова', time:'5 мая 2026' },
+    { id:23, title:'Серия Reels для кофейни', cat:'Видео', status:'done',
+      people:'1 человек', place:'Ханты-Мансийск', when:'закрыта 2 апреля 2026',
+      price:'10 000 ₽', priceNote:'За задание', who:'Мария Кузьмина', time:'2 апреля 2026' }
+  ];
+
+  var STATUS = {
+    work:      ['task-badge--work', 'В работе'],
+    responses: ['task-badge--responses', 'Сбор откликов'],
+    done:      ['task-badge--done', 'Завершена']
+  };
+
+  // canonical icons (same as catalog.html)
+  var IC_USERS = '<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M5.00816 11.547C5.01028 11.5893 5.00377 11.6317 4.98901 11.6714C4.97426 11.7111 4.95158 11.7474 4.92235 11.7781C4.89312 11.8088 4.85794 11.8333 4.81897 11.8499C4.78 11.8666 4.73805 11.8752 4.69566 11.8751H1.24879C1.10772 11.8753 0.970732 11.8278 0.860095 11.7403C0.749458 11.6528 0.671682 11.5304 0.639413 11.3931C0.61932 11.2991 0.620246 11.2018 0.642125 11.1082C0.664005 11.0146 0.706296 10.927 0.765975 10.8517C1.31739 10.1204 2.04901 9.54464 2.88941 9.18059C2.52045 8.84418 2.23746 8.42427 2.06416 7.95601C1.89086 7.48775 1.83228 6.98478 1.89333 6.48922C1.95438 5.99367 2.13329 5.51996 2.41507 5.10776C2.69685 4.69557 3.07329 4.35689 3.51287 4.1201C3.95246 3.88332 4.44238 3.7553 4.94161 3.74679C5.44084 3.73828 5.93484 3.84952 6.38224 4.07118C6.82963 4.29285 7.21741 4.61849 7.51307 5.02084C7.80874 5.42319 8.00369 5.89053 8.0816 6.38371C8.09166 6.45003 8.07978 6.51783 8.04777 6.57678C8.01576 6.63572 7.96536 6.6826 7.90426 6.71028C7.03737 7.11104 6.30321 7.7514 5.7884 8.5558C5.27359 9.36021 4.99961 10.2951 4.99879 11.2501C4.99879 11.3501 4.99879 11.4486 5.00816 11.547ZM19.2269 10.8509C18.6768 10.1205 17.9468 9.54502 17.1082 9.18059C17.4771 8.84418 17.7601 8.42427 17.9334 7.95601C18.1067 7.48775 18.1653 6.98478 18.1042 6.48922C18.0432 5.99367 17.8643 5.51996 17.5825 5.10776C17.3007 4.69557 16.9243 4.35689 16.4847 4.1201C16.0451 3.88332 15.5552 3.7553 15.056 3.74679C14.5567 3.73828 14.0627 3.84952 13.6153 4.07118C13.1679 4.29285 12.7802 4.61849 12.4845 5.02084C12.1888 5.42319 11.9939 5.89053 11.916 6.38371C11.9059 6.45003 11.9178 6.51783 11.9498 6.57678C11.9818 6.63572 12.0322 6.6826 12.0933 6.71028C12.9602 7.11104 13.6944 7.7514 14.2092 8.5558C14.724 9.36021 14.998 10.2951 14.9988 11.2501C14.9988 11.3501 14.9988 11.4486 14.9894 11.547C14.9873 11.5893 14.9938 11.6317 15.0086 11.6714C15.0233 11.7111 15.046 11.7474 15.0752 11.7781C15.1045 11.8088 15.1396 11.8333 15.1786 11.8499C15.2176 11.8666 15.2595 11.8752 15.3019 11.8751H18.7488C18.8899 11.8753 19.0268 11.8278 19.1375 11.7403C19.2481 11.6528 19.3259 11.5304 19.3582 11.3931C19.3784 11.2989 19.3774 11.2014 19.3554 11.1077C19.3334 11.0139 19.2908 10.9262 19.2308 10.8509H19.2269Z"/><path d="M12.2738 14.2243C12.8961 13.7477 13.3534 13.0881 13.5815 12.3382C13.8095 11.5883 13.7969 10.7857 13.5453 10.0434C13.2936 9.30104 12.8157 8.65618 12.1787 8.19947C11.5417 7.74275 10.7775 7.49713 9.99371 7.49713C9.20987 7.49713 8.44574 7.74275 7.80871 8.19947C7.17167 8.65618 6.69377 9.30104 6.44216 10.0434C6.19055 10.7857 6.17789 11.5883 6.40595 12.3382C6.63401 13.0881 7.09133 13.7477 7.71363 14.2243C6.60936 14.7028 5.68728 15.5222 5.08238 16.5626C5.02752 16.6576 4.99864 16.7654 4.99865 16.8752C4.99865 16.9849 5.02754 17.0927 5.08242 17.1877C5.13729 17.2827 5.21621 17.3616 5.31124 17.4164C5.40627 17.4713 5.51407 17.5001 5.62379 17.5001H14.3738C14.4835 17.5001 14.5913 17.4713 14.6863 17.4164C14.7814 17.3616 14.8603 17.2827 14.9152 17.1877C14.97 17.0927 14.9989 16.9849 14.9989 16.8752C14.9989 16.7654 14.9701 16.6576 14.9152 16.5626C14.309 15.5215 13.3852 14.7021 12.2793 14.2243H12.2738Z"/></svg>';
+  var IC_PIN = '<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.5A6.5 6.5 0 0 0 3.5 8c0 4.875 6.5 10 6.5 10s6.5-5.125 6.5-10A6.5 6.5 0 0 0 10 1.5Zm0 8.5a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z"/></svg>';
+  var IC_CAL = '<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M16 3.5h-1.5V2.5a.75.75 0 1 0-1.5 0v1H6.5V2.5a.75.75 0 1 0-1.5 0v1H4A1.5 1.5 0 0 0 2.5 5v11A1.5 1.5 0 0 0 4 17.5h12a1.5 1.5 0 0 0 1.5-1.5V5A1.5 1.5 0 0 0 16 3.5Zm0 12.5H4V8h12v8Z"/></svg>';
+  var IC_PENCIL = '<svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor"><path d="M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120Z"/></svg>';
+  var IC_TRASH = '<svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192Z"/></svg>';
+
+  var list = document.getElementById('ecTaskList');
+  var curFilter = 'work';
+
+  function footerFor(t) {
+    if (t.status === 'responses')
+      return '<a class="ec-btn" href="employer-chat.html?id=' + t.id + '">Смотреть отклики <span class="ec-btn-count">' + t.resp + '</span></a>'
+           + '<span class="ec-ft-note ec-ft-note--accent">Нужно выбрать исполнителя</span>';
+    if (t.status === 'done')
+      return '<a class="ec-btn" href="employer-documents.html?task=' + t.id + '">Открыть документы</a>'
+           + '<span class="ec-ft-note">Исполнитель: ' + t.who + '</span>';
+    return '<a class="ec-btn" href="employer-chat.html?id=' + t.id + '">Открыть чат с исполнителем</a>'
+         + '<span class="ec-ft-note">Задача в работе · ' + t.who + '</span>';
+  }
+
+  function render() {
+    var rows = TASKS.filter(function(t){ return t.status === curFilter; });
+    if (!rows.length) {
+      list.innerHTML = '<div class="ec-empty">Здесь пока ничего нет</div>';
+      return;
+    }
+    list.innerHTML = rows.map(function(t) {
+      var s = STATUS[t.status];
+      return '<article class="task-card" data-id="' + t.id + '" style="margin-bottom:18px;">'
+        + '<header class="task-card-head">'
+        +   '<div class="task-card-badges">'
+        +     '<span class="task-badge ' + s[0] + '">' + s[1] + '</span>'
+        +     '<span class="task-tag task-tag--cat">' + t.cat + '</span>'
+        +   '</div>'
+        +   '<div class="task-card-icons">'
+        +     '<button type="button" class="task-icon-btn" aria-label="Редактировать">' + IC_PENCIL + '</button>'
+        +     '<button type="button" class="task-icon-btn" aria-label="Удалить">' + IC_TRASH + '</button>'
+        +   '</div>'
+        + '</header>'
+        + '<div class="task-card-main">'
+        +   '<div class="task-card-desc">'
+        +     '<h3 class="task-card-title">' + t.title + '</h3>'
+        +     '<ul class="task-card-meta">'
+        +       '<li>' + IC_USERS + t.people + '</li>'
+        +       '<li>' + IC_PIN + t.place + '</li>'
+        +       '<li>' + IC_CAL + t.when + '</li>'
+        +     '</ul>'
+        +   '</div>'
+        +   '<div class="task-card-price"><span class="task-card-price-num">' + t.price + '</span><span class="task-card-price-label">' + t.priceNote + '</span></div>'
+        + '</div>'
+        + '<footer class="task-card-foot">'
+        +   '<div class="ec-ft-left">' + footerFor(t) + '</div>'
+        +   '<span class="task-card-time">' + t.time + '</span>'
+        + '</footer>'
+        + '</article>';
+    }).join('');
+  }
+
+  function setFilter(name) {
+    var btn = document.querySelector('.ec-aside [data-filter="' + name + '"]');
+    if (!btn) return;
+    curFilter = name;
+    document.querySelectorAll('.ec-aside .ec-nav-item').forEach(function(n) {
+      n.classList.toggle('is-active', n === btn);
+    });
+    render();
+  }
+
+  // ── Sidebar filter ──
+  document.querySelectorAll('.ec-aside [data-filter]').forEach(function(b) {
+    b.addEventListener('click', function() {
+      setFilter(b.dataset.filter);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  // ── Initial filter from #hash (e.g. #done, #responses, #work) ──
+  var hash = (location.hash || '').replace('#', '');
+  if (['work','responses','done'].indexOf(hash) !== -1) setFilter(hash);
+  else render();
+
+  window.addEventListener('hashchange', function() {
+    var h = (location.hash || '').replace('#', '');
+    if (['work','responses','done'].indexOf(h) !== -1) setFilter(h);
+  });
+})();
+</script>
+
+</body>
+</html>

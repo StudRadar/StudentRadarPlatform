@@ -1,0 +1,1383 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Статья — СтудРадар</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="city-picker.js" defer></script>
+  <style>
+    /* ===== ARTICLE ===== */
+    .art-hero { padding: 56px 120px 0; }
+    .art-crumbs {
+      font-family: 'Manrope', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.04em;
+      color: var(--ink-72);
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .art-crumbs a { color: var(--ink-72); transition: color .2s; }
+    .art-crumbs a:hover { color: var(--ink); }
+    .art-crumbs .sep { color: rgba(2,3,39,0.3); }
+    .art-crumbs .cat-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: var(--ink);
+      color: #fff;
+      border-radius: 999px;
+      font-size: 18px;
+    }
+    .art-crumbs .cat-pill.blue { background: #1153B5; }
+    .art-crumbs .cat-pill.orange { background: var(--orange); }
+    .art-crumbs .cat-pill.gold { background: #D9A441; }
+
+    .art-title {
+      font-family: 'Tektur', sans-serif;
+      font-size: 84px;
+      line-height: 0.95;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin: 0 0 24px;
+      max-width: 1100px;
+    }
+    .art-title em { font-style: normal; color: #1153B5; }
+    .art-subtitle {
+      font-size: 22px;
+      line-height: 1.4;
+      color: var(--ink-72);
+      max-width: 760px;
+      margin: 0 0 36px;
+    }
+    .art-meta-row {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      align-items: center;
+      padding: 22px 0;
+      border-top: 1px solid rgba(2,3,39,0.1);
+      border-bottom: 1px solid rgba(2,3,39,0.1);
+      font-family: 'Manrope', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.04em;
+      color: var(--ink-72);
+      text-transform: uppercase;
+    }
+    .art-meta-row b { color: var(--ink); font-weight: 600; }
+    .art-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 18px;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+    .art-author-avatar {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background-size: cover;
+      background-position: center;
+      background-color: #ddd;
+    }
+    .art-author-name { font-weight: 700; color: var(--ink); font-size: 18px; }
+    .art-author-role { font-size: 18px; color: var(--ink-72); }
+
+    .art-cover {
+      margin: 40px 120px 56px;
+      border-radius: 28px;
+      overflow: hidden;
+      aspect-ratio: 16/7;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+    .art-cover .cover-cap {
+      position: absolute;
+      bottom: 20px;
+      left: 24px;
+      background: rgba(2,3,39,0.7);
+      color: #fff;
+      backdrop-filter: blur(6px);
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.04em;
+    }
+
+    /* Content */
+    .art-content {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 40px 80px;
+      font-size: 18px;
+    }
+    .art-content > * { margin: 0 0 28px; }
+    .art-content p {
+      font-size: 19px;
+      line-height: 1.65;
+      color: var(--ink);
+    }
+    .art-content p.lead {
+      font-size: 24px;
+      line-height: 1.45;
+      color: var(--ink);
+      font-weight: 500;
+    }
+    .art-content h2 {
+      font-family: 'Tektur', sans-serif;
+      font-size: 42px;
+      line-height: 1.05;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--ink);
+      margin-top: 24px;
+      letter-spacing: -0.01em;
+    }
+    .art-content h2 .num {
+      font-family: 'Manrope', sans-serif;
+      color: var(--orange);
+      font-size: 18px;
+      vertical-align: 14px;
+      margin-right: 8px;
+    }
+    .art-content h3 {
+      font-family: 'Tektur', sans-serif;
+      font-size: 26px;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin-top: 12px;
+    }
+
+    /* Pull quote */
+    .pull-quote {
+      margin: 56px -40px;
+      padding: 56px 48px;
+      background: #1153B5;
+      color: #fff;
+      border-radius: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .pull-quote.orange { background: var(--orange); }
+    .pull-quote.dark   { background: var(--ink); }
+    .pull-quote::before {
+      content: ',,';
+      position: absolute;
+      top: 12px;
+      right: 32px;
+      font-family: 'Tektur', sans-serif;
+      font-size: 180px;
+      line-height: 0.5;
+      color: rgba(255,255,255,0.18);
+    }
+    .pull-quote p {
+      font-family: 'Tektur', sans-serif;
+      font-size: 32px !important;
+      line-height: 1.15;
+      color: #fff !important;
+      margin: 0 0 18px;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+    }
+    .pull-quote .qa {
+      font-family: 'Manrope', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.06em;
+      color: rgba(255,255,255,0.65);
+      text-transform: uppercase;
+    }
+
+    /* Stats */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1px;
+      background: rgba(2,3,39,0.08);
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 36px -40px;
+    }
+    .stat-row .cell {
+      background: #fff;
+      padding: 28px 24px;
+      text-align: left;
+    }
+    .stat-row .num {
+      font-family: 'Tektur', sans-serif;
+      font-size: 44px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .stat-row .num.blue { color: #1153B5; }
+    .stat-row .num.orange { color: var(--orange); }
+    .stat-row .lbl {
+      font-family: 'Manrope', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.04em;
+      color: var(--ink-72);
+      text-transform: uppercase;
+      line-height: 1.3;
+    }
+
+    /* Callout */
+    .callout {
+      background: #FFF6E5;
+      border-radius: 18px;
+      padding: 28px 32px;
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+    .callout.tip { background: #FFF6E5; }
+    .callout.warn { background: #FFE9E5; }
+    .callout.info { background: #E5EEFB; }
+    .callout-icon {
+      width: 48px; height: 48px;
+      border-radius: 14px;
+      background: var(--orange);
+      color: #fff;
+      font-family: 'Tektur', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-transform: uppercase;
+    }
+    .callout.info .callout-icon { background: #1153B5; }
+    .callout.warn .callout-icon { background: #DD5444; }
+    .callout-body strong {
+      display: block;
+      font-family: 'Tektur', sans-serif;
+      font-size: 18px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .callout-body p { margin: 0 !important; font-size: 18px !important; line-height: 1.5 !important; }
+
+    /* Check list */
+    ul.check-list { list-style: none; padding: 0; margin: 0; }
+    ul.check-list li {
+      padding: 18px 0 18px 44px;
+      position: relative;
+      font-size: 18px;
+      line-height: 1.45;
+      border-bottom: 1px dashed rgba(2,3,39,0.12);
+    }
+    ul.check-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 22px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #1153B5 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='white'><path d='M6.5 11L3 7.5l1-1L6.5 9 12 3.5l1 1L6.5 11z'/></svg>") center/16px no-repeat;
+    }
+
+    /* Numbered list big */
+    ol.num-list {
+      list-style: none; padding: 0; margin: 0;
+      counter-reset: nl;
+    }
+    ol.num-list li {
+      counter-increment: nl;
+      padding: 22px 0 22px 80px;
+      position: relative;
+      border-bottom: 1px solid rgba(2,3,39,0.08);
+    }
+    ol.num-list li::before {
+      content: '0' counter(nl);
+      position: absolute;
+      left: 0; top: 18px;
+      font-family: 'Tektur', sans-serif;
+      font-weight: 700;
+      font-size: 38px;
+      color: var(--orange);
+      line-height: 1;
+    }
+    ol.num-list h3 { margin: 0 0 6px; }
+    ol.num-list p { font-size: 18px; line-height: 1.5; color: var(--ink-72); margin: 0; }
+
+    /* Comparison 2-col */
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 36px -40px;
+    }
+    .compare > div {
+      padding: 28px;
+      border-radius: 18px;
+    }
+    .compare .bad { background: #FFE9E5; }
+    .compare .good { background: #E8F4EC; }
+    .compare h4 {
+      font-family: 'Tektur', sans-serif;
+      font-size: 18px;
+      text-transform: uppercase;
+      margin: 0 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .compare .bad h4 { color: #B53B2B; }
+    .compare .good h4 { color: #2E7544; }
+    .compare p { margin: 0 !important; font-family: 'Manrope', sans-serif; font-size: 18px !important; line-height: 1.55 !important; color: var(--ink) !important; }
+    .compare p + p { margin-top: 12px !important; padding-top: 12px; border-top: 1px dashed rgba(2,3,39,0.15); }
+
+    /* Inline image */
+    .art-image {
+      margin: 40px -40px;
+      border-radius: 22px;
+      overflow: hidden;
+      aspect-ratio: 16/9;
+      background-size: cover;
+      background-position: center;
+    }
+    .art-image-cap {
+      font-family: 'Manrope', sans-serif;
+      font-size: 18px;
+      color: var(--ink-72);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-top: -16px !important;
+      margin-bottom: 36px;
+      text-align: center;
+    }
+
+    /* Gallery */
+    .gallery {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 10px;
+      margin: 36px -40px;
+      height: 280px;
+    }
+    .gallery > div {
+      background-size: cover;
+      background-position: center;
+      border-radius: 14px;
+    }
+    .gallery > div:first-child { grid-row: span 2; height: 280px; }
+    .gallery { grid-template-rows: 1fr 1fr; height: auto; }
+
+    /* Mono block (code-like / template) */
+    .mono-block {
+      background: #020327;
+      color: #E4E4E8;
+      border-radius: 18px;
+      padding: 40px 40px 36px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 19px;
+      font-weight: 500;
+      line-height: 1.75;
+      position: relative;
+    }
+    .mono-block .label {
+      position: absolute;
+      top: -14px; left: 24px;
+      background: var(--orange);
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 18px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .mono-block .you { color: #64B5F6; }
+    .mono-block .em { color: #FFB74D; }
+
+    /* Mini cards row */
+    .feat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin: 36px -40px;
+    }
+    .feat-grid .feat {
+      background: #fff;
+      border: 1px solid rgba(2,3,39,0.08);
+      border-radius: 18px;
+      padding: 24px;
+    }
+    .feat-grid .feat .ico {
+      width: 44px; height: 44px;
+      background: #E5EEFB;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Tektur',sans-serif; font-weight: 700; color: #1153B5;
+      margin-bottom: 12px;
+    }
+    .feat-grid .feat h4 {
+      font-family: 'Tektur',sans-serif;
+      text-transform: uppercase;
+      margin: 0 0 6px;
+      font-size: 20px;
+    }
+    .feat-grid .feat p { font-size: 18px !important; line-height: 1.5 !important; color: var(--ink-72) !important; margin: 0 !important; }
+
+    /* Big quote line */
+    .art-content p.big-line {
+      font-family: 'Tektur', sans-serif;
+      font-size: 44px !important;
+      line-height: 1.05 !important;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin: 48px 0 !important;
+      text-align: left;
+      font-weight: 700;
+    }
+    .art-content p.big-line span { color: var(--orange); display: inline-block; }
+
+    /* Footer: end of article */
+    .art-end {
+      max-width: 760px;
+      margin: 0 auto 100px;
+      padding: 0 40px;
+    }
+    .art-end-line {
+      height: 1px;
+      background: rgba(2,3,39,0.12);
+      margin-bottom: 32px;
+    }
+    .art-end-share {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .art-end-share .tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .art-end-share .tag {
+      padding: 10px 16px;
+      background: #fff;
+      border: 1px solid rgba(2,3,39,0.1);
+      border-radius: 999px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-72);
+    }
+    .art-end-share .share-btns { display: flex; gap: 8px; }
+    .art-end-share .share-btns a {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: #fff;
+      border: 1px solid rgba(2,3,39,0.1);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 18px;
+      color: var(--ink-72);
+    }
+    .art-end-share .share-btns a:hover { background: var(--ink); color: #fff; }
+
+    /* Related */
+    .art-related {
+      padding: 0 120px 100px;
+    }
+    .art-related h3 {
+      font-family: 'Tektur',sans-serif;
+      font-size: 36px;
+      text-transform: uppercase;
+      margin: 0 0 32px;
+    }
+    .art-related-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .rel-card {
+      background: #fff;
+      border-radius: 22px;
+      overflow: hidden;
+      transition: transform .2s ease;
+    }
+    .rel-card:hover { transform: translateY(-4px); }
+    .rel-cover { aspect-ratio: 4/3; background-size: cover; background-position: center; }
+    .rel-body { padding: 20px 22px 24px; }
+    .rel-tag {
+      font-family: 'Manrope', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 8px;
+    }
+    .rel-card h4 {
+      font-family: 'Tektur',sans-serif;
+      text-transform: uppercase;
+      font-size: 18px;
+      margin: 0;
+      line-height: 1.15;
+    }
+
+    @media (max-width: 1100px) {
+      .art-hero { padding: 36px 24px 0; }
+      .art-title { font-size: 44px; }
+      .art-subtitle { font-size: 18px; }
+      .art-cover { margin: 24px 24px 36px; aspect-ratio: 16/9; }
+      .art-content { padding: 0 24px 60px; }
+      .pull-quote, .stat-row, .compare, .art-image, .gallery, .mono-block, .feat-grid, .big-line { margin-left: 0 !important; margin-right: 0 !important; }
+      .pull-quote { padding: 32px 24px; }
+      .pull-quote p { font-size: 22px !important; }
+      .big-line { font-size: 28px !important; }
+      .compare { grid-template-columns: 1fr; }
+      .gallery { height: auto; grid-template-columns: 1fr; }
+      .gallery > div { aspect-ratio: 16/9; }
+      .gallery > div:first-child { grid-row: auto; height: auto; }
+      .art-related { padding: 0 24px 60px; }
+      .art-related-grid { grid-template-columns: 1fr; }
+      .art-content h2 { font-size: 30px; }
+    }
+
+    /* ===== Якорное оглавление ===== */
+    .art-toc {
+      background: #F4F4F6;
+      border-radius: 18px;
+      padding: 24px 28px;
+      margin: 0 0 32px;
+    }
+    .art-toc h3 {
+      font-family: 'Tektur', sans-serif;
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--ink-72);
+      margin: 0 0 14px;
+    }
+    .art-toc ol {
+      list-style: none;
+      counter-reset: toc;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .art-toc ol li {
+      counter-increment: toc;
+      font-size: 17px;
+      line-height: 1.45;
+      padding-left: 36px;
+      position: relative;
+    }
+    .art-toc ol li::before {
+      content: counter(toc) ".";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: #1153B5;
+      font-weight: 700;
+      font-family: 'Manrope', sans-serif;
+    }
+    .art-toc ol li a {
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: color .15s, border-color .15s;
+    }
+    .art-toc ol li a:hover { color: #1153B5; border-bottom-color: #1153B5; }
+
+    /* ===== Экспертный комментарий ===== */
+    .art-expert {
+      display: grid;
+      grid-template-columns: 88px 1fr;
+      gap: 20px;
+      background: #FFF;
+      border: 1.5px solid rgba(2,3,39,0.08);
+      border-left: 4px solid #1153B5;
+      border-radius: 18px;
+      padding: 24px 28px;
+      margin: 0 0 32px;
+    }
+    .art-expert-photo {
+      width: 88px; height: 88px;
+      border-radius: 50%;
+      background: #EEEEF0 center/cover no-repeat;
+    }
+    .art-expert-name {
+      font-family: 'Tektur', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--ink);
+      margin: 0 0 4px;
+    }
+    .art-expert-role {
+      font-size: 14px;
+      color: var(--ink-72);
+      margin: 0 0 12px;
+    }
+    .art-expert-text {
+      font-size: 17px !important;
+      line-height: 1.55 !important;
+      color: var(--ink);
+      margin: 0 !important;
+    }
+
+    /* ===== Личный опыт ===== */
+    .art-personal {
+      background: #FAF6EE;
+      border-left: 4px solid #D9A441;
+      border-radius: 14px;
+      padding: 22px 26px;
+      margin: 0 0 32px;
+    }
+    .art-personal-label {
+      font-family: 'Tektur', sans-serif;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #B58400;
+      margin-bottom: 10px;
+    }
+    .art-personal-text {
+      font-style: italic;
+      font-size: 18px !important;
+      line-height: 1.55 !important;
+      color: var(--ink);
+      margin: 0 !important;
+    }
+
+    /* ===== Маркированный список ===== */
+    ul.bullet-list { padding: 0 0 0 22px; margin: 0; }
+    ul.bullet-list li {
+      font-size: 18px;
+      line-height: 1.5;
+      margin-bottom: 10px;
+      padding-left: 6px;
+    }
+    ul.bullet-list li::marker { color: #1153B5; }
+
+    @media (max-width: 760px) {
+      .art-toc, .art-personal { padding: 18px 18px; }
+      .art-expert { grid-template-columns: 64px 1fr; gap: 14px; padding: 18px 20px; }
+      .art-expert-photo { width: 64px; height: 64px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="header" data-header="guest">
+  <a href="index.html" class="logo">
+    <span class="logo-mark"><img src="assets/logo.svg" alt=""/></span>СТУДРАДАР
+  </a>
+  <nav class="toggle" aria-label="Я ищу">
+    <span class="toggle-pill"></span>
+    <a href="for-students.html" class="active">Студентам</a>
+    <a href="employer.html">Заказчику</a>
+  </nav>
+  <nav class="menu">
+    <a href="catalog.html">Задачи</a>
+    <a href="for-students.html#how">О платформе</a>
+    <a href="blog.html" style="color:var(--blue)">Блог</a>
+  </nav>
+  <a href="#location" class="location" title="Сменить город">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.6a6.7 6.7 0 0 0-6.7 6.7c0 5 6.7 10.1 6.7 10.1s6.7-5.1 6.7-10.1A6.7 6.7 0 0 0 10 1.6Zm0 9.1a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8Z"/></svg>
+    Ханты-Мансийск
+  </a>
+  <div class="header-right">
+    <a href="catalog.html" class="btn-login">Найти подработку</a>
+    <a href="#login" class="link-login">Войти</a>
+  </div>
+</header>
+
+<!-- ===== ARTICLE ===== -->
+<section class="art-hero">
+  <div class="art-crumbs">
+    <a href="blog.html">Блог</a>
+    <span class="sep">/</span>
+    <span class="cat-pill" id="catPill">// Категория</span>
+    <span class="sep">·</span>
+    <span id="crumbDate"></span>
+  </div>
+  <h1 class="art-title" id="artTitle"></h1>
+  <p class="art-subtitle" id="artSubtitle"></p>
+  <div class="art-meta-row">
+    <div class="art-author">
+      <span class="art-author-avatar" id="authorAvatar"></span>
+      <div>
+        <div class="art-author-name" id="authorName"></div>
+        <div class="art-author-role" id="authorRole"></div>
+      </div>
+    </div>
+    <span>Чтение <b id="metaTime"></b></span>
+    <span>Просмотров <b id="metaViews"></b></span>
+    <span id="metaTags"></span>
+  </div>
+</section>
+
+<div class="art-cover" id="artCover">
+  <span class="cover-cap" id="coverCap"></span>
+</div>
+
+<article class="art-content" id="artBody"></article>
+
+<section class="art-end">
+  <div class="art-end-line"></div>
+  <div class="art-end-share">
+    <div class="tags" id="endTags"></div>
+    <div class="share-btns">
+      <a href="#tg" title="Telegram">TG</a>
+      <a href="#vk" title="ВКонтакте">VK</a>
+      <a href="#copy" title="Скопировать">⎘</a>
+    </div>
+  </div>
+</section>
+
+<section class="art-related">
+  <h3>Читать дальше</h3>
+  <div class="art-related-grid" id="relatedGrid"></div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="for-students.html" class="logo">
+        <span class="logo-mark"><img src="assets/logo.svg" alt=""/></span>СТУДРАДАР
+      </a>
+      <p class="footer-tagline">Платформа для краткосрочной занятости студентов — задачи, портфолио, реальный опыт.</p>
+      <div class="footer-social">
+        <a href="#tg" title="Telegram">TG</a>
+        <a href="#vk" title="ВКонтакте">VK</a>
+      </div>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <div class="footer-col-title">Платформа</div>
+        <a href="for-students.html#about">О нас</a>
+        <a href="blog.html">Блог</a>
+        <a href="#policy">Политика</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Студентам</div>
+        <a href="catalog.html">Каталог задач</a>
+        <a href="for-students.html#tasks">Свежие задачи</a>
+        <a href="for-students.html#pro">PRO-подписка</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Бизнесу</div>
+        <a href="employer.html">Для работодателей</a>
+        <a href="students.html">Исполнители</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Контакты</div>
+        <a href="mailto:hi@studradar.ru">hi@studradar.ru</a>
+        <a href="#location">Ханты-Мансийск</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 СтудРадар. Все права защищены.</span>
+  </div>
+</footer>
+
+<script>
+const POSTS = {
+  // Featured — Long-form story with stats, quotes, numbered list
+  '1': {
+    cat: 'Карьера', catColor: 'blue',
+    title: 'Локализация игр: <em>как из мода для друзей попасть в студию</em>',
+    subtitle: 'Куда идти лингвисту, если он любит игры — и почему сейчас самое время начинать.',
+    cover: 'assets/Photo/1.webp', coverCap: '// От любительского патча до коммерческого проекта',
+    date: '22 мая 2026', time: '8 мин', views: '892',
+    author: 'Алиса Н.', authorRole: 'Студент 3 курса · Лингвистика · ЮГУ',
+    avatar: 'assets/Студенты/1 (17).png',
+    tags: ['#карьера', '#лингвистика', '#геймдев'],
+    blocks: [
+      { type: 'lead', text: 'Ещё пять лет назад локализация игр в России была закрытой профессией: студии работали через узкий круг подрядчиков, а попасть туда без рекомендации было почти невозможно. Сейчас ситуация другая. Российский геймдев растёт, инди-разработчики ищут переводчиков напрямую через Telegram-каналы, а фанатские сообщества переводят игры, которые официально на русском не выходят. Если вы учитесь на лингвиста и любите игры — это шанс начать карьеру там, где конкуренция меньше, чем в обычном переводе, а вход реальнее, чем кажется со стороны.' },
+
+      { type: 'toc', items: [
+        { label: 'Что такое локализация и чем она отличается от перевода', anchor: 'lokal' },
+        { label: 'Почему лингвистам стоит обратить внимание на эту нишу', anchor: 'pochemu' },
+        { label: 'С чего начинают почти все: моды и любительские патчи', anchor: 'start' },
+        { label: 'Как устроена работа в студии', anchor: 'studio' },
+        { label: '5 рабочих принципов начинающего локализатора', anchor: 'rules' },
+        { label: 'Где искать первые проекты', anchor: 'where' }
+      ]},
+
+      { type: 'h2', id: 'lokal', text: 'Что такое локализация и чем она отличается от перевода' },
+      { type: 'p', text: 'Локализация (game localization) — это полная адаптация игры под язык и культуру целевой аудитории. Перевод — это слова. Локализация — это опыт игры: реплики персонажей, интерфейс, шрифты, шутки, валюты, единицы измерения, правовые предупреждения. Всё, что игрок видит и слышит на экране, проходит через руки локализатора.' },
+      { type: 'p', text: 'Разница не косметическая. Хороший перевод книги — это передача стиля автора. Хорошая локализация игры — это иллюзия, будто игра изначально на русском (или английском, японском, испанском — на каком переводим). Если игрок об этом не задумывается — локализатор сработал.' },
+      { type: 'callout', kind: 'info', icon: '💡', title: 'Полезное чтение', text: '<a href="article.html?id=8" style="color:#1153B5">Профессиональные стандарты перевода: ISO 17100 и что они значат для начинающих</a>' },
+
+      { type: 'h2', id: 'pochemu', text: 'Почему лингвистам стоит обратить внимание на эту нишу' },
+      { type: 'p', text: 'Несколько причин, которые часто называют практики:' },
+      { type: 'ul', items: [
+        '<b>Низкий порог входа.</b> В отличие от устного перевода или нотариальных тарифов, в локализации никто не спросит у вас аккредитации. Спросят портфолио. Портфолио можно собрать на бесплатных проектах.',
+        '<b>Удалённый формат по умолчанию.</b> Большинство студий не требуют переезда. Можно жить в Сургуте и работать на студию из Москвы или Хельсинки.',
+        '<b>Гонорары растут быстрее, чем в обычном переводе.</b> Начинающий — 100–200 ₽ за 1000 знаков. Опытный с нишевой специализацией (RPG, шутеры, симуляторы) — 600–1000 ₽ и больше.',
+        '<b>Профессия пока не «съедена» ИИ.</b> Машинный перевод диалогов получается плоским, без характеров. Студии заказывают MTPE (постредактирование) у людей.'
+      ]},
+
+      { type: 'h2', id: 'start', text: 'С чего начинают почти все: моды и любительские патчи' },
+      { type: 'p', text: 'Спросите любого работающего локализатора, как он начинал — и почти всегда услышите одну и ту же историю. Мод для друзей. Любительский патч для игры без официального русского. Перевод комикса в одиночку. Это естественная стартовая площадка отрасли.' },
+      { type: 'p', text: 'Идея простая: вы переводите что-то бесплатно, выкладываете в сообщество, получаете обратную связь, учитесь на ошибках. Через полгода у вас уже есть портфолио и понимание, как устроена работа изнутри.' },
+      { type: 'callout', kind: 'info', icon: '🎮', title: 'Где находят первые проекты', text: 'Discord-серверы фанатских переводов · Сабреддиты конкретных игр (r/skyrim, r/eu4) · Telegram-каналы переводческих сообществ · Steam Workshop — некоторые игры поддерживают пользовательские переводы напрямую.' },
+      { type: 'p', text: 'Главная ошибка новичка — переводить файлы локализации в Word, не запуская игру. Получается набор фраз без контекста. Старуха-травница в моде начинает говорить как военный комиссар, молодой вор — как профессор филологии, и это сразу видно игрокам. Перевод заиграет только тогда, когда вы будете слышать голоса персонажей.' },
+
+      { type: 'expert', photo: 'assets/Студенты/1 (14).png', name: 'Денис, переводчик-локализатор', role: '6 лет в отрасли · Сургут',
+        text: 'Я начал с мода для одной инди-RPG в 2020 году. Перевёл за месяц, выложил, получил тонну критики от сообщества. Половину переделал. Через год меня позвали в небольшую студию — потому что я единственный из откликнувшихся показал реальный продукт, а не диплом. Сейчас перевожу в среднем 60–80 тысяч слов в месяц. Образование лингвиста использую каждый день — но не то, чему учили в институте, а то, чему я учился сам на модах.' },
+
+      { type: 'h2', id: 'studio', text: 'Как устроена работа в студии' },
+      { type: 'p', text: 'На любительском моде вы один. На коммерческом проекте — команда. Минимальный состав, в котором обычно работает локализатор:' },
+      { type: 'ol', items: [
+        { h: 'Менеджер проекта', p: 'Распределяет задачи, следит за сроками, общается с разработчиком.' },
+        { h: 'Переводчики (обычно 2–4 человека)', p: 'Делят файлы по разделам или по жанрам реплик.' },
+        { h: 'Редактор', p: 'Сводит переводы воедино, ловит стилистические провалы и неконсистентность.' },
+        { h: 'Тестировщик локализации (LQA)', p: 'Запускает игру с готовым переводом и проверяет, как реплики выглядят в реальной сцене.' },
+        { h: 'Терминолог', p: 'Ведёт глоссарий: имена, названия предметов, заклинаний, фракций.' }
+      ]},
+      { type: 'p', text: 'В небольших студиях один человек может закрывать несколько ролей. Лингвист-новичок обычно начинает как переводчик и параллельно учится у редактора и тестировщика — это даёт быстрый рост.' },
+      { type: 'callout', kind: 'info', icon: '💡', title: 'Полезное чтение', text: '<a href="article.html?id=14" style="color:#1153B5">CAT-инструменты для начинающих: с чего начать в 2026 году</a>' },
+
+      { type: 'h2', id: 'rules', text: '5 рабочих принципов начинающего локализатора' },
+      { type: 'ol', items: [
+        { h: 'Контекст важнее словаря', p: 'Без понимания сюжета, характеров и сцены перевод получается мёртвым. Сначала играем (или требуем у студии описание персонажей и синопсис) — потом переводим.' },
+        { h: 'Технические ограничения определяют решения', p: 'Длина строки, кодировка, шрифты диктуют переводчику больше, чем художественные предпочтения. «28 символов на реплику» — это закон, а не пожелание. Хороший локализатор сначала спрашивает технические лимиты, потом начинает работу.' },
+        { h: 'Не переводи в одиночку', p: 'Даже в маленьком моде нужен второй человек на вычитку. На коммерческом проекте — команда. Без редактора и тестировщика ошибки неизбежны, и это нормально.' },
+        { h: 'Изучи целевую аудиторию игры', p: 'Игроки в RPG ждут одного, фанаты шутеров — другого, аудитория visual novel — третьего. Сленг, отсылки, стилистика реплик подбираются под конкретное сообщество. «Универсального хорошего перевода» не существует.' },
+        { h: 'Веди глоссарий с первого дня', p: 'Даже маленький проект быстро превращается в хаос без единого свода терминов. Имена персонажей, названия артефактов, географии, фракций — всё в таблицу с первой строки. Иначе через два месяца один и тот же меч окажется в разных частях игры под разными именами.' }
+      ]},
+
+      { type: 'personal', label: 'Личный опыт', text: 'Я начала переводить любительски в 2024 году, на втором курсе. Делала перевод одной visual novel вместе с двумя ребятами из Discord-сообщества. Денег никто не платил, делали для себя. Через восемь месяцев я выложила резюме на ProZ, приложила ссылку на наш патч. Через две недели мне написал издатель из СНГ — нужна была переводчица на короткую игру в том же жанре. Заплатили 35 000 ₽ за две недели работы. С тех пор беру 2–3 коммерческих проекта в семестр — это не «работа на полную», но платит больше, чем подработка репетитором, и пишется в резюме как реальный опыт.' },
+
+      { type: 'h2', id: 'where', text: 'Где искать первые проекты' },
+      { type: 'p', text: 'Несколько каналов, которые работают для начинающих:' },
+      { type: 'ul', items: [
+        '<b>Telegram-каналы локализаторов</b> — «Розетка локализаторов», «Игрожур», «Локализация без боли». Студии часто публикуют запросы напрямую.',
+        '<b>ProZ.com</b> — международная биржа переводчиков. Раздел Games & Video Games. Регистрация бесплатная, базовое портфолио соберёте за вечер.',
+        '<b>Smartcat</b> — российская платформа, есть отдельные проекты по геймдеву.',
+        '<b>Прямые откликовые формы студий</b> — Lesta Games, 1С Game Studios, Cyberia Nova, Hypetrain Digital и другие принимают резюме на сайтах.',
+        '<b>Discord-серверы конкретных игр</b>, где идут фанатские переводы — путь без денег, но с реальным опытом и контактами.'
+      ]},
+      { type: 'callout', kind: 'warn', icon: '⚠', title: 'Чего не делать', text: 'Не предлагать студиям демпинг по ставкам. Если вы готовы переводить за 50 ₽ за 1000 знаков «лишь бы взяли», это снижает не только ваш доход, но и ставки всего сегмента. Студии охотнее берут новичка с адекватной ставкой и реальным портфолио, чем без портфолио и за полцены.' },
+
+      { type: 'h2', id: 'short', text: 'Если коротко' },
+      { type: 'p', text: 'Локализация игр — реальная карьерная опция для лингвиста-студента в 2026 году. Профессия пока не «съедена» нейросетями (хотя ИИ-инструменты уже работают в связке с человеком). Вход через бесплатные моды и любительские патчи, рост — через накопление портфолио и сеть знакомств в сообществе. Главное — не бояться сделать первый шаг и не стесняться учиться на собственных ошибках.' },
+      { type: 'big', text: 'Хочешь попробовать? <span>Подпишись на «СтудРадар»</span> — присылаем подборки вакансий и стажировок в геймдеве.' }
+    ]
+  },
+
+  // 2 — Первая подработка без опыта
+  '2': {
+    cat: 'Карьера', catColor: 'orange',
+    title: 'Как студент-юрист <em>подрабатывает</em> на консультациях для МСП',
+    subtitle: 'Не нужно ждать выпуска, чтобы зарабатывать профессией. Разбираем, какие задачи берёт второкурсник и сколько за них платят.',
+    cover: 'assets/Photo/3.webp', coverCap: '// Право в малом бизнесе — рабочая ниша',
+    date: '18 мая 2026', time: '7 мин', views: '1 540',
+    author: 'Мария Соколова', authorRole: 'Студентка 2 курса · Юриспруденция · ТюмГУ',
+    avatar: 'assets/Студенты/1 (15).png',
+    tags: ['#карьера', '#юриспруденция', '#подработка'],
+    blocks: [
+      { type: 'lead', text: 'Юриспруденция кажется профессией «после диплома»: пока не сдашь экзамен на адвоката и не отстажируешься три года — на тебя никто не посмотрит. Это правда, если ты хочешь в крупные фирмы. Но малый бизнес устроен иначе. Маленькому ИП или ООО на 5 сотрудников не нужен партнёр Magic Circle — ему нужен человек, который посмотрит договор за вечер и скажет, где подвох.' },
+      { type: 'h2', text: 'Какие задачи берёт студент' },
+      { type: 'p', text: 'Заказчики из малого бизнеса приходят с понятными запросами: проверить договор аренды, составить претензию, разобрать спорную переписку с подрядчиком. Это не уголовные дела и не корпоративные споры на миллиарды — это бытовая правовая работа, которую студент 2-3 курса с хорошим преподавателем по обязательственному праву делает спокойно.' },
+      { type: 'ol', items: [
+        { h: 'Проверка типовых договоров', p: 'Аренда, поставка, оказание услуг. 1–3 страницы, средняя ставка 1500–3000 ₽ за документ. Главное — не сдавать «и так сойдёт», а реально проходить по пунктам ответственности и расторжения.' },
+        { h: 'Подготовка претензий', p: 'Заказчик не вернул деньги, поставщик сорвал срок, исполнитель не сделал работу. Студент пишет претензию по форме. Ставка 2000–4000 ₽. Если дело уходит в суд — клиент часто продолжает работать с тем же человеком.' },
+        { h: 'Консультации по 1–2 вопросам', p: 'Письменно или голосом 30 минут. «Можно ли уволить сотрудника на испытательном сроке без объяснений?» — раскрываешь со ссылками на статьи ТК. Стоимость 800–1500 ₽ за консультацию.' },
+        { h: 'Подготовка пакета документов', p: 'Открытие самозанятости, регистрация ИП, подача в ФНС. Студент-юрист собирает пакет, объясняет шаги, проверяет заполнение. Это «упаковка», но именно за неё многие готовы платить — не хочется разбираться самим.' }
+      ]},
+      { type: 'expert', photo: 'assets/Студенты/1 (13).png', name: 'Илья Романов', role: 'Юрист, 7 лет в малом бизнесе · Тюмень',
+        text: 'Я беру студентов 2-3 курса на проверку договоров. Главное условие — не выдумывать. Если не уверен в норме, пиши «нужно уточнить», а не «всё ок». Один такой студент сейчас закрывает мне 5–6 договоров в месяц параллельно с учёбой. Через два года я возьму его в команду без всяких собеседований.' },
+      { type: 'h2', text: 'С чего начать' },
+      { type: 'p', text: 'Главная ошибка — пытаться сразу взять «настоящее дело». Сначала наберите портфолио из 3–5 проверенных договоров и одной–двух претензий, которые вам отдал ваш преподаватель или знакомый предприниматель «для тренировки». Бесплатно. Эти кейсы пойдут в портфолио.' },
+      { type: 'callout', kind: 'warn', icon: '⚠', title: 'Чего не делать', text: 'Не подписывайте документы своим именем как «юрист». Студент — не юрист по закону. Работайте под надзором преподавателя или практикующего юриста, либо подписывайте как «помощник по правовым вопросам».' },
+      { type: 'big', text: 'Право — <span>не профессия после диплома</span>. Это профессия с первой задачи.' }
+    ]
+  },
+
+  // 3 — Quote-driven opinion piece
+  '3': {
+    cat: 'Истории', catColor: 'gold',
+    title: '«Дедлайны важнее <em>идеального</em> кода»',
+    subtitle: 'Цитата недели — от студента-разработчика, который дважды переделывал бот по ТЗ и понял главное про работу с заказчиком.',
+    cover: 'assets/Студенты/1 (16).png', coverCap: '// Цитата недели',
+    date: '16 мая 2026', time: '3 мин', views: '1 820',
+    author: 'Редакция', authorRole: 'Цитата недели · май 2026',
+    avatar: 'assets/avatar.png',
+    tags: ['#цитата', '#разработка', '#дедлайны'],
+    blocks: [
+      { type: 'lead', text: 'Каждую неделю выбираем короткое наблюдение от студента, которое стоит запомнить. На этот раз — про вечный конфликт между «сделать хорошо» и «сдать вовремя».' },
+      { type: 'expert', photo: 'assets/Студенты/i (1).webp', name: 'Никита Морозов', role: 'Разработчик, 3 курс · ПО · УрФУ',
+        text: 'Я три раза переписывал один бот для службы доставки. Каждый раз — «вот сейчас точно отрефакторю как надо». Заказчик через две недели сказал: «Слушай, мне не нужен идеальный код. Мне нужен бот, который принимает заказы в эту субботу». Я сдал то, что было, в субботу. Бот работал. Через месяц заказчик заказал ещё две задачи.' },
+      { type: 'h2', text: 'Почему это важно' },
+      { type: 'p', text: 'Студенты часто ставят планку выше, чем нужна заказчику. Хочется, чтобы код был чистый, архитектура — масштабируемая, тесты — покрывающие. Это нормальный инженерный инстинкт. Но реальность работы с малым бизнесом: 80% задач — это «надо, чтобы работало к понедельнику». Не «работало пять лет без поддержки», а «работало в понедельник».' },
+      { type: 'p', text: 'Это не значит делать плохо. Это значит — отделять «техдолг, который сделает мне больно через полгода» от «техдолг, который никогда никого не побеспокоит, потому что проект живёт три месяца и закрывается». Решение «что важно» — половина профессионализма.' },
+      { type: 'callout', kind: 'tip', icon: '!', title: 'Простое правило Никиты', text: 'Перед каждой переделкой задавай себе вопрос: «Заметит ли это заказчик и его пользователи?» Если ответ «нет» — значит, это работа для тебя, а не для проекта. Делай в свободное время как пет-проект, а не в часы клиента.' },
+      { type: 'big', text: 'Готово — <span>лучше идеального</span>. Если идеального нет.' }
+    ]
+  },
+
+  // 4 — Data-driven money piece (lots of stats)
+  '4': {
+    cat: 'Деньги', catColor: 'blue',
+    title: 'Сколько <em>реально</em> зарабатывают студенты в Югре',
+    subtitle: 'Мы посмотрели на 1 400 задач, закрытых студентами Югры за последние полгода. Никаких «зарабатывайте от 100 тысяч» — только медианы, чеки и реальные истории.',
+    cover: 'assets/Студенты/1 (13).png', coverCap: '// Опрос 320 студентов · апрель 2026',
+    date: '10 мая 2026', time: '5 мин', views: '2 410',
+    author: 'Софья Бойко', authorRole: 'Студентка 4 курса · Социология · УрФУ',
+    avatar: 'assets/Студенты/i (3).webp',
+    tags: ['#деньги', '#быт', '#бюджет'],
+    blocks: [
+      { type: 'lead', text: 'Когда студент впервые получает деньги за реальную работу, происходит интересное: бюджет не становится больше, он становится сложнее. Расход на еду остаётся таким же, но появляются десятки новых статей — от подписки на нейросеть до «премии себе» за сданный проект. Опросили 320 студентов из четырёх городов, на что уходит первая подработка.' },
+      { type: 'stats', items: [
+        { n: '38%', l: 'еда вне дома и доставка', c: 'orange' },
+        { n: '22%', l: 'инструменты и подписки', c: 'blue' },
+        { n: '18%', l: 'откладывают' },
+        { n: '12%', l: 'учебные курсы' }
+      ]},
+      { type: 'h2', text: 'На что уходит первая зарплата' },
+      { type: 'p', text: 'Самое предсказуемое — еда. Те, кто живёт в общежитии, тратят на доставки и кафе примерно в три раза больше, чем те, кто живёт дома с родителями. Это нормально: после двух лет каши с тушёнкой первое настоящее «можно купить роллы» — это про маленький праздник, а не про неумение копить.' },
+      { type: 'ul', items: [
+        '<b>Подписки</b> — Яндекс.Плюс, Notion, Adobe, ChatGPT. В среднем 1 400 ₽ в месяц. Половина опрошенных не помнит, на что подписалась.',
+        '<b>Транспорт и каршеринг</b> — особенно у тех, кто работает онсайт на ивентах. Часто съедает 15–20% от подработки.',
+        '<b>Гаджеты</b> — наушники, второй монитор, нормальная клавиатура. Покупают редко, но крупно.',
+        '<b>Подарки родителям</b> — у 41% это была первая крупная покупка из «своих». Чаще всего — что-то для дома.'
+      ]},
+      { type: 'expert', photo: 'assets/Студенты/1 (17).png', name: 'Татьяна Зяблова', role: 'Финансовый консультант · Тюмень',
+        text: 'Студенту я советую простое правило 50/30/20: половина — на жизнь, 30% — на «хочу», 20% — откладывать. Но если получаешь первые 5 000 ₽ и пытаешься их по формуле раскладывать — это пытка. Сначала просто посмотрите, куда они уходят за месяц. Без оценок. Через два-три месяца картина уже скажет, где у вас «дыры».' },
+      { type: 'h2', text: 'Что отличает тех, кто откладывает' },
+      { type: 'p', text: 'У тех 18%, которые откладывают, нет волшебной дисциплины. У них есть одно общее: они получают деньги сразу на отдельную карту или счёт, который не виден в основном банковском приложении. Принцип «с глаз долой — из ума вон» работает в обе стороны. Меньше видишь — меньше тратишь.' },
+      { type: 'callout', kind: 'tip', icon: '!', title: 'Лёгкий шаг', text: 'Откройте у своего банка отдельный счёт «копилка» и настройте автоперевод: при каждой выплате — 1 000 ₽ туда. Не процент, а конкретная сумма. Через семестр там накопится ощутимая подушка, и вы даже не заметите.' },
+      { type: 'big', text: 'Бюджет — это <span>не таблица</span>. Это привычка смотреть.' }
+    ]
+  },
+
+  // 5 — Productivity / schedule with weekly grid
+  '5': {
+    cat: 'Учёба', catColor: 'blue',
+    title: 'Подготовка к сессии за <em>две недели</em>: метод 4 цветов',
+    subtitle: 'Простая система маркировки для тех, у кого 6 экзаменов и нет лишней недели. Опробовано на трёх курсах подряд.',
+    cover: 'assets/Студенты/1 (15).png', coverCap: '// 4 цвета, 14 дней',
+    date: '14 мая 2026', time: '6 мин', views: '2 080',
+    author: 'Дарья Крылова', authorRole: 'Студентка 4 курса · Медиа · УрФУ',
+    avatar: 'assets/Студенты/i (3).webp',
+    tags: ['#учёба', '#сессия', '#метод'],
+    blocks: [
+      { type: 'lead', text: 'За две недели до сессии у меня обычно 6 экзаменов, 200 страниц лекций по каждому и ощущение, что времени уже нет. Так было два года подряд. На третьем курсе я попробовала систему, которую увидела у однокурсницы-математика: красить темы четырьмя цветами и работать с каждым цветом по-разному. Это сработало — впервые я закрыла сессию без бессонных ночей.' },
+      { type: 'h2', text: 'В чём суть метода' },
+      { type: 'p', text: 'Все темы каждого предмета делятся на четыре категории. Не «важные / не очень», а по моему отношению к ним: знаю / не уверена / совсем не помню / даже не открывала. Каждая категория получает свой цвет и свой режим работы.' },
+      { type: 'ol', items: [
+        { h: '🟢 Зелёный — знаю', p: 'Темы, которые я могу пересказать без подготовки. Их я НЕ повторяю первую неделю. Подхожу только за 2-3 дня до экзамена для лёгкого прогона. Это экономит главное — энергию.' },
+        { h: '🟡 Жёлтый — почти знаю', p: 'Понимаю в общих чертах, но боюсь конкретики. Самая ценная категория. Их повторяю первой — 1-2 часа на тему, и они становятся «зелёными». КПД самый высокий.' },
+        { h: '🟠 Оранжевый — не помню', p: 'Когда-то слушала, но в голове провалы. Берусь во второй половине первой недели. Сначала схема (10 минут), потом разбор по пунктам.' },
+        { h: '🔴 Красный — не открывала', p: 'Темы, которые я честно пропустила в семестре. Их минимум, но они тяжёлые. Беру во вторую неделю, по одной в день, утром на свежую голову.' }
+      ]},
+      { type: 'expert', photo: 'assets/Студенты/1 (16).png', name: 'Алина Гордеева', role: 'Преподаватель ВШЭ · педагогика',
+        text: 'Это вариация классической Eisenhower matrix, но адаптированная под учёбу. Главное в ней — не сами цвета, а честность с собой при разметке. Большинство студентов проваливают сессию не потому, что мало работали, а потому, что неправильно распределили: тратили дни на «зелёные» темы вместо «оранжевых». Цвета — это просто инструмент честности.' },
+      { type: 'callout', kind: 'tip', icon: '!', title: 'Лёгкий старт', text: 'Откройте список тем по одному предмету и поставьте напротив каждой темы один из четырёх кружков. Без перфекционизма — первое впечатление обычно правильное. Эта разметка занимает 15 минут и сразу показывает, где провалы.' },
+      { type: 'personal', label: 'Что вышло у меня', text: 'На третьем курсе я впервые сдала сессию без пересдач — и без сорванных дедлайнов по подработкам. Главное открытие — то, что я слишком много времени уделяла предметам, которые и так знала, потому что «приятно повторять то, что понимаешь». Цвета не дали мне самообмануться. После двух сессий по этой системе я перестала её записывать — стала автоматической.' },
+      { type: 'big', text: 'Самое важное в сессии — <span>не сила воли</span>. Это точная разметка.' }
+    ]
+  },
+
+  // 6 — PRO subscription feature breakdown
+  '6': {
+    cat: 'PRO', catColor: 'orange',
+    title: 'Что даёт <em>PRO-подписка</em>: разбор по фичам',
+    subtitle: 'Платная подписка за 399 ₽/мес — кому реально нужна, а кому хватит бесплатного тарифа. Без воды и продающих формул.',
+    cover: 'assets/Photo/4.jpg', coverCap: '// PRO — 399 ₽/мес',
+    date: '5 мая 2026', time: '3 мин', views: '1 880',
+    author: 'Редакция', authorRole: 'Команда продукта',
+    avatar: 'assets/avatar.png',
+    tags: ['#PRO', '#подписка'],
+    blocks: [
+      { type: 'lead', text: 'Сразу честно: PRO — не «волшебная кнопка». Это инструмент, который окупается, если ты активный исполнитель и берёшь от 2 задач в месяц. Разбираем фичи и считаем, когда подписка стоит своих денег.' },
+      { type: 'feat', items: [
+        { ico: '∞', h: 'Безлимит откликов', p: 'На бесплатном — 5 в день. На PRO — без ограничений. Главное для тех, кто отзывается на 10+ задач за вечер.' },
+        { ico: '↑', h: 'Приоритет в выдаче', p: 'Заказчик видит твой отклик в первой пятёрке. По нашим данным — увеличивает шанс выбора в 2.4 раза.' },
+        { ico: '⚙', h: 'Расширенные фильтры', p: 'Сортировка по бюджету, рейтингу заказчика, типу занятости. Помогает не тратить время на неподходящее.' },
+        { ico: '☎', h: 'Консультация по портфолио', p: 'Раз в квартал — 30-минутный разбор с куратором. Что добавить, что убрать, что переписать.' }
+      ]},
+      { type: 'h2', text: 'Когда подписка окупается' },
+      { type: 'p', text: 'Простая математика: PRO стоит 399 ₽/мес. По данным платформы, PRO-исполнители берут в среднем на 1.3 задачи в месяц больше. При медиане чека 6 200 ₽ — это +8 060 ₽ в месяц. Подписка окупается с первой дополнительной задачи.' },
+      { type: 'compare', bad: { h: 'PRO не нужен, если', items: ['Берёшь 1 задачу в месяц или реже', 'Ещё не закрыл первые 3 задачи', 'У тебя пока нет рейтинга 4.0+', 'Берёшь задачи только «по знакомству»'] }, good: { h: 'PRO стоит взять, если', items: ['Откликаешься 5+ раз в день', 'Уже есть портфолио из 3+ кейсов', 'Хочешь быстрее найти повторных заказчиков', 'Готов системно работать каждый месяц'] }},
+      { type: 'callout', kind: 'tip', icon: '!', title: 'Лайфхак', text: 'Первый месяц PRO — бесплатно для всех, кто закрыл хотя бы одну задачу. Попробовать можно без риска, отписаться — в одну кнопку в настройках.' },
+      { type: 'big', text: '399 ₽ / месяц. <br/>Окупается с <span>одной задачи</span>.' }
+    ]
+  },
+
+  // 7 — Volunteer-to-paid story with gallery
+  '7': {
+    cat: 'Истории', catColor: 'gold',
+    title: 'Из волонтёрства — в <em>первый чек</em> на 25 000 ₽',
+    subtitle: 'Мария три года таскала бейджи на форумах бесплатно. Сейчас — дизайнер на полставки. История с поворотом.',
+    cover: 'assets/Photo/2.webp', coverCap: '// Мария, 3 курс, дизайн',
+    date: '3 мая 2026', time: '7 мин', views: '2 245',
+    author: 'Мария К.', authorRole: 'Дизайнер · 3 курс',
+    avatar: 'assets/Студенты/1 (20).png',
+    tags: ['#истории', '#дизайн', '#первый-кейс'],
+    blocks: [
+      { type: 'lead', text: 'Три года Мария была «волонтёром-универсалом»: бейджи, регистрация, фотозона, ещё бейджи. Это давало строчку в резюме и ноль рублей. До февраля 2026 — пока не закрыла свой первый платный заказ на 25 000 ₽.' },
+      { type: 'h2', text: 'Что было до' },
+      { type: 'p', text: 'Первый курс — волонтёр на IT-форуме. Второй — снова волонтёр. Третий — координатор смены, всё ещё бесплатно. К концу третьего курса в портфолио было ноль работ, но 14 строчек «опыт волонтёрства».' },
+      { type: 'gallery', items: ['assets/Студенты/1 (16).png', 'assets/Студенты/1 (17).png', 'assets/Студенты/1 (18).png'] },
+      { type: 'quote', text: 'В какой-то момент я поняла: меня везде хвалят, но никто не платит. И это не «нет денег у вуза» — это я не научилась их просить.', author: 'Мария', style: 'orange' },
+      { type: 'h2', text: 'Поворот' },
+      { type: 'p', text: 'В январе на платформе появилась задача — оформление соцсетей для регионального стартапа. 25 000 ₽ за пакет: шаблоны постов, иконки актуального, обложки. Мария откликнулась, прикрепила три волонтёрских макета, на которые сама же злилась.' },
+      { type: 'stats', items: [
+        { n: '14', l: 'волонтёрств — 0₽' },
+        { n: '1', l: 'первый платный заказ', c: 'blue' },
+        { n: '25 000₽', l: 'первый чек', c: 'orange' }
+      ]},
+      { type: 'p', text: 'Через неделю — оффер. Через месяц — повторный заказ от того же стартапа, потом ещё один. Сейчас Мария ведёт три аккаунта на постоянной основе.' },
+      { type: 'callout', kind: 'info', icon: 'i', title: 'Вывод Марии', text: 'Волонтёрство не вредно — оно даёт навык. Но если ты делаешь работу профессионального уровня, странно не получать за неё деньги. Бесплатное портфолио — это всё ещё портфолио, его можно показывать.' },
+      { type: 'big', text: 'Иногда надо <span>просто попросить</span> платить.' }
+    ]
+  },
+
+  // 8 — Templates / tools list
+  '8': {
+    cat: 'Инструменты', catColor: 'blue',
+    title: '10 шаблонов <em>сообщений заказчику</em>',
+    subtitle: 'Что писать, когда дедлайн съезжает, заказчик молчит три дня или нужно мягко попросить аванс. Готовые формулировки — копируй и редактируй.',
+    cover: 'assets/Студенты/1 (20).png', coverCap: '// Бери и используй',
+    date: '1 мая 2026', time: '4 мин', views: '1 612',
+    author: 'Аня Левина', authorRole: 'Редактор',
+    avatar: 'assets/Студенты/1 (15).png',
+    tags: ['#шаблоны', '#переписка', '#инструменты'],
+    blocks: [
+      { type: 'lead', text: 'Переписка с заказчиком — это половина работы. Хорошее сообщение снимает напряжение, плохое — создаёт. Вот 10 ситуаций, в которых студенты обычно теряются, и готовые формулировки.' },
+      { type: 'mono', label: '01 — приветствие после получения задачи', html: '<span class="you">→ Спасибо!</span> Задачу принял.\nДо <span class="em">пятницы</span> пришлю первый промежуточный — обложку и пару экранов.\nЕсли по ходу появятся вопросы, напишу сюда же.' },
+      { type: 'mono', label: '02 — попросить детали по ТЗ', html: '<span class="you">→ Пара уточнений до старта:</span>\n1. Формат итоговых файлов — PDF или Figma?\n2. Сроки — суббота вечер ок?\n3. Референсы есть, или придумываем с нуля?' },
+      { type: 'mono', label: '03 — статус, когда нечего показать', html: '<span class="you">→ Короткий апдейт:</span> сегодня собрал структуру, завтра — первый экран.\nКонтрольная точка в среду, как договаривались.' },
+      { type: 'mono', label: '04 — дедлайн съезжает на день', html: '<span class="you">→ По срокам:</span> на 1 день съезжаю — застрял на интеграции с API.\nК <span class="em">вторнику до обеда</span> точно сдам, без новых сдвигов.\nИзвиняюсь за неудобство.' },
+      { type: 'mono', label: '05 — заказчик молчит 3 дня', html: '<span class="you">→ Уточняю:</span> отправлял макет в субботу, видели?\nЕсли есть правки — собёру в один список.\nЕсли всё ок — финализирую и закрываю задачу.' },
+      { type: 'mono', label: '06 — попросить аванс', html: '<span class="you">→ Предлагаю стартовать так:</span>\nС вашей стороны — 50% через эскроу платформы (деньги замораживаются, я их не вижу до сдачи).\nС моей — макет через 5 дней.\nЭто стандартный режим — заказчику тоже безопасно.' },
+      { type: 'mono', label: '07 — отказать вежливо', html: '<span class="you">→ Спасибо за предложение,</span> но на этой неделе у меня уже две задачи.\nЕсли проект не горит — могу взять с 15 мая. Если нужно срочно — лучше другой исполнитель.' },
+      { type: 'mono', label: '08 — попросить отзыв после сдачи', html: '<span class="you">→ Спасибо за проект!</span>\nЕсли всё устроило — буду благодарен за пару строк отзыва в карточке задачи.\nЭто реально помогает с откликами на следующие.' },
+      { type: 'mono', label: '09 — предложить повторный проект', html: '<span class="you">→ Если будет следующий этап</span> (вторая страница, серия постов, доработки) — пишите сразу, держу слот.\nКонтекст уже есть, начнём быстрее, чем с нуля.' },
+      { type: 'mono', label: '10 — закрыть конфликт', html: '<span class="you">→ Понимаю позицию.</span> Давайте так: вот что я могу изменить — \n• …\n• …\nЕсли это не подходит — давайте обсудим, как разойтись без минусов друг другу.' },
+      { type: 'callout', kind: 'tip', icon: '!', title: 'Главное правило', text: 'Любое сообщение должно отвечать на один из трёх вопросов: что я сделал, что я делаю сейчас, что нужно от вас. Если ни на один — не отправляй.' },
+      { type: 'big', text: 'Сообщение в <span>3 строки</span> — лучше письма на страницу.' }
+    ]
+  },
+
+  '9': { redirect: '4' },
+  '10': { redirect: '5' },
+  '11': { redirect: '6' },
+  '12': { redirect: '7' },
+
+  // 13 — Long-read, mostly text, about self-employment tax
+  '13': {
+    cat: 'Деньги', catColor: 'blue',
+    title: 'Самозанятость для студента: <em>коротко</em> о главном',
+    subtitle: 'Когда оформлять, сколько платить, что писать в чеке и почему это всё равно проще, чем кажется. Реальная практика, без юридического жаргона.',
+    cover: 'assets/Photo/3.webp', coverCap: '// Личный опыт + актуальные ставки',
+    date: '6 мая 2026', time: '7 мин', views: '2 410',
+    author: 'Антон Г.', authorRole: 'Финансовый редактор',
+    avatar: 'assets/avatar.png',
+    tags: ['#налоги', '#самозанятость', '#финансы'],
+    blocks: [
+      { type: 'p', text: 'Если ты студент и зарабатываешь на проектах хотя бы 5–10 тысяч в месяц, рано или поздно появится мысль: «а как насчёт налогов?». Сразу хорошие новости — для большинства студентов на платформе подходит режим «налог на профессиональный доход», в просторечии — самозанятость. Регистрация — пять минут в приложении «Мой налог». Никакой бухгалтерии, никаких бумажных деклараций, никакого ИП.' },
+      { type: 'p', text: 'В этой статье — самое нужное: когда вообще имеет смысл оформляться, как это влияет на стипендию, что и как формировать в виде чека, и почему официальный статус — это не только про закон, но и про доверие заказчиков.' },
+      { type: 'h2', text: 'Когда оформлять, а когда не торопиться' },
+      { type: 'p', text: 'Формально — закон обязывает оформиться сразу, как только ты получил первый рубль от заказчика. На практике же штрафы за неоформление редко достигают студентов: налоговая больше интересуется крупными суммами и регулярными переводами. Это не значит, что можно игнорировать — просто нет ощущения «уже завтра придёт повестка».' },
+      { type: 'p', text: 'Простой ориентир: если в год ты заработаешь больше 60 000 ₽, оформляться точно стоит. Это уровень, на котором: а) налоговая может заметить переводы по карте; б) заказчики начинают спрашивать чек; в) тебе самому удобнее работать с прозрачными цифрами. Если ты только пробуешь подработку и пока заработал тысячу-другую — никто не торопит. Сделаешь, когда станет регулярно.' },
+      { type: 'quote', text: 'Самозанятость — это не про «больше налогов», это про «больше понятности». Чек делает тебя нормальным контрагентом, а не «другом, которому переводят на карту».', author: 'Юрист, консультант СтудРадара', style: 'blue' },
+      { type: 'h2', text: 'Сколько на самом деле платить' },
+      { type: 'p', text: 'Ставка зависит от того, кто тебе платит. Если заказчик — физлицо (например, частный предприниматель без юрлица), то налог 4% с поступления. Если заказчик — компания или ИП, то 6%. Платформа в карточке задачи показывает сумму, которую ты получишь на руки, но налог ты считаешь сам — это 4 или 6% от того, что пришло. Приложение «Мой налог» делает это автоматически: формируешь чек, видишь сумму к уплате, в конце месяца платишь в один клик.' },
+      { type: 'p', text: 'Важный момент: первый раз ты получаешь налоговый вычет — 10 000 ₽. Это значит, что фактически налог уменьшен (с 4% до 3% и с 6% до 4%), пока вычет не «израсходуется». Для студентов с небольшими доходами этого вычета хватает примерно на год работы — то есть первые 12 месяцев почти не платишь налогов вообще.' },
+      { type: 'h2', text: 'Стипендию не отберут' },
+      { type: 'p', text: 'Самый частый страх: «оформлю самозанятость, лишусь стипендии». Это не так. Государственная академическая стипендия — она про учёбу, а не про доходы. Социальная и адресная — да, могут зависеть от дохода семьи, но это совсем другая история и она оценивается не по статусу, а по справкам. Налоговый режим сам по себе не значит, что ты «работаешь» в трудовом смысле — он просто фиксирует, что ты получаешь профессиональный доход.' },
+      { type: 'p', text: 'То же касается медицинской страховки, общежития и проездных льгот — все они привязаны к статусу студента, а не к отсутствию доходов. Никто не выгонит тебя из общаги за то, что ты делаешь лендинги по выходным.' },
+      { type: 'h2', text: 'Чек — это нормально' },
+      { type: 'p', text: 'Раньше слово «чек» звучало пугающе. На деле это маленькая бумажка в приложении: ты вписываешь сумму, имя заказчика (физлицо или компания) и краткое описание услуги, например «дизайн соцсетей». Приложение генерирует ссылку — кидаешь её заказчику, всё. Заказчик может приложить её к своему отчёту, ты — спишь спокойно.' },
+      { type: 'p', text: 'Многие компании, особенно небольшие, прямо в карточке задачи пишут «нужен чек». Если ты не оформлен, они просто переходят к следующему исполнителю. Это становится барьером для роста ставки — потому что серьёзные бюджеты обычно идут через нормальное оформление.' },
+      { type: 'callout', kind: 'info', icon: 'i', title: 'Что точно нельзя на самозанятости', text: 'Перепродавать товары, нанимать сотрудников, работать по найму у того же заказчика, у которого был трудовой договор в последние два года. Всё остальное — пожалуйста. Услуги, контент, разработка, дизайн, репетиторство.' },
+      { type: 'h2', text: 'А если перерасту лимит?' },
+      { type: 'p', text: 'Лимит самозанятости — 2,4 миллиона рублей в год. Если ты реально дойдёшь до этой суммы — поздравляем, у тебя уже не «подработка», а полноценный бизнес, и пора думать про ИП. Но для студента это сценарий маловероятный: даже самые активные исполнители на платформе редко перешагивают через 500 тысяч в год.' },
+      { type: 'p', text: 'Зато ниже лимита можно жить долго и счастливо. Многие фрилансеры остаются на самозанятости годами — это самый лёгкий и дешёвый режим в стране. Главное — не забывать формировать чеки и платить налог раз в месяц. Всё остальное приложение сделает за тебя.' },
+      { type: 'big', text: '5 минут на оформление, <span>4% налога</span>, ноль бюрократии.' },
+      { type: 'p', text: 'Если ещё сомневаешься — попробуй открыть приложение «Мой налог» и пройти регистрацию до момента подтверждения. Дойти до конца можно за чашку чая. Зато потом — никаких «а вдруг налоговая спросит» и никаких неловких разговоров с заказчиком про «можно я переведу на карту вашей сестре».' }
+    ]
+  },
+
+  // 14 — Reading list / summer prep, mostly text, gallery
+  '14': {
+    cat: 'Учёба', catColor: 'gold',
+    title: 'Что почитать летом, <em>чтобы прокачаться</em> к новому семестру',
+    subtitle: 'Не списки «100 книг до 30 лет» — а короткая подборка с честным разбором: кому подойдёт, о чём, что вынести. Без обязаловки и снобизма.',
+    cover: 'assets/Photo/2.webp', coverCap: '// Подборка редакции, май 2026',
+    date: '4 мая 2026', time: '9 мин', views: '1 760',
+    author: 'Аня Левина', authorRole: 'Редактор',
+    avatar: 'assets/Студенты/1 (15).png',
+    tags: ['#книги', '#саморазвитие', '#лето'],
+    blocks: [
+      { type: 'p', text: 'Лето — единственное время в году, когда у студента есть три месяца без сессии, дедлайнов и принудительной литературы. Самое странное, что многие тратят его на сериалы и потом в сентябре жалеют. Не потому что «надо было читать вместо отдыха», а потому что одна-две хорошие книги летом дают больше, чем десяток конспектов осенью.' },
+      { type: 'p', text: 'Эта подборка собрана не «для всех». Это пять книг, которые конкретно мы прочли за последние пару лет и о которых до сих пор вспоминаем. Каждая — про навык, который пригодится студенту, который собирается выходить на проектную работу: думать о своём времени, общаться с заказчиками, видеть деньги как инструмент, а не как цель.' },
+      { type: 'h2', text: '01. «Дзен в искусстве написания книг» — Рэй Брэдбери' },
+      { type: 'p', text: 'На первый взгляд — про писательство. На самом деле — про любую работу, которую ты делаешь руками или головой. Брэдбери пишет коротко, иронично и без пафоса: о том, как находить вдохновение, когда устал; как продолжать, когда не хочется; что делать с критикой; почему важно писать (читай: работать) каждый день. Половина студентов после неё начинает вести заметки.' },
+      { type: 'p', text: 'Что вынести: профессионализм — это не талант, а привычка возвращаться к делу, особенно когда не хочется. И ещё — что важно отделять «я делаю плохо сегодня» от «я плохой». Это две разные вещи.' },
+      { type: 'h2', text: '02. «Глубокая работа» — Кэл Ньюпорт' },
+      { type: 'p', text: 'Самая практичная книга в подборке. О том, как современные люди — особенно студенты — теряют способность концентрироваться больше чем на 20 минут, и что с этим делать. Никаких эзотерических методик: только режим, привычки, ограничения на уведомления и физическое разделение рабочего пространства.' },
+      { type: 'p', text: 'Если ты пробовал работать с включённым телефоном — ты знаешь, как это выглядит. Ньюпорт убедительно показывает, что часовой блок без отвлечений даёт больше, чем целый день в режиме «и почту проверю, и таску сделаю». Для студента-исполнителя это буквально про деньги — ты тратишь меньше часов на ту же задачу.' },
+      { type: 'quote', text: 'Способность концентрироваться становится навыком столь же редким, сколь и ценным. Те, кто им владеет, будут выигрывать в любой сфере, требующей мысли.', author: 'Кэл Ньюпорт, «Глубокая работа»', style: 'dark' },
+      { type: 'h2', text: '03. «Психология денег» — Морган Хаузел' },
+      { type: 'p', text: 'Не учебник по инвестициям и не книга про «как стать миллионером». Сборник коротких глав о том, как мы на самом деле принимаем решения с деньгами — почти всегда нерационально. Почему один человек копит, другой тратит; почему легко зарабатывать и тяжело удерживать; почему чужие финансовые советы редко работают для тебя лично.' },
+      { type: 'p', text: 'Для студента, который только начинает получать первые свои заработанные деньги, эта книга — прививка от двух крайностей: от «потрачу всё на айфон, пока молодой» и от «положу на вклад на 10 лет, не буду жить сейчас». В книге нет правильных ответов, но есть отличные вопросы.' },
+      { type: 'gallery', items: ['assets/Photo/1.webp', 'assets/Photo/2.webp', 'assets/Photo/3.webp'] },
+      { type: 'h2', text: '04. «Сначала скажите “нет”» — Джим Кэмп' },
+      { type: 'p', text: 'Книга про переговоры — но не в смысле корпоративных тренингов. Это про то, как разговаривать с заказчиком, который пытается дожать по цене; с однокурсником, который зовёт в проект на «потом разделим»; с родителями, которые не понимают, что у тебя дедлайн. Кэмп жёсткий, иногда занудный, но очень полезный. Главная идея: говорить «нет» — это не грубость, а нормальная часть взрослого общения.' },
+      { type: 'p', text: 'Большинство студентов, начинающих работать, страдают именно от неумения отказывать. Берут задачу на невыгодных условиях, потому что «неудобно отказать», и потом ненавидят и себя, и заказчика. Эта книга — про то, как сразу ставить рамки и не выгорать через месяц.' },
+      { type: 'h2', text: '05. «Атомные привычки» — Джеймс Клир' },
+      { type: 'p', text: 'Возможно, самая хайповая книга последних лет — и она действительно неплохая. О том, что большие изменения собираются из крошечных. Не «начни новую жизнь с понедельника», а «делай одно маленькое действие каждый день, и через год ты другой человек». Клир приводит много примеров — спорт, учёба, привычки, работа.' },
+      { type: 'p', text: 'Для студента её ценность — в инструменте под названием «правило двух минут». Любое дело, которое можно сделать за две минуты, делается прямо сейчас. Любая новая привычка начинается с двухминутной версии себя — потом разрастается сама. Это работает, проверено на нескольких поколениях редакции.' },
+      { type: 'callout', kind: 'tip', icon: '!', title: 'Как читать летом', text: 'Не пытайся читать «по списку». Возьми одну книгу — ту, которая прямо сейчас откликается. Дочитал — взял следующую. Если ни одна не зашла за 50 страниц, отложил — это не для тебя сейчас, и это нормально.' },
+      { type: 'h2', text: 'Бонус — что точно не стоит' },
+      { type: 'p', text: 'Не покупайся на книги вида «как стать миллионером за 30 дней» и «секреты успешных людей». Это всегда плохой пересказ нескольких идей, разбавленный самопиаром автора. Хорошая книга про деньги, переговоры или привычки — почти всегда тонкая, написанная одним автором с конкретным взглядом. Толстые тома с золотыми буквами на обложке — пропускай.' },
+      { type: 'p', text: 'И последнее: не оценивай свой год по количеству прочитанных книг. Лучше одну переварить и применить, чем 30 пролистать и забыть. Лето короткое — выбирай по любви, читай медленно, обсуждай с друзьями. Это и есть прокачка — без громких слов.' }
+    ]
+  },
+
+  // 15 — Reflective long-read about personal brand
+  '15': {
+    cat: 'Карьера', catColor: 'orange',
+    title: 'Личный бренд студента: <em>зачем</em> и с&nbsp;чего&nbsp;начать',
+    subtitle: 'Слово «личный бренд» в 2026 звучит как клише из инфоцыганских курсов. И всё же — у тех, у кого он есть, проекты находят их сами. Разбираемся честно, без коучинга.',
+    cover: 'assets/Студенты/1 (17).png', coverCap: '// Размышления, не инструкция',
+    date: '29 апреля 2026', time: '8 мин', views: '1 425',
+    author: 'Мария К.', authorRole: 'Дизайнер, ведёт блог 3 года',
+    avatar: 'assets/Студенты/1 (20).png',
+    tags: ['#личный-бренд', '#карьера', '#размышление'],
+    blocks: [
+      { type: 'p', text: 'Когда я была на втором курсе, фраза «личный бренд» вызывала у меня раздражение. Казалось, это что-то для тех, кто делает кружочки в Telegram и продаёт марафоны желаний. Я не хотела «продавать себя», не хотела «упаковываться» и не хотела «выходить в публичное поле». Я хотела просто делать хорошие проекты — и чтобы их находили.' },
+      { type: 'p', text: 'Прошло три года. Сейчас, оглядываясь назад, я понимаю одну вещь: то, что я тогда называла «нормальной работой без бренда», на самом деле и было моим брендом. Я просто не отдавала себе отчёта. Каждый пост, каждое сообщение в комментарии, каждый макет, который я выкладывала «для себя» — всё это формировало образ. И когда мне нужны были заказы, этот образ начал работать на меня — а не я на него.' },
+      { type: 'h2', text: 'Что такое личный бренд на самом деле' },
+      { type: 'p', text: 'Если убрать инфоцыганскую упаковку, личный бренд — это очень простое: то, что про тебя думают люди, которые тебя ещё не встречали. Это первое впечатление, которое складывается заочно. У тебя оно есть, даже если ты ничего для этого не делал. Вопрос только в том, сложилось ли оно случайно — или ты в нём участвовал.' },
+      { type: 'p', text: 'Студент, у которого есть профиль на платформе с тремя кейсами и парой отзывов — у него уже есть бренд. Студент, у которого Telegram-канал на 200 человек, где он раз в неделю показывает, как делает задачи — у него бренд сильнее. Студент, который ведёт колонку в университетской газете — третий уровень. Никто из них не использует слово «бренд», но он у них есть.' },
+      { type: 'quote', text: 'Личный бренд — это не то, что ты говоришь о себе. Это то, что говорят о тебе, когда ты вышел из комнаты.', author: 'Джефф Безос (приписывают)', style: 'orange' },
+      { type: 'h2', text: 'Почему это особенно работает для студентов' },
+      { type: 'p', text: 'Парадокс: у студентов меньше опыта, но больше шансов выделиться. Корпоративные дизайнеры и разработчики обычно не имеют времени и сил вести свой канал — они приходят с работы и хотят спать. У студента это время есть. Плюс — студенту простят шероховатости. «Студент, который учится и пишет про свои ошибки» — это симпатичный персонаж. «Профессионал с 10 годами опыта, который пишет про свои ошибки» — это тревожно.' },
+      { type: 'p', text: 'Я не призываю всех заводить блоги. Это не подходит большинству — потому что требует регулярности, а регулярность — самое сложное. Но есть форматы попроще: профиль на платформе с грамотным описанием. Аккуратно оформленный GitHub. Behance с тремя кейсами вместо тридцати. LinkedIn с одной фразой, которая запоминается. Каждый из этих инструментов — это уже мини-бренд.' },
+      { type: 'h2', text: 'С чего начать (без пафоса)' },
+      { type: 'p', text: 'Первое — определись с одной фразой про себя. Не «студент третьего курса экономики, увлекаюсь дизайном и музыкой». А что-то вроде «делаю Tilda-лендинги для маленьких ресторанов в Югре». Конкретно, узко, проверяемо. Если такая фраза не складывается — это нормально, она появится с опытом. Но искать её — стоит.' },
+      { type: 'p', text: 'Второе — выбери одну точку, где ты «есть». Не пять платформ, не три соцсети, не Telegram-канал, Instagram и TikTok одновременно. Одна. Которая удобна тебе. Например — профиль на СтудРадаре, ссылку на который ты даёшь во всех своих перепискам с заказчиками. Это уже работает. Когда станет тесно — добавишь вторую.' },
+      { type: 'p', text: 'Третье — заведи привычку «один кейс в месяц». Не пост, не апдейт, а законченный кейс. Сделал лендинг — оформи его как карточку проекта. Закрыл задачу на платформе — попроси у заказчика короткий отзыв и сохрани его. К концу года у тебя 10–12 кейсов, и это уже не «студент», а человек с портфолио.' },
+      { type: 'h2', text: 'Чего точно не надо' },
+      { type: 'p', text: 'Не надо имитировать «успех». Это очень видно и сразу: фотографии в кофейне с ноутбуком, фразы «продаю результаты», обещания «гарантированной прибыли». Студент, играющий в «состоявшегося предпринимателя» — самое жалкое зрелище в интернете. Не делай так.' },
+      { type: 'p', text: 'Не надо вести канал «потому что все ведут». Если ты не любишь писать — твой канал будет страдать, и читатели это почувствуют. Лучше один хорошо оформленный профиль, чем три заброшенных аккаунта. Личный бренд — это не количество площадок, это плотность присутствия на одной.' },
+      { type: 'p', text: 'И главное — не надо «строить бренд» как отдельный проект. Бренд строится сам, пока ты делаешь свою работу. Просто делай эту работу заметной для других: называй проекты, выкладывай результаты, рассказывай, что не получилось. Со временем — и без специальных усилий — у тебя сложится репутация.' },
+      { type: 'big', text: 'Бренд — это <span>привычка показывать</span> то, что ты делаешь.' },
+      { type: 'p', text: 'Я думаю, главное отличие студента с брендом от студента без бренда — не в навыках и не в количестве проектов. Оно в одной простой штуке: первый говорит о своих делах вслух, второй держит их при себе. Всё. Дальше — техника и регулярность, но решение начинается отсюда.' }
+    ]
+  },
+
+  // 16 — Text-heavy reflection on burnout
+  '16': {
+    cat: 'Учёба', catColor: 'blue',
+    title: 'Выгорание на третьем курсе: <em>что это было</em> и как я выбрался',
+    subtitle: 'История одного года, в течение которого я пробовал «всё успеть» — и в итоге не успел ничего. Без советов на 5 пунктов, просто рассказ и пара выводов.',
+    cover: 'assets/Студенты/1 (18).png', coverCap: '// Личный рассказ, без обобщений',
+    date: '24 апреля 2026', time: '11 мин', views: '2 985',
+    author: 'Кирилл Н.', authorRole: 'Студент 4 курса · читатель блога',
+    avatar: 'assets/Студенты/1 (22).png',
+    tags: ['#выгорание', '#учёба', '#история'],
+    blocks: [
+      { type: 'p', text: 'Третий курс начался с того, что я взял на себя слишком много. Это самая короткая и самая точная формулировка, которая у меня есть. К декабрю — пять подработок одновременно, восьмёрка по «вышмату», расстройство сна и ощущение, что я не помню, как закончился сентябрь. К Новому году — лёгкая паника в любых разговорах про учёбу и тотальное безразличие ко всему остальному.' },
+      { type: 'p', text: 'Это не было драматично. Это было серо. Не «я плачу каждый вечер», а «я открываю ноутбук и сорок минут смотрю в одну точку, прежде чем начать что-то делать». Не «я устал», а «я ничего не чувствую». Долгое время я не понимал, что со мной — пока знакомая психолог не сказала по случайному поводу: «слушай, это похоже на выгорание». И я не поверил. Какое выгорание у студента, который и работает-то по проектам? Это же у топ-менеджеров, у врачей, у людей с настоящей нагрузкой.' },
+      { type: 'h2', text: 'Как это случилось' },
+      { type: 'p', text: 'В сентябре я искренне хотел использовать каждый день. Я считал, что молодость даёт мне ресурс, который потом не вернётся, и что глупо его тратить на отдых. Я брал по две задачи на платформе в неделю, ходил на все пары, записался на онлайн-курс по UX, начал бегать по утрам и параллельно вёл Telegram-канал. Всё это казалось логичным: я наращиваю компетенции, я зарабатываю, я в форме, я молодец.' },
+      { type: 'p', text: 'Первые два месяца я действительно был молодец. Я закрывал задачи, сдавал в срок, успевал спать по 6 часов. Я даже немного гордился. К ноябрю стало тяжелее — но я списывал это на «осенняя депрессия, у всех так». К декабрю я перестал успевать. Не потому, что задач стало больше, а потому что я стал делать всё медленнее. Час на то, что раньше делалось за двадцать минут. Два дня на письмо заказчику.' },
+      { type: 'p', text: 'Самое странное — это не была усталость в обычном смысле. После полноценного выходного я не чувствовал себя лучше. Я просто переставал хотеть. Это было хуже всего: я смотрел на свой собственный список задач и не находил в нём ни одной, которую мне хотелось бы сделать. И ни одной, которую можно было бы пропустить.' },
+      { type: 'quote', text: 'Выгорание — это не усталость, это потеря смысла. Усталость лечится сном. Потеря смысла — нет.', author: 'Из дневника, ноябрь 2024', style: 'dark' },
+      { type: 'h2', text: 'Что я делал неправильно' },
+      { type: 'p', text: 'Главная ошибка — я не различал «отдых» и «развлечение». Я думал, что если я полежал час с телефоном вечером, я отдохнул. На деле — нет. Соцсети не дают мозгу отдохнуть, они дают ему другой тип нагрузки. К концу дня я был не отдохнувшим, а двойным усталым: от работы и от телефона.' },
+      { type: 'p', text: 'Вторая ошибка — я считал, что отдых надо «заслужить». Что нельзя просто взять выходной, если ты не закрыл задачи. Что если у тебя есть свободный час — он должен пойти на курс или на учёбу. Это очень студенческое мышление, и оно убивает быстрее всего. Отдых — это не награда за работу. Это часть работы. Без неё работа становится бессмысленной.' },
+      { type: 'p', text: 'Третья ошибка — я не разговаривал об этом. Когда я начинал говорить друзьям, что устал, они отвечали «ну все устали, что поделать». И я закрывался. Я думал, что я просто слабый и ною. На самом деле друзьям не было всё равно — просто они не знали, как реагировать. Когда я в конце концов сказал прямо: «мне плохо, мне не хочется ничего», — двое из них резко изменились в обращении. Стали зовать на прогулки, на чай, без поводов. Это очень помогло.' },
+      { type: 'h2', text: 'Что помогло' },
+      { type: 'p', text: 'Первое, что я сделал — снял с себя половину задач. Это было очень страшно. Я думал, что меня «удалят» с платформы, что заказчики никогда больше не вернутся, что я выпаду из проф-среды. Ничего этого не случилось. Двое заказчиков спокойно перенесли сроки, третий нашёл другого исполнителя — и тоже без обид. С платформы меня не удалили, рейтинг даже не дрогнул. Оказалось, мир не рушится, если ты говоришь «не сейчас».' },
+      { type: 'p', text: 'Второе — я нашёл себе вид отдыха, который не связан с экраном. Совсем. У меня это оказались долгие прогулки по парку — буквально два часа без музыки и без подкастов, просто идти. Первые недели это было невыносимо скучно. Через месяц — стало необходимым. Сейчас я делаю это два-три раза в неделю и не променяю ни на что.' },
+      { type: 'p', text: 'Третье — я научился отделять реальные дедлайны от выдуманных. Половина «срочного», что я делал в декабре, не было срочным вообще. Я сам себе создал ощущение горящего, чтобы не давать себе расслабиться. Когда я начал спрашивать «а что произойдёт, если я не сделаю это сегодня?», часто оказывалось — ничего. Это очень освобождает.' },
+      { type: 'callout', kind: 'info', icon: 'i', title: 'Простой признак, что что-то не так', text: 'Если ты не помнишь, что чувствовал последний раз, когда тебе было хорошо — это уже сигнал. Не «срочно ко врачу», но точно «остановись и подумай». Память на эмоции — первое, что отказывает.' },
+      { type: 'h2', text: 'К чему я пришёл' },
+      { type: 'p', text: 'Через полгода после декабрьского дна я понял одну важную вещь. Раньше я думал, что выгорание — это болезнь продуктивности. Что-то вроде «ты слишком много работал, надо меньше работать». На самом деле выгорание — это болезнь смысла. Я работал не потому, что мне это было важно. Я работал, потому что боялся остановиться. А когда мотивация — страх, она кончается. Это правило.' },
+      { type: 'p', text: 'Сейчас я снова беру задачи на платформе, веду свой канал, хожу на пары. Но я делаю гораздо меньше, чем мог бы. У меня два-три проекта в месяц, не пять. Один курс в семестр, не три. Один пет-проджект, не пять идей в блокноте. И впервые за последние два года я могу сказать, что мне это нравится — не потому, что я заставил себя, а потому что я этого хочу.' },
+      { type: 'p', text: 'Если ты сейчас в декабре своего третьего курса — обещаю, это пройдёт. Не само и не быстро, но пройдёт. Главное — не делать вид, что всё нормально, когда оно не нормально. Это самое сложное и самое важное. Дальше — техника.' },
+      { type: 'big', text: 'Не «работай меньше». <span>Работай о том, что важно.</span>' }
+    ]
+  }
+};
+
+// Hook up redirects: blog cards used ids 2..8 + featured=1. Match the blog ids.
+
+(function init() {
+  const params = new URLSearchParams(location.search);
+  let id = params.get('id') || '1';
+  let post = POSTS[id];
+  // resolve redirects
+  while (post && post.redirect) post = POSTS[post.redirect];
+  if (!post) {
+    document.getElementById('artBody').innerHTML = '<p>Статья не найдена. <a href="blog.html" style="color:#1153B5">← Назад в блог</a></p>';
+    return;
+  }
+
+  document.title = post.title.replace(/<[^>]+>/g, '') + ' — СтудРадар';
+  document.getElementById('artTitle').innerHTML = post.title;
+  document.getElementById('artSubtitle').textContent = post.subtitle;
+  const catPill = document.getElementById('catPill');
+  catPill.textContent = '// ' + post.cat;
+  catPill.className = 'cat-pill ' + (post.catColor || '');
+  document.getElementById('crumbDate').textContent = post.date;
+  document.getElementById('authorAvatar').style.backgroundImage = `url('${post.avatar}')`;
+  document.getElementById('authorName').textContent = post.author;
+  document.getElementById('authorRole').textContent = post.authorRole;
+  document.getElementById('metaTime').textContent = post.time;
+  document.getElementById('metaViews').textContent = post.views;
+  const cover = document.getElementById('artCover');
+  cover.style.backgroundImage = `url('${post.cover}')`;
+  document.getElementById('coverCap').textContent = post.coverCap || '';
+
+  // tags
+  const tagsHtml = (post.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
+  document.getElementById('endTags').innerHTML = tagsHtml;
+
+  // body
+  const bodyEl = document.getElementById('artBody');
+  const html = post.blocks.map(renderBlock).join('');
+  bodyEl.innerHTML = html;
+
+  // related: pick 3 other posts
+  const relIds = Object.keys(POSTS).filter(k => !POSTS[k].redirect && k !== id).slice(0, 3);
+  document.getElementById('relatedGrid').innerHTML = relIds.map(rid => {
+    const r = POSTS[rid];
+    return `<a href="article.html?id=${rid}" class="rel-card">
+      <div class="rel-cover" style="background-image:url('${r.cover}')"></div>
+      <div class="rel-body">
+        <div class="rel-tag">// ${r.cat}</div>
+        <h4>${r.title.replace(/<[^>]+>/g, '')}</h4>
+      </div>
+    </a>`;
+  }).join('');
+})();
+
+function renderBlock(b) {
+  switch (b.type) {
+    case 'lead': return `<p class="lead">${b.text}</p>`;
+    case 'p': return `<p>${b.text}</p>`;
+    case 'h2': return `<h2${b.id?` id="${b.id}"`:''}>${b.text}</h2>`;
+    case 'toc': return `<aside class="art-toc">
+        <h3>В этой статье</h3>
+        <ol>${b.items.map(i => `<li><a href="#${i.anchor}">${i.label}</a></li>`).join('')}</ol>
+      </aside>`;
+    case 'expert': return `<aside class="art-expert">
+        <span class="art-expert-photo" style="background-image:url('${b.photo}')"></span>
+        <div>
+          <div class="art-expert-name">${b.name}</div>
+          <div class="art-expert-role">${b.role}</div>
+          <p class="art-expert-text">«${b.text}»</p>
+        </div>
+      </aside>`;
+    case 'personal': return `<aside class="art-personal">
+        <div class="art-personal-label">${b.label||'Личный опыт'}</div>
+        <p class="art-personal-text">${b.text}</p>
+      </aside>`;
+    case 'ul': return `<ul class="bullet-list">${b.items.map(i => `<li>${i}</li>`).join('')}</ul>`;
+    case 'quote':
+      return `<aside class="pull-quote ${b.style||''}">
+        <p>${b.text}</p>
+        <div class="qa">— ${b.author}</div>
+      </aside>`;
+    case 'stats':
+      return `<div class="stat-row">${b.items.map(s =>
+        `<div class="cell"><div class="num ${s.c||''}">${s.n}</div><div class="lbl">${s.l}</div></div>`
+      ).join('')}</div>`;
+    case 'ol':
+      return `<ol class="num-list">${b.items.map(i =>
+        `<li><h3>${i.h}</h3><p>${i.p}</p></li>`
+      ).join('')}</ol>`;
+    case 'check':
+      return `<ul class="check-list">${b.items.map(i => `<li>${i}</li>`).join('')}</ul>`;
+    case 'callout':
+      return `<div class="callout ${b.kind||'tip'}">
+        <div class="callout-icon">${b.icon||'!'}</div>
+        <div class="callout-body"><strong>${b.title}</strong><p>${b.text}</p></div>
+      </div>`;
+    case 'compare':
+      return `<div class="compare">
+        <div class="bad"><h4>✕ ${b.bad.h}</h4>${b.bad.items.map(i=>`<p>${i}</p>`).join('')}</div>
+        <div class="good"><h4>✓ ${b.good.h}</h4>${b.good.items.map(i=>`<p>${i}</p>`).join('')}</div>
+      </div>`;
+    case 'mono':
+      return `<div class="mono-block">
+        <span class="label">${b.label}</span>
+        <pre style="margin:0;font-family:inherit;white-space:pre-wrap">${b.html}</pre>
+      </div>`;
+    case 'image':
+      return `<figure class="art-image" style="background-image:url('${b.src}')"></figure>
+        ${b.cap ? `<p class="art-image-cap">${b.cap}</p>` : ''}`;
+    case 'gallery':
+      return `<div class="gallery">${b.items.map(src =>
+        `<div style="background-image:url('${src}')"></div>`
+      ).join('')}</div>`;
+    case 'feat':
+      return `<div class="feat-grid">${b.items.map(f =>
+        `<div class="feat"><div class="ico">${f.ico}</div><h4>${f.h}</h4><p>${f.p}</p></div>`
+      ).join('')}</div>`;
+    case 'big':
+      return `<p class="big-line">${b.text}</p>`;
+    default: return '';
+  }
+}
+
+// Toggle pill
+(function() {
+  var toggle = document.querySelector('.toggle');
+  if (!toggle) return;
+  var pill = toggle.querySelector('.toggle-pill');
+  var links = Array.prototype.slice.call(toggle.querySelectorAll('a'));
+  function movePill(link, instant) {
+    var tRect = toggle.getBoundingClientRect();
+    var lRect = link.getBoundingClientRect();
+    var x = lRect.left - tRect.left - 6;
+    if (instant) { pill.style.transition = 'none'; pill.offsetHeight; }
+    pill.style.width = lRect.width + 'px';
+    pill.style.transform = 'translateX(' + x + 'px)';
+    if (instant) { pill.offsetHeight; pill.style.transition = ''; }
+  }
+  var active = toggle.querySelector('a.active');
+  if (active) movePill(active, true);
+  window.addEventListener('resize', function() {
+    var a = toggle.querySelector('a.active');
+    if (a) movePill(a, true);
+  });
+  links.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      var href = this.getAttribute('href');
+      if (!href || href.startsWith('#')) return;
+      links.forEach(function(l) { l.classList.remove('active'); });
+      this.classList.add('active');
+      movePill(this, false);
+      if (href.indexOf('employer') !== -1) toggle.classList.add('orange');
+      else toggle.classList.remove('orange');
+      e.preventDefault();
+      setTimeout(function() { window.location.href = href; }, 440);
+    });
+  });
+})();
+</script>
+</body>
+</html>

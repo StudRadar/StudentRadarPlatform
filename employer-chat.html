@@ -1,0 +1,941 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Предложения и чаты — СтудРадар</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Tektur:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    html, body { height: 100%; margin: 0; }
+    body { background: #F2F2F2; overflow: hidden; display: flex; flex-direction: column; font-family: 'Manrope', sans-serif; }
+
+    /* ===== Header (employer) ===== */
+    .ec-hd {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 40px; background: #F2F2F2; flex-shrink: 0;
+    }
+    .ec-hd-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+    .ec-hd-logo img { width: 38px; height: 38px; }
+    .ec-hd-logo span { font-family: 'Tektur', sans-serif; font-weight: 600; font-size: 19px; color: #000; white-space: nowrap; }
+    .ec-hd-menu { display: flex; align-items: center; gap: 10px; }
+    .ec-chip {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 12px 22px; border-radius: 80px;
+      background: hsla(238,90%,8%,0.04); color: #020327;
+      font-size: 16px; text-decoration: none; transition: background .15s;
+    }
+    .ec-chip:hover { background: hsla(238,90%,8%,0.06); }
+    .ec-chip svg { width: 20px; height: 20px; }
+    .ec-chip .ic-accent { color: #DD5444; }
+    .ec-hd-user { position: relative; }
+    .ec-user {
+      display: flex; align-items: center; gap: 14px;
+      padding: 4px 26px 4px 4px; border-radius: 100px;
+      background: #E9E9EB; border: 1px solid hsla(0,0%,0%,0.30); cursor: pointer;
+    }
+    .ec-user-ava { width: 44px; height: 44px; border-radius: 50%; overflow: hidden; background: #C9D4EA; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #1153B5; }
+    .ec-user-ava img { width: 100%; height: 100%; object-fit: cover; }
+    .ec-user-ava svg { width: 60%; height: 60%; }
+    .ec-user-name { font-size: 16px; color: #020327; white-space: nowrap; }
+    .ec-user svg { width: 20px; height: 20px; color: hsla(238,90%,8%,0.72); }
+
+    /* ===== Shell: 3 columns ===== */
+    .chats-shell {
+      flex: 1; min-height: 0; display: grid;
+      grid-template-columns: 320px 460px 1fr;
+      gap: 16px; padding: 8px 24px 24px; background: #F2F2F2; font-size: 16px;
+    }
+    .chats-shell.no-list { grid-template-columns: 460px minmax(0, 1fr); }
+    .chats-shell.no-list .list-col { display: none; }
+    .chats-shell.no-list .thread-col { max-width: 820px; width: 100%; margin: 0 auto; }
+
+    /* Disabled "Принять работу" with tooltip */
+    .accept-wrap { position: relative; display: inline-flex; }
+    .thread-actions button.accept-disabled {
+      background: #E6E6EA; color: var(--ink-72); cursor: not-allowed; pointer-events: none;
+    }
+    .accept-tip {
+      position: absolute; bottom: calc(100% + 10px); left: 0;
+      width: 270px; background: var(--ink); color: #fff;
+      font-size: 13px; font-weight: 500; line-height: 1.5;
+      padding: 10px 13px; border-radius: 10px;
+      opacity: 0; pointer-events: none; transform: translateY(4px);
+      transition: opacity .15s, transform .15s; box-shadow: 0 12px 32px rgba(2,3,39,0.25);
+      z-index: 30;
+    }
+    .accept-wrap:hover .accept-tip { opacity: 1; transform: translateY(0); }
+
+    /* ===== LEFT NAV ===== */
+    .nav-col { background: transparent; display: flex; flex-direction: column; min-height: 0; gap: 8px; padding: 8px 4px; overflow-y: auto; }
+    .nav-task-title { font-weight: 700; font-size: 28px; line-height: 1.15; color: var(--ink); margin: 8px 4px 18px; }
+    .nav-list { display: flex; flex-direction: column; gap: 4px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 13px 16px; border-radius: 14px;
+      font-weight: 500; font-size: 16px; color: var(--ink);
+      cursor: pointer; transition: background .15s; text-decoration: none;
+    }
+    .nav-item:hover { background: rgba(2,3,39,0.04); }
+    .nav-item.active { background: rgba(17,83,181,0.10); font-weight: 600; }
+    .nav-item svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--ink-72); }
+    .nav-item.active svg { color: #1153B5; }
+    .nav-sep { height: 1px; background: rgba(2,3,39,0.08); margin: 16px 4px; }
+    .nav-info { padding: 4px; }
+    .nav-info h4 { font-weight: 700; font-size: 17px; color: var(--ink); margin: 0 0 10px; }
+    .nav-info p { font-size: 16px; line-height: 1.45; color: var(--ink-72); margin: 0 0 14px; }
+    .nav-info p a { color: #1153B5; text-decoration: underline; }
+    .nav-info .views { display: inline-flex; align-items: center; gap: 6px; font-size: 16px; color: var(--ink-72); }
+    .nav-info .views svg { width: 18px; height: 18px; }
+
+    /* ===== MIDDLE: PROPOSALS LIST ===== */
+    .list-col { background: #fff; border-radius: 22px; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+    .list-head { padding: 22px 24px 16px; flex-shrink: 0; display: flex; align-items: center; gap: 10px; }
+    .list-head h2 { font-weight: 700; font-size: 22px; color: var(--ink); margin: 0; }
+    .list-head .cnt { font-weight: 700; font-size: 22px; color: var(--ink-72); }
+    .list-scroll { flex: 1; min-height: 0; overflow-y: auto; padding: 0 12px 14px; }
+    .chat-row {
+      display: grid; grid-template-columns: 60px 1fr auto; gap: 14px;
+      padding: 14px 12px; border-radius: 16px; cursor: pointer;
+      align-items: center; transition: background .15s;
+    }
+    .chat-row:hover { background: #F6F7FB; }
+    .chat-row.active { background: #E8EEFB; }
+    .chat-ava {
+      width: 60px; height: 60px; border-radius: 14px;
+      background: #EEEEF0 center/cover no-repeat;
+      font-weight: 700; color: var(--ink);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .chat-ava.b1 { background: #E5EEFB; color: #1153B5; }
+    .chat-ava.b2 { background: #FFE8E4; color: #DD5444; }
+    .chat-ava.b3 { background: #E8F4EC; color: #2E7544; }
+    .chat-ava.b4 { background: #FFF6E5; color: #B58400; }
+    .chat-ava.b5 { background: #EAE8FB; color: #4D3FCB; }
+    .chat-ava.b6 { background: #FBE9F2; color: #B72D6A; }
+    .chat-info { min-width: 0; }
+    .chat-name {
+      font-weight: 700; font-size: 17px; color: var(--ink);
+      margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .chat-rate {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 15px; color: var(--ink-72); margin-bottom: 6px;
+    }
+    .chat-rate .it { display: inline-flex; align-items: center; gap: 5px; }
+    .chat-rate .it svg { width: 15px; height: 15px; }
+    .chat-rate .it img { width: 18px; height: 18px; display: block; }
+    .chat-rate .it.star svg { color: #F5A623; }
+    .chat-rate .no-rev { color: var(--ink-72); }
+    .chat-preview {
+      font-size: 15px; line-height: 1.35; color: var(--ink-72);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .chat-unread {
+      min-width: 24px; height: 24px; padding: 0 8px;
+      background: #DD5444; color: #fff; border-radius: 999px;
+      font-weight: 700; font-size: 14px;
+      display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+
+    /* ===== RIGHT: CHAT THREAD ===== */
+    .thread-col { background: #F2F2F2; border: 6px solid #fff; border-radius: 22px; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+    .thread-empty {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 14px; color: var(--ink-72); text-align: center; padding: 40px;
+    }
+    .thread-empty h2 { font-weight: 700; font-size: 22px; margin: 0; color: var(--ink); }
+    .thread-empty p { font-size: 16px; max-width: 320px; margin: 0; }
+    .thread-empty .e-ico {
+      width: 72px; height: 72px; border-radius: 22px; background: #F2F2F4;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 30px; color: var(--ink-72);
+    }
+    .thread-head {
+      padding: 18px 28px; display: flex; align-items: center; gap: 14px;
+      flex-shrink: 0; background: #fff; border-bottom: 1px solid rgba(2,3,39,0.06);
+    }
+    .thread-head .ava-wrap {
+      width: 52px; height: 52px; border-radius: 50%; overflow: hidden;
+      background: #EEEEF0 center/cover no-repeat;
+      flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 16px; color: var(--ink);
+    }
+    .thread-head-info { flex: 1; min-width: 0; }
+    .thread-head-name {
+      font-weight: 700; font-size: 20px; color: var(--ink);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .thread-head-name .verify { width: 20px; height: 20px; flex-shrink: 0; color: #1153B5; }
+    .thread-head-status { font-size: 16px; color: var(--ink-72); margin-top: 2px; }
+    .thread-head-status.online { color: #2E7544; }
+    .thread-more {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--ink-72);
+    }
+    .thread-more:hover { background: #F4F4F6; }
+    .thread-task-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      height: 40px; padding: 0 16px; border-radius: 12px;
+      background: #F2F2F2; color: var(--ink); text-decoration: none;
+      font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 15px;
+      white-space: nowrap; transition: background .15s, color .15s;
+    }
+    .thread-task-btn:hover { background: #1153B5; color: #fff; }
+    .thread-task-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+    .thread-body {
+      flex: 1; min-height: 0; overflow-y: auto;
+      padding: 14px 28px 4px; display: flex; flex-direction: column; gap: 10px;
+      background: #F2F2F2;
+    }
+    .day-sep {
+      align-self: center; font-weight: 500; font-size: 15px; color: var(--ink-72);
+      margin: 14px 0 8px; padding: 6px 14px; background: #fff; border-radius: 999px;
+    }
+    .sys-card {
+      align-self: center; max-width: 70%; text-align: center;
+      background: #fff; border-radius: 18px; padding: 18px 24px;
+      color: var(--ink-72); font-size: 15px; line-height: 1.45; margin: 6px 0;
+    }
+    .sys-card .ico {
+      width: 34px; height: 34px; margin: 0 auto 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--ink-72);
+    }
+    .sys-card .ico svg { width: 28px; height: 28px; }
+    .msg { max-width: 70%; display: flex; flex-direction: column; gap: 2px; }
+    .msg.them { align-self: flex-start; align-items: flex-start; }
+    .msg.me   { align-self: flex-end;   align-items: flex-end; }
+    .msg .bub {
+      padding: 14px 18px; border-radius: 16px;
+      font-size: 16px; font-weight: 500; line-height: 1.4;
+      white-space: pre-wrap; word-wrap: break-word;
+    }
+    .msg.them .bub { background: #fff; color: var(--ink); border-bottom-left-radius: 6px; }
+    .msg.me .bub { background: #E5EEFB; color: var(--ink); border-bottom-right-radius: 6px; }
+    .msg .meta {
+      font-size: 14px; color: var(--ink-72); padding: 0 6px;
+      display: flex; gap: 6px; align-items: center;
+    }
+    .msg.me .meta .read { color: #1153B5; }
+    .msg.grouped + .msg.grouped { margin-top: -6px; }
+    .msg.grouped .meta { display: none; }
+    .msg.grouped.last .meta { display: flex; }
+
+    .typing {
+      align-self: flex-start; background: #fff;
+      border-radius: 16px; border-bottom-left-radius: 6px;
+      padding: 14px 18px; display: inline-flex; gap: 5px;
+    }
+    .typing span { width: 7px; height: 7px; background: var(--ink-72); border-radius: 50%; animation: ty 1.2s infinite; }
+    .typing span:nth-child(2) { animation-delay: .15s; }
+    .typing span:nth-child(3) { animation-delay: .3s; }
+    @keyframes ty { 0%,60%,100% { transform: translateY(0); opacity: .4; } 30% { transform: translateY(-4px); opacity: 1; } }
+
+    .thread-actions { padding: 14px 24px; display: flex; gap: 10px; flex-shrink: 0; flex-wrap: wrap; align-items: center; background: #F2F2F2; }
+    .thread-actions button.accept-active { background: #DD5444; color: #fff; }
+    .thread-actions button.accept-active:hover { background: #c2452f; }
+    .thread-actions button {
+      padding: 13px 24px; background: var(--ink); color: #fff;
+      border-radius: 12px; font-weight: 700; font-size: 16px;
+      cursor: pointer; border: 0; transition: background .15s;
+    }
+    .thread-actions button:hover { background: #1153B5; }
+    .thread-actions button.ghost { background: #fff; color: var(--ink); }
+    .thread-actions button.ghost:hover { background: #F4F4F6; }
+    .thread-actions button.done { background: #E8F4EC; color: #2E7544; cursor: default; }
+
+    /* ===== Escrow modal ===== */
+    .ec-modal-overlay {
+      position: fixed; inset: 0; background: rgba(2,3,39,0.55);
+      display: none; align-items: center; justify-content: center;
+      padding: 24px; z-index: 1000;
+    }
+    .ec-modal-overlay.open { display: flex; }
+    .ec-modal {
+      position: relative;
+      background: #fff; border-radius: 24px; padding: 32px;
+      max-width: 480px; width: 100%; box-shadow: 0 24px 60px rgba(2,3,39,0.25);
+    }
+    .ec-modal-close {
+      position: absolute; top: 18px; right: 18px;
+      width: 36px; height: 36px; border: 0; border-radius: 10px;
+      background: #F2F2F2; color: var(--ink-72); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s, color .15s;
+    }
+    .ec-modal-close:hover { background: #E6E6EA; color: var(--ink); }
+    .ec-modal-close svg { width: 18px; height: 18px; }
+    .ec-modal h3 {
+      font-family: 'Tektur', sans-serif; font-weight: 700; font-size: 22px;
+      text-transform: uppercase; color: var(--ink); margin: 0 40px 16px 0;
+    }
+    .ec-modal p { font-size: 18px; line-height: 1.5; color: var(--ink-72); margin: 0 0 12px; }
+    .ec-modal .amount { color: var(--ink); font-weight: 700; }
+    .ec-modal-sum {
+      background: #F2F2F2; border-radius: 14px; padding: 16px 18px; margin: 16px 0 22px;
+      font-size: 15px; line-height: 1.6; color: var(--ink-72);
+    }
+    .ec-modal-sum .row { display: flex; justify-content: space-between; gap: 12px; }
+    .ec-modal-sum .row.total { font-weight: 700; color: var(--ink); margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(2,3,39,0.10); }
+    .ec-modal-acts { display: flex; gap: 12px; }
+    .ec-modal-acts button {
+      flex: 1; padding: 14px; border: 0; border-radius: 12px; cursor: pointer;
+      font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 16px; transition: background .15s;
+    }
+    .ec-modal-acts .confirm { background: #1153B5; color: #fff; }
+    .ec-modal-acts .confirm:hover { background: #0d439a; }
+    .ec-modal-acts .cancel { background: #F2F2F2; color: var(--ink); }
+    .ec-modal-acts .cancel:hover { background: #E6E6EA; }
+    .ec-modal-acts .topup { background: #DD5444; color: #fff; }
+    .ec-modal-acts .topup:hover { background: #c2452f; }
+
+    .thread-input {
+      padding: 0; display: flex; align-items: stretch; flex-shrink: 0;
+      background: #fff; border-top: 1px solid rgba(2,3,39,0.06);
+    }
+    .thread-input .attach {
+      width: 60px; align-self: stretch; background: transparent; border: 0;
+      color: var(--ink-72); cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .thread-input .attach:hover { color: #1153B5; }
+    .thread-input .attach svg { width: 24px; height: 24px; }
+    .thread-input textarea {
+      flex: 1; resize: none; border: 0; background: transparent;
+      padding: 24px 8px; font-family: 'Manrope', sans-serif; font-size: 16px;
+      color: var(--ink); outline: none; line-height: 1.4; max-height: 160px; min-height: 72px;
+    }
+    .thread-input button.send {
+      flex-shrink: 0; width: 72px; align-self: stretch; background: transparent;
+      color: #1153B5; cursor: pointer; border: 0;
+      display: flex; align-items: center; justify-content: center; transition: background .15s, transform .1s;
+    }
+    .thread-input button.send:hover { background: rgba(17,83,181,0.08); }
+    .thread-input button.send:active { transform: scale(0.96); }
+    .thread-input button.send:disabled { color: rgba(2,3,39,0.25); cursor: default; background: transparent; transform: none; }
+    .thread-input button.send svg { width: 24px; height: 24px; fill: currentColor; }
+
+    @media (max-width: 1280px) {
+      .chats-shell { grid-template-columns: 280px 380px 1fr; padding: 8px 12px 16px; }
+      .chats-shell.no-list { grid-template-columns: 380px minmax(0, 1fr); }
+    }
+    @media (max-width: 980px) {
+      body { overflow: auto; }
+      .chats-shell, .chats-shell.no-list { grid-template-columns: 1fr; gap: 12px; overflow: visible; }
+      .nav-col { overflow: visible; }
+      .list-col { min-height: 360px; }
+      .list-scroll { overflow-y: visible; }
+      .thread-col { min-height: 80vh; }
+      .ec-hd { padding: 14px 16px; }
+      .ec-hd-menu .ec-chip span { display: none; }
+      .msg, .sys-card { max-width: 88%; }
+    }
+  </style>
+</head>
+<body class="orange-theme" data-screen-label="Чат с исполнителем">
+<script>(function(){
+  try {
+    var s = localStorage.getItem('studradar_session');
+    var h = s && JSON.parse(s).role;
+    if (!h) { window.location.replace('employer.html'); return; }
+    if (h === 'student') { window.location.replace('catalog.html'); return; }
+  } catch(e){}
+})();</script>
+
+<!-- ===== HEADER ===== -->
+<header class="ec-hd">
+  <a href="employer-dashboard.html" class="ec-hd-logo">
+    <img src="assets/logo.svg" alt=""/>
+    <span>СтудРадар</span>
+  </a>
+  <nav class="ec-hd-menu" aria-label="Меню">
+    <a href="students.html" class="ec-chip">
+      <svg class="ic-accent" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M64.12,147.8a4,4,0,0,1-4,4.2H16a8,8,0,0,1-7.8-6.17,8.35,8.35,0,0,1,1.62-6.93A67.79,67.79,0,0,1,37,117.51a40,40,0,1,1,66.46-35.8,3.94,3.94,0,0,1-2.27,4.18A64.08,64.08,0,0,0,64,144C64,145.27,64,146.54,64.12,147.8Zm182-8.91A67.76,67.76,0,0,0,219,117.51a40,40,0,1,0-66.46-35.8,3.94,3.94,0,0,0,2.27,4.18A64.08,64.08,0,0,1,192,144c0,1.27,0,2.54-.12,3.8a4,4,0,0,0,4,4.2H240a8,8,0,0,0,7.8-6.17A8.33,8.33,0,0,0,246.17,138.89Zm-89,43.18a48,48,0,1,0-58.37,0A72.13,72.13,0,0,0,65.07,212,8,8,0,0,0,72,224H184a8,8,0,0,0,6.93-12A72.15,72.15,0,0,0,157.16,182.07Z"/></svg>
+      <span>Студенты</span>
+    </a>
+    <a href="employer-dashboard.html" class="ec-chip">
+      <svg class="ic-accent" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,24a16,16,0,0,0-7.16,1.69l-88,44a16,16,0,0,0,0,28.62l88,44a16,16,0,0,0,14.32,0l88-44a16,16,0,0,0,0-28.62l-88-44A16,16,0,0,0,128,24Z"/><path d="M219.16,152.84,128,198.42,36.84,152.84a8,8,0,1,0-7.16,14.31l92,46a8,8,0,0,0,7.16,0l92-46a8,8,0,1,0-7.16-14.31Z"/><path d="M219.16,190.84,128,236.42,36.84,190.84a8,8,0,1,0-7.16,14.31l92,46a8,8,0,0,0,7.16,0l92-46a8,8,0,1,0-7.16-14.31Z"/></svg>
+      <span>Мой кабинет</span>
+    </a>  </nav>
+  <div class="ec-hd-user">
+    <div class="ec-notif" id="ecNotif">
+      <button type="button" class="ec-notif-btn" id="notifBtn" aria-label="Уведомления" aria-haspopup="menu" aria-expanded="false">
+        <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216Z"/></svg>
+        <span class="ec-notif-dot">3</span>
+      </button>
+      <div class="ec-notif-menu" id="notifMenu" role="menu" hidden>
+        <div class="ec-notif-head">Уведомления</div>
+        <a class="ec-notif-item unread" href="employer-dashboard.html#responses" role="menuitem">
+          <span class="ec-notif-ic"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M232.07,186.76a80,80,0,0,0-62.5-114.17A80,80,0,1,0,23.93,138.76l-7.27,24.71a16,16,0,0,0,19.87,19.87l24.71-7.27a80.39,80.39,0,0,0,25.18,7.35,80,80,0,0,0,108.94,40.45l24.71,7.27a16,16,0,0,0,19.87-19.86Z"/></svg></span>
+          <span class="ec-notif-tx"><span class="t">Новый отклик</span><span class="s">«Лендинг для образовательного курса» — 3 кандидата</span></span>
+        </a>
+        <a class="ec-notif-item unread" href="employer-chat.html?id=1" role="menuitem">
+          <span class="ec-notif-ic"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Z"/></svg></span>
+          <span class="ec-notif-tx"><span class="t">Сообщение от Ксении Р.</span><span class="s">по задаче «Сопровождение гостей форума «Югра-Экспо»»</span></span>
+        </a>
+        <a class="ec-notif-item" href="employer-finance.html" role="menuitem">
+          <span class="ec-notif-ic"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M216,64H56a8,8,0,0,1,0-16H192a8,8,0,0,0,0-16H56A24,24,0,0,0,32,56V184a24,24,0,0,0,24,24H216a16,16,0,0,0,16-16V80A16,16,0,0,0,216,64Zm-36,80a12,12,0,1,1,12-12A12,12,0,0,1,180,144Z"/></svg></span>
+          <span class="ec-notif-tx"><span class="t">Средства заморожены по эскроу</span><span class="s">5 175 ₽ по задаче «Югра-Экспо»</span></span>
+        </a>
+        <a class="ec-notif-all" href="chats.html">Все уведомления</a>
+      </div>
+    </div>
+    <button type="button" class="ec-user" id="userBtn" aria-haspopup="menu" aria-expanded="false">
+      <span class="ec-user-ava" aria-hidden="true">
+        <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128,24a104,104,0,1,0,104,104A104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"/></svg>
+      </span>
+      <span class="ec-user-name" id="ecUserName">Ивент-агентство Югра 360</span>
+      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="feed-user-menu" role="menu" id="userMenu" hidden>
+      <a href="employer-profile.html" role="menuitem">Профиль</a>
+      <a href="settings.html" role="menuitem">Настройки</a>
+      <button type="button" class="feed-user-menu-logout" data-logout>Выйти</button>
+    </div>
+  </div>
+</header>
+<script src="shared.js"></script>
+
+<!-- ===== SHELL ===== -->
+<div class="chats-shell" id="chatsShell">
+
+  <!-- LEFT: task nav -->
+  <aside class="nav-col">
+    <a class="task-back" href="employer-dashboard.html" id="navBackLink">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M11 3 L5 9 L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Мои задачи</span>
+    </a>
+    <div class="nav-task-title" id="navTitle">Задача</div>
+    <div class="nav-sep"></div>
+    <div class="nav-info">
+      <h4 id="navInfoTitle">Задача в работе</h4>
+      <p id="navInfoText">Исполнитель выбран и приступил к&nbsp;работе. Общайтесь в&nbsp;чате и&nbsp;при необходимости <a href="employer-documents.html">оформите документы</a>.</p>
+      <span class="views">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 4C5 4 1.7 8.2 1 10c.7 1.8 4 6 9 6s8.3-4.2 9-6c-.7-1.8-4-6-9-6zm0 9.5A3.5 3.5 0 1 1 10 6.5a3.5 3.5 0 0 1 0 7z"/></svg>
+        <span id="navViews">21</span>
+      </span>
+    </div>
+  </aside>
+
+  <!-- MIDDLE: proposals list -->
+  <section class="list-col">
+    <div class="list-head">
+      <h2>Предложения и чаты</h2>
+      <span class="cnt" id="listCount">0</span>
+    </div>
+    <div class="list-scroll" id="chatsList"></div>
+  </section>
+
+  <!-- RIGHT: thread -->
+  <section class="thread-col">
+    <div class="thread-empty" id="threadEmpty">
+      <div class="e-ico">,,</div>
+      <h2>Выберите специалиста</h2>
+      <p>Откройте чат слева, чтобы обсудить детали и&nbsp;выбрать исполнителя задачи.</p>
+    </div>
+
+    <div id="threadView" style="display:none; flex-direction:column; flex:1; min-height:0;">
+      <header class="thread-head">
+        <span class="ava-wrap" id="headAva"></span>
+        <div class="thread-head-info">
+          <div class="thread-head-name" id="headName"></div>
+          <div class="thread-head-status" id="headStatus"></div>
+        </div>
+        <a class="thread-task-btn" id="headTaskLink" href="task.html">
+          <svg viewBox="0 0 20 20" fill="none"><path d="M4 5h12M4 10h12M4 15h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <span>Детали задачи</span>
+        </a>
+        <button type="button" class="thread-more" aria-label="Меню чата">
+          <svg width="22" height="22" viewBox="0 0 20 20" fill="currentColor"><circle cx="5" cy="10" r="1.5"/><circle cx="10" cy="10" r="1.5"/><circle cx="15" cy="10" r="1.5"/></svg>
+        </button>
+      </header>
+      <div class="thread-body" id="threadBody"></div>
+      <div class="thread-actions" id="threadActions"></div>
+      <form class="thread-input" id="threadForm">
+        <button type="button" class="attach" aria-label="Прикрепить файл">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M8 4h8l4 4v12H4V4z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M12 9v6M9 12h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        </button>
+        <textarea id="threadTextarea" placeholder="Сообщение" rows="1"></textarea>
+        <button type="submit" class="send" id="sendBtn" aria-label="Отправить" disabled>
+          <svg viewBox="0 0 24 24"><path d="M3.4 20.6 22 12 3.4 3.4l-.1 6.7L17 12 3.3 13.9z"/></svg>
+        </button>
+      </form>
+    </div>
+  </section>
+
+</div>
+
+<!-- ===== ESCROW MODAL ===== -->
+<div class="ec-modal-overlay" id="escrowOverlay">
+  <div class="ec-modal" role="dialog" aria-modal="true" aria-labelledby="escrowTitle">
+    <button type="button" class="ec-modal-close" id="escrowClose" aria-label="Закрыть">
+      <svg viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <h3 id="escrowTitle">Назначить исполнителя</h3>
+    <div id="escrowBody"></div>
+    <div class="ec-modal-acts" id="escrowActs"></div>
+  </div>
+</div>
+
+<script>
+// ===== TASKS (mirror of employer dashboard) =====
+const TASKS = {
+  1: { title: 'Сопровождение гостей форума «Югра-Экспо»', status: 'work', views: 21, price: 4500, submitted: true },
+  3: { title: 'Telegram-бот для сети кофеен',             status: 'work', views: 14, price: 25000 },
+  9: { title: 'Контент-план и посты для кофейни',         status: 'work', views: 9,  price: 12000 },
+  7: { title: 'Лендинг для образовательного курса',       status: 'responses', views: 33, price: 18000 },
+  5: { title: 'Reels-серия для бренда одежды',            status: 'responses', views: 41, price: 9000 }
+};
+
+// ===== SPECIALISTS per task =====
+const SPECS_BY_TASK = {
+  1: [
+    { id:'ksenia', name:'Ксения Р.', avaCls:'b1', avaText:'КР', verified:true, online:false,
+      lastSeen:'была вчера в 22:18', reviews:0, selected:true,
+      messages:[
+        { day:'8 января' },
+        { sys:'Если договорились — выберите специалиста, чтобы он мог приступить к задаче' },
+        { from:'me', text:'Добрый день, Ксения\nПомощь требуется на форуме «Югра-Экспо». Можете сейчас созвониться, чтобы я лучше объяснил задачу?', time:'20:45', read:true },
+        { from:'them', text:'Да', time:'20:46' },
+        { day:'9 января' },
+        { from:'them', text:'Работа выполнена! Все гости форума «Югра-Экспо» сопровождены, регистрация и навигация прошли без накладок. Прикладываю отчёт и фотоотчёт — прошу проверить и принять работу 🙌', time:'18:30' },
+        { sys:'Исполнитель сдал работу. Проверьте результат и нажмите «Принять работу».' }
+      ] },
+    { id:'marina_k', name:'Марина К.', avaCls:'b2', avaText:'МК', verified:false, online:true,
+      rating:'4,91', reviews:98, preview:'Что скажете?',
+      messages:[
+        { day:'7 января' },
+        { from:'them', text:'Здравствуйте! Готова помочь с сопровождением гостей, опыт на ивентах 2 года. Что скажете?', time:'11:20' }
+      ] },
+    { id:'marina_f', name:'Марина Ф.', avaCls:'b6', avaText:'МФ', verified:false, online:false,
+      lastSeen:'была сегодня в 09:40', rating:'4,81', reviews:16,
+      preview:'В качестве знакомства с моей про…',
+      messages:[
+        { day:'6 января' },
+        { from:'them', text:'Добрый день! В качестве знакомства с моей профессией прикладываю короткое портфолио. Английский B2, свободна 12–13 июня.', time:'18:05' }
+      ] },
+    { id:'maria_s', name:'Мария С.', avaCls:'b3', avaText:'МС', verified:true, online:true,
+      rating:'5,0', reviews:5, preview:'Стоимость занятия 3500 руб. / 50 м…',
+      messages:[
+        { day:'5 января' },
+        { from:'them', text:'Здравствуйте! Стоимость моей работы 3500 руб. за смену / 50 мест. Готова приступить.', time:'14:12' }
+      ] },
+    { id:'tatiana', name:'Татьяна З.', avaCls:'b4', avaText:'ТЗ', verified:true, online:false,
+      lastSeen:'была вчера', rating:'5,0', reviews:19,
+      preview:'Здравствуйте. Меня зовут Зяблова …',
+      messages:[
+        { day:'4 января' },
+        { from:'them', text:'Здравствуйте. Меня зовут Зяблова Татьяна, координатор гостевых зон с опытом на крупных форумах.', time:'10:30' }
+      ] },
+    { id:'anna_ch', name:'Анна Ч.', avaCls:'b5', avaText:'АЧ', verified:false, online:false,
+      lastSeen:'была 3 дня назад', rating:'4,71', reviews:17,
+      preview:'Стоимость занятия 3000 руб. / 60 м…',
+      messages:[
+        { day:'3 января' },
+        { from:'them', text:'Добрый день! Стоимость 3000 руб. / 60 мест. Подробное портфолио вышлю по запросу.', time:'16:48' }
+      ] }
+  ],
+  3: [
+    { id:'kirill', name:'Кирилл З.', avaCls:'b1', avaText:'КЗ', verified:true, online:true,
+      rating:'4,88', reviews:42, selected:true,
+      messages:[
+        { day:'Вчера' },
+        { sys:'Если договорились — выберите специалиста, чтобы он мог приступить к задаче' },
+        { from:'them', text:'Привет! Прочитал ТЗ по Telegram-боту — звучит понятно. Когда сможем созвониться?', time:'14:08' },
+        { from:'me', text:'Здравствуйте! Готов сегодня после 18:00.', time:'14:12', read:true },
+        { from:'them', text:'Отлично, до связи.', time:'14:15' }
+      ] }
+  ],
+  9: [
+    { id:'alina', name:'Алина Р.', avaCls:'b6', avaText:'АР', verified:false, online:true,
+      rating:'4,79', reviews:31, selected:true,
+      messages:[
+        { day:'Сегодня' },
+        { sys:'Если договорились — выберите специалиста, чтобы он мог приступить к задаче' },
+        { from:'them', text:'Здравствуйте! Готова вести контент-план для кофейни. Пришлю примеры постов.', time:'10:02' }
+      ] }
+  ],
+  7: [
+    { id:'olesya', name:'Олеся Ч.', avaCls:'b3', avaText:'ОЧ', verified:true, online:true,
+      rating:'4,90', reviews:24, preview:'Сделаю прототип за 3 дня',
+      messages:[
+        { day:'Сегодня' },
+        { sys:'Если договорились — выберите специалиста, чтобы он мог приступить к задаче' },
+        { from:'them', text:'Здравствуйте! Сделаю прототип лендинга за 3 дня, потом вёрстку. Покажу кейсы.', time:'09:15' }
+      ] },
+    { id:'pavel', name:'Павел Д.', avaCls:'b1', avaText:'ПД', verified:false, online:false,
+      lastSeen:'был сегодня в 08:00', rating:'4,65', reviews:11, preview:'Можно подробнее по дедлайну?',
+      messages:[
+        { day:'Сегодня' },
+        { from:'them', text:'Добрый день! Можно подробнее по дедлайну и количеству экранов?', time:'08:00' }
+      ] },
+    { id:'darya', name:'Дарья К.', avaCls:'b4', avaText:'ДК', verified:true, online:false,
+      lastSeen:'была вчера', rating:'5,0', reviews:7, preview:'Портфолио во вложении',
+      messages:[
+        { day:'Вчера' },
+        { from:'them', text:'Здравствуйте! Портфолио по образовательным лендингам во вложении.', time:'19:30' }
+      ] }
+  ],
+  5: [
+    { id:'maria_k2', name:'Мария К.', avaCls:'b2', avaText:'МК', verified:true, online:true,
+      rating:'4,91', reviews:98, preview:'Сниму серию за неделю',
+      messages:[
+        { day:'Сегодня' },
+        { sys:'Если договорились — выберите специалиста, чтобы он мог приступить к задаче' },
+        { from:'them', text:'Привет! Сниму и смонтирую серию Reels за неделю. Покажу примеры в нужном стиле.', time:'12:40' }
+      ] }
+  ]
+};
+
+const REPLIES = [
+  'Поняла, спасибо!','Хорошо, договорились.','Принято.','Уточню и напишу.',
+  'Можно подробнее?','Ок, готова приступить.','Спасибо за ответ!','Записала, на связи.'
+];
+
+// ===== STATE =====
+const params = new URLSearchParams(location.search);
+const taskId = params.get('id') || params.get('task') || '1';
+const task = TASKS[taskId] || TASKS['1'];
+const SPECS = (SPECS_BY_TASK[taskId] || SPECS_BY_TASK['1']).map(s => ({ ...s }));
+
+// Задача в работе: исполнитель уже выбран — показываем только его, без списка других диалогов.
+const IS_WORK = task.status !== 'responses';
+if (IS_WORK) {
+  const exec = SPECS.find(s => s.selected) || SPECS.find(s => s.chosen) || SPECS[0];
+  SPECS.length = 0;
+  if (exec) SPECS.push(exec);
+}
+
+// ===== WALLET / ESCROW =====
+const COMMISSION_RATE = 0.15;
+// Always wrap in « » guillemets; collapse doubled guillemets into one
+function qmark(s){ return ('«' + s + '»').replace(/«{2,}/g, '«').replace(/»{2,}/g, '»'); }
+function fmt(n){ return Math.round(n).toLocaleString('ru-RU').replace(/ /g,' ') + ' ₽'; }
+function getWallet(){
+  try {
+    const w = JSON.parse(localStorage.getItem('studradar_wallet') || 'null');
+    if (w && typeof w.balance === 'number') return w;
+  } catch(e){}
+  return { balance: 15000, frozen: 0 };
+}
+function saveWallet(w){ localStorage.setItem('studradar_wallet', JSON.stringify(w)); }
+function pushEscrow(tx){
+  let list = [];
+  try { list = JSON.parse(localStorage.getItem('studradar_escrow') || '[]'); } catch(e){}
+  list.push(tx);
+  localStorage.setItem('studradar_escrow', JSON.stringify(list));
+}
+
+const escrowOverlay = document.getElementById('escrowOverlay');
+const escrowBody = document.getElementById('escrowBody');
+const escrowActs = document.getElementById('escrowActs');
+const escrowTitle = document.getElementById('escrowTitle');
+function closeModal(){ escrowOverlay.classList.remove('open'); escrowBody.innerHTML=''; escrowActs.innerHTML=''; }
+escrowOverlay.addEventListener('click', e => { if (e.target === escrowOverlay) closeModal(); });
+document.getElementById('escrowClose').addEventListener('click', closeModal);
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && escrowOverlay.classList.contains('open')) closeModal(); });
+
+// Check balance, then branch into confirm or insufficient modal
+function requestEscrow(c){
+  const amount = task.price || 0;
+  const commission = Math.round(amount * COMMISSION_RATE);
+  const total = amount + commission;
+  const wallet = getWallet();
+
+  if (wallet.balance >= total){
+    escrowTitle.textContent = 'Назначить исполнителя';
+    escrowBody.innerHTML =
+      `<p>Назначить <span class="amount">${esc(c.name)}</span> исполнителем по заказу `
+      + `${qmark(esc(task.title))}. Со счёта будет заморожено <span class="amount">${fmt(total)}</span> до момента приёмки работы.</p>`
+      + `<div class="ec-modal-sum">`
+      +   `<div class="row"><span>Исполнителю</span><span>${fmt(amount)}</span></div>`
+      +   `<div class="row"><span>Комиссия платформы 15%</span><span>${fmt(commission)}</span></div>`
+      +   `<div class="row total"><span>К заморозке</span><span>${fmt(total)}</span></div>`
+      + `</div>`
+      + `<p>Деньги вернутся, если заказ будет отменён по вине исполнителя или платформы.</p>`;
+    escrowActs.innerHTML = '';
+    const ok = document.createElement('button');
+    ok.className = 'confirm'; ok.textContent = 'Подтвердить';
+    ok.addEventListener('click', () => {
+      const w = getWallet();
+      w.balance -= total;
+      w.frozen = (w.frozen || 0) + total;
+      saveWallet(w);
+      pushEscrow({
+        id: 'esc-' + Date.now(),
+        taskId: taskId,
+        taskTitle: task.title,
+        executor: c.name,
+        amount: amount,
+        commission: commission,
+        total: total,
+        status: 'frozen',
+        createdAt: new Date().toISOString()
+      });
+      closeModal();
+      finalizeChoice(c, total);
+    });
+    const no = document.createElement('button');
+    no.className = 'cancel'; no.textContent = 'Отмена';
+    no.addEventListener('click', closeModal);
+    escrowActs.appendChild(ok);
+    escrowActs.appendChild(no);
+  } else {
+    escrowTitle.textContent = 'Недостаточно средств';
+    escrowBody.innerHTML =
+      `<p>Чтобы назначить <span class="amount">${esc(c.name)}</span> исполнителем по заказу `
+      + `${qmark(esc(task.title))}, нужно заморозить <span class="amount">${fmt(total)}</span>.</p>`
+      + `<div class="ec-modal-sum">`
+      +   `<div class="row"><span>Исполнителю</span><span>${fmt(amount)}</span></div>`
+      +   `<div class="row"><span>Комиссия платформы 15%</span><span>${fmt(commission)}</span></div>`
+      +   `<div class="row total"><span>Требуется</span><span>${fmt(total)}</span></div>`
+      +   `<div class="row"><span>На балансе кошелька</span><span>${fmt(wallet.balance)}</span></div>`
+      + `</div>`
+      + `<p>Пополните кошелёк на платформе, чтобы продолжить.</p>`;
+    escrowActs.innerHTML = '';
+    const top = document.createElement('button');
+    top.className = 'topup'; top.textContent = 'Пополнить кошелёк';
+    top.addEventListener('click', () => { window.location.href = 'employer-finance.html'; });
+    const no = document.createElement('button');
+    no.className = 'cancel'; no.textContent = 'Отмена';
+    no.addEventListener('click', closeModal);
+    escrowActs.appendChild(top);
+    escrowActs.appendChild(no);
+  }
+  escrowOverlay.classList.add('open');
+}
+
+// Apply the choice after successful escrow freeze
+function finalizeChoice(c, frozenTotal){
+  SPECS.forEach(s => { s.chosen = false; });
+  c.chosen = true;
+  c.messages.push({ sys: 'Вы выбрали этого специалиста — он приступает к задаче. Чат с остальными кандидатами закрыт.' });
+  if (frozenTotal != null){
+    c.messages.push({ sys: 'По эскроу заморожено ' + fmt(frozenTotal) + ' до приёмки работы.' });
+  }
+  renderBody(c);
+  renderActions(c);
+  document.getElementById('navInfoTitle').textContent = 'Задача в работе';
+  document.getElementById('navInfoText').innerHTML = 'Исполнитель выбран и&nbsp;приступил к&nbsp;работе. Средства заморожены по&nbsp;эскроу. Общайтесь в&nbsp;чате и&nbsp;при необходимости <a href="employer-documents.html">оформите документы</a>.';
+}
+
+let activeId = null;
+const shell = document.getElementById('chatsShell');
+const listEl = document.getElementById('chatsList');
+const emptyEl = document.getElementById('threadEmpty');
+const viewEl = document.getElementById('threadView');
+const bodyEl = document.getElementById('threadBody');
+const textarea = document.getElementById('threadTextarea');
+const sendBtn = document.getElementById('sendBtn');
+const form = document.getElementById('threadForm');
+const headAva = document.getElementById('headAva');
+const headName = document.getElementById('headName');
+const headStatus = document.getElementById('headStatus');
+const actionsEl = document.getElementById('threadActions');
+
+const SVG_STAR = '<img src="assets/Star.svg" alt="" width="18" height="18"/>';
+const SVG_MSG  = '<img src="assets/ChatTeardropDots.svg" alt="" width="18" height="18"/>';
+const SVG_VERIFY = '<svg class="verify" viewBox="0 0 20 20" fill="currentColor"><path d="M10 1l2.4 1.8 3 .2.2 3L17.4 8 19 10l-1.6 2L17.6 15l-3 .2L12.4 17 10 18.2 7.6 17 5.4 15.2l-3-.2L2.4 12 .8 10 2.4 8 2.6 5l3-.2L7.6 3zM8.6 12.7l5-5-1.4-1.4-3.6 3.6-1.8-1.8L5.4 9.5z"/></svg>';
+const SVG_PICK = '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M5 20a7 7 0 0 1 11.5-5.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M15 18.5l2 2 4-4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+function esc(s){ return (s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function lastTextOf(c){
+  for (let i=c.messages.length-1;i>=0;i--){ if (c.messages[i].text) return c.messages[i]; }
+  return null;
+}
+
+function renderList(){
+  document.getElementById('listCount').textContent = SPECS.length;
+  listEl.innerHTML = SPECS.map(c => {
+    const last = lastTextOf(c);
+    const preview = c.preview || (last ? (last.from==='me'?'Вы: ':'') + last.text : '');
+    let rate;
+    if (c.reviews === 0) rate = `<span class="it no-rev">${SVG_MSG}Нет отзывов</span>`;
+    else rate = `<span class="it star">${SVG_STAR}${esc(c.rating)}</span><span class="it">${SVG_MSG}${c.reviews}</span>`;
+    return `<div class="chat-row${c.id===activeId?' active':''}" data-id="${c.id}">
+      <span class="chat-ava ${c.avaCls}">${esc(c.avaText)}</span>
+      <div class="chat-info">
+        <div class="chat-name">${esc(c.name)}</div>
+        <div class="chat-rate">${rate}</div>
+        <div class="chat-preview">${esc(preview)}</div>
+      </div>
+      ${c.unread?`<span class="chat-unread">${c.unread}</span>`:''}
+    </div>`;
+  }).join('');
+  listEl.querySelectorAll('.chat-row').forEach(r => r.addEventListener('click', () => openChat(r.dataset.id)));
+}
+
+function renderBody(c){
+  let html=''; let prevFrom=null;
+  c.messages.forEach((m,idx)=>{
+    if (m.day){ html+=`<div class="day-sep">${esc(m.day)}</div>`; prevFrom=null; return; }
+    if (m.sys){ html+=`<div class="sys-card"><div class="ico">${SVG_PICK}</div>${esc(m.sys)}</div>`; prevFrom=null; return; }
+    const next=c.messages[idx+1];
+    const isLast=!next||next.day||next.sys||next.from!==m.from;
+    const grouped=prevFrom===m.from;
+    const cls=`msg ${m.from} ${grouped?'grouped':''} ${grouped&&isLast?'last':''}`;
+    html+=`<div class="${cls}">
+      <div class="bub">${esc(m.text)}</div>
+      <div class="meta">
+        <span>${esc(m.time)}</span>
+        ${m.from==='me'?`<span class="read">${m.read?'✓✓':'✓'}</span>`:''}
+      </div>
+    </div>`;
+    prevFrom=m.from;
+  });
+  bodyEl.innerHTML=html;
+  bodyEl.scrollTop=bodyEl.scrollHeight;
+}
+
+function renderActions(c){
+  actionsEl.innerHTML='';
+  if (IS_WORK){
+    if (task.accepted){
+      actionsEl.innerHTML = `<button type="button" class="done">✓ Работа принята</button>`;
+      return;
+    }
+    if (task.submitted){
+      const acceptA=document.createElement('button');
+      acceptA.type='button';
+      acceptA.className='accept-active';
+      acceptA.textContent='Принять работу';
+      acceptA.addEventListener('click',()=>acceptWork(c));
+      actionsEl.appendChild(acceptA);
+      return;
+    }
+    const wrap=document.createElement('div');
+    wrap.className='accept-wrap';
+    const accept=document.createElement('button');
+    accept.type='button';
+    accept.className='accept-disabled';
+    accept.disabled=true;
+    accept.textContent='Принять работу';
+    const tip=document.createElement('span');
+    tip.className='accept-tip';
+    tip.textContent='Станет доступной, когда исполнитель завершит работу';
+    wrap.appendChild(accept);
+    wrap.appendChild(tip);
+    const ghostW=document.createElement('button');
+    ghostW.type='button';
+    ghostW.className='ghost';
+    ghostW.textContent='Профиль студента';
+    ghostW.addEventListener('click',()=>{ window.location.href='student.html?pid='+encodeURIComponent(c.id)+'&from=employer-chat&chat='+taskId; });
+    actionsEl.appendChild(wrap);
+    actionsEl.appendChild(ghostW);
+    return;
+  }
+  if (c.chosen){
+    actionsEl.innerHTML = `<button type="button" class="done">✓ Исполнитель выбран</button>`;
+    return;
+  }
+  const pick=document.createElement('button');
+  pick.type='button';
+  pick.textContent='Выбрать специалиста';
+  pick.addEventListener('click',()=>{ requestEscrow(c); });
+  const ghost=document.createElement('button');
+  ghost.type='button';
+  ghost.className='ghost';
+  ghost.textContent='Профиль студента';
+  ghost.addEventListener('click',()=>{ window.location.href='student.html?pid='+encodeURIComponent(c.id)+'&from=employer-chat&chat='+taskId; });
+  actionsEl.appendChild(pick);
+  actionsEl.appendChild(ghost);
+}
+
+function acceptWork(c){
+  task.submitted=false;
+  task.accepted=true;
+  const now=new Date();
+  const time=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+  c.messages.push({ sys:'Вы приняли работу. Оплата по безопасной сделке переведена исполнителю.' });
+  c.messages.push({ from:'me', text:'Работу принял, всё отлично — спасибо за помощь на форуме! 🙌', time, read:false });
+  renderBody(c);
+  renderActions(c);
+}
+
+function openChat(id){
+  const c=SPECS.find(x=>x.id===id);
+  if(!c) return;
+  activeId=id;
+  c.unread=0;
+  emptyEl.style.display='none';
+  viewEl.style.display='flex';
+  shell.classList.add('open-chat');
+  headAva.className='ava-wrap '+c.avaCls;
+  headAva.textContent=c.avaText;
+  headName.innerHTML=esc(c.name)+(c.verified?SVG_VERIFY:'');
+  const goProfile=()=>{ window.location.href='student.html?pid='+encodeURIComponent(c.id)+'&from=employer-chat&chat='+taskId; };
+  headAva.style.cursor='pointer';
+  headName.style.cursor='pointer';
+  headAva.onclick=goProfile;
+  headName.onclick=goProfile;
+  if (c.online){ headStatus.className='thread-head-status online'; headStatus.textContent='● онлайн'; }
+  else { headStatus.className='thread-head-status'; headStatus.textContent=c.lastSeen||'не в сети'; }
+  renderBody(c);
+  renderActions(c);
+  renderList();
+  textarea.focus();
+}
+
+function appendMsg(c,msg){ c.messages.push(msg); renderBody(c); renderList(); }
+function showTyping(){
+  const el=document.createElement('div');
+  el.className='typing'; el.id='typingEl';
+  el.innerHTML='<span></span><span></span><span></span>';
+  bodyEl.appendChild(el); bodyEl.scrollTop=bodyEl.scrollHeight;
+}
+function hideTyping(){ const el=document.getElementById('typingEl'); if(el) el.remove(); }
+function sendMessage(text){
+  const c=SPECS.find(x=>x.id===activeId);
+  if(!c||!text.trim()) return;
+  const now=new Date();
+  const time=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+  appendMsg(c,{ from:'me', text:text.trim(), time, read:false });
+  setTimeout(()=>{
+    showTyping();
+    setTimeout(()=>{
+      hideTyping();
+      const reply=REPLIES[Math.floor(Math.random()*REPLIES.length)];
+      const r=new Date();
+      const rt=String(r.getHours()).padStart(2,'0')+':'+String(r.getMinutes()).padStart(2,'0');
+      appendMsg(c,{ from:'them', text:reply, time:rt });
+      for(let i=c.messages.length-2;i>=0;i--){ if(c.messages[i].from==='me'){ c.messages[i].read=true; break; } }
+      renderBody(c);
+    }, 900+Math.random()*1400);
+  },600);
+}
+
+form.addEventListener('submit',(e)=>{
+  e.preventDefault();
+  if(!textarea.value.trim()) return;
+  sendMessage(textarea.value);
+  textarea.value=''; autosize(); sendBtn.disabled=true;
+});
+textarea.addEventListener('input',()=>{ sendBtn.disabled=!textarea.value.trim(); autosize(); });
+textarea.addEventListener('keydown',(e)=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); form.requestSubmit(); } });
+function autosize(){ textarea.style.height='auto'; textarea.style.height=Math.min(textarea.scrollHeight,150)+'px'; }
+
+// ===== INIT =====
+document.getElementById('navTitle').textContent=task.title;
+document.getElementById('navViews').textContent=task.views;
+document.getElementById('headTaskLink').href='task.html?id='+taskId+'&from=employer-chat';
+if (IS_WORK) shell.classList.add('no-list');
+if (task.status==='responses'){
+  document.getElementById('navInfoTitle').textContent='Идёт сбор откликов';
+  document.getElementById('navInfoText').innerHTML='Кандидаты откликнулись на&nbsp;задачу. Обсудите детали в&nbsp;чате и&nbsp;нажмите «Выбрать специалиста», чтобы исполнитель приступил.';
+}
+renderList();
+if (IS_WORK){
+  if (SPECS[0]) openChat(SPECS[0].id);
+} else if (window.innerWidth>=980){
+  const first = SPECS.find(s=>s.chosen) || SPECS[0];
+  if (first) openChat(first.id);
+}
+</script>
+</body>
+</html>

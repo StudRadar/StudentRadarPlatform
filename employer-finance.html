@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Финансы — СтудРадар</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Tektur:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root {
+      --ec-blue: #1153B5;
+      --ec-blue-08: hsla(216, 83%, 39%, 0.08);
+      --ec-accent: #DD5444;
+      --ec-ink: #020327;
+      --ec-ink-72: hsla(238, 90%, 8%, 0.72);
+      --ec-ink-40: hsla(238, 90%, 8%, 0.40);
+      --ec-fill-04: hsla(238, 90%, 8%, 0.04);
+      --ec-fill-06: hsla(238, 90%, 8%, 0.06);
+    }
+    body { background: #F2F2F2; font-family: 'Manrope', sans-serif; }
+
+    .ec-hd { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; background: #F2F2F2; }
+    .ec-hd-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+    .ec-hd-logo img { width: 40px; height: 40px; flex-shrink: 0; }
+    .ec-hd-logo span { font-family: 'Tektur', sans-serif; font-weight: 600; font-size: 19px; color: #000; white-space: nowrap; }
+    .ec-hd-menu { display: flex; align-items: center; gap: 10px; }
+    .ec-chip {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 24px; border-radius: 80px;
+      background: var(--ec-fill-04); color: var(--ec-ink);
+      font-size: 16px; text-decoration: none; border: 0; cursor: pointer; transition: background .15s;
+    }
+    .ec-chip:hover { background: var(--ec-fill-06); }
+    .ec-chip svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .ec-chip .ic-accent { color: var(--ec-accent); }
+    .ec-hd-user { position: relative; }
+    .ec-user {
+      display: flex; align-items: center; gap: 16px;
+      padding: 4px 28px 4px 4px; border-radius: 100px;
+      background: #E9E9EB; border: 1px solid hsla(0, 0%, 0%, 0.30); cursor: pointer;
+    }
+    .ec-user-ava {
+      width: 46px; height: 46px; border-radius: 50%; overflow: hidden; flex-shrink: 0;
+      background: #C9D4EA; display: flex; align-items: center; justify-content: center; color: #1153B5;
+    }
+    .ec-user-ava svg { width: 60%; height: 60%; }
+    .ec-user-name { font-size: 16px; color: var(--ec-ink); white-space: nowrap; }
+    .ec-user > svg { width: 20px; height: 20px; color: var(--ec-ink-72); }
+
+    .ec-wrap { max-width: 1206px; margin: 0 auto; padding: 24px 40px 80px; display: flex; align-items: flex-start; gap: 24px; }
+    .ec-col-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 18px; }
+    .ec-aside { width: 290px; flex-shrink: 0; display: flex; flex-direction: column; gap: 0; }
+    .ec-nav-item {
+      display: flex; align-items: center; width: 290px; box-sizing: border-box;
+      padding: 16px 24px; border-radius: 10px; gap: 10px;
+      font-size: 16px; font-weight: 500; color: var(--ec-ink);
+      background: transparent; border: 0; cursor: pointer;
+      text-align: left; text-decoration: none; transition: background .15s, color .15s;
+    }
+    .ec-nav-item:hover { background: var(--ec-fill-04); }
+    .ec-nav-item.is-active { background: var(--ec-blue-08); color: var(--ec-blue); }
+
+    .ec-card { background: #fff; border-radius: 32px; padding: 28px 30px; }
+    .ec-card-title {
+      font-family: 'Tektur', sans-serif; font-weight: 700; font-size: 22px;
+      text-transform: uppercase; color: var(--ec-ink); margin: 0 0 6px;
+    }
+    .doc-section-desc { font-size: 15px; color: var(--ec-ink-72); line-height: 1.55; margin: 0 0 20px; }
+
+    .ec-stats { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 4px; }
+    .ec-stat {
+      flex: 1; min-width: 200px; background: var(--ec-fill-04);
+      border-radius: 18px; padding: 20px 22px;
+    }
+    .ec-stat .lbl { font-size: 14px; color: var(--ec-ink-72); margin-bottom: 8px; }
+    .ec-stat .num { font-family: 'Tektur', sans-serif; font-weight: 700; font-size: 28px; color: var(--ec-ink); letter-spacing: -0.02em; }
+    .ec-stat--accent { background: rgba(17,83,181,0.07); }
+    .ec-stat--accent .num { color: var(--ec-blue); }
+    .ec-stat .lbl { display: flex; align-items: center; gap: 8px; }
+    .ec-help {
+      width: 20px; height: 20px; border-radius: 50%; border: 0; cursor: pointer;
+      background: rgba(2,3,39,0.10); color: var(--ec-ink-72);
+      font-size: 12px; font-weight: 700; line-height: 1;
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: background .15s, color .15s;
+    }
+    .ec-help-wrap:hover .ec-help, .ec-help-wrap:focus-within .ec-help { background: var(--ec-blue); color: #fff; }
+    .ec-help-wrap { position: relative; display: inline-flex; }
+    .ec-explain {
+      position: absolute; top: calc(100% + 12px); left: 50%; transform: translateX(-50%) translateY(4px);
+      width: 320px; max-width: 78vw; z-index: 20;
+      background: #fff; border-radius: 14px;
+      padding: 14px 16px; font-size: 14px; line-height: 1.6; color: var(--ec-ink-72);
+      box-shadow: 0 12px 32px rgba(2,3,39,0.16); border: 1px solid rgba(2,3,39,0.06);
+      opacity: 0; visibility: hidden; pointer-events: none;
+      transition: opacity .16s ease, transform .16s ease;
+    }
+    .ec-explain::before {
+      content: ""; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+      border: 7px solid transparent; border-bottom-color: #fff;
+      filter: drop-shadow(0 -1px 0 rgba(2,3,39,0.06));
+    }
+    .ec-help-wrap:hover .ec-explain, .ec-help-wrap:focus-within .ec-explain {
+      opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0);
+    }
+
+    .ed-list { display: flex; flex-direction: column; }
+    .ed-row {
+      display: flex; align-items: center; gap: 18px;
+      padding: 18px 0; border-bottom: 1px solid var(--ec-fill-06);
+    }
+    .ed-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .ed-row:first-child { padding-top: 0; }
+    .ed-ico {
+      width: 46px; height: 46px; border-radius: 13px; flex: none;
+      background: rgba(221,84,68,0.12); color: var(--ec-accent);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ed-tx { flex: 1; min-width: 0; }
+    .ed-tx .t { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 16px; color: var(--ec-ink); }
+    .ed-tx .s { font-family: 'Manrope', sans-serif; font-size: 14px; color: var(--ec-ink-72); margin-top: 3px; line-height: 1.45; }
+    .ed-sum { font-family: 'Manrope', sans-serif; font-size: 17px; font-weight: 700; color: var(--ec-ink); white-space: nowrap; }
+    .ed-sum.neg { color: var(--ec-accent); }
+    .ed-sum.pos { color: #15803d; }
+    .ed-btn {
+      flex: none; height: 42px; padding: 0 22px;
+      background: var(--ec-accent); color: #fff; border: none; border-radius: 12px;
+      cursor: pointer; font-family: 'Manrope', sans-serif; font-size: 14px;
+      font-weight: 700; transition: background .18s; white-space: nowrap;
+    }
+    .ed-btn:hover { background: var(--ec-ink); }
+    .ed-badge {
+      display: inline-flex; align-items: center;
+      font-size: 13px; font-weight: 600;
+      padding: 4px 11px; border-radius: 100px; white-space: nowrap;
+    }
+    .ed-badge--frozen { background: rgba(17,83,181,0.10); color: var(--ec-blue); }
+    .ed-badge--done { background: rgba(34,197,94,0.13); color: #15803d; }
+
+    .ed-toast {
+      position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(20px);
+      background: var(--ec-ink); color: #fff; padding: 14px 22px; border-radius: 14px;
+      font-size: 15px; font-weight: 600; box-shadow: 0 16px 40px rgba(2,3,39,0.28);
+      opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 950;
+    }
+    .ed-toast.is-shown { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 980px) {
+      .ec-hd { padding: 16px 20px; }
+      .ec-hd-menu .ec-chip span { display: none; }
+      .ec-wrap { flex-direction: column; padding: 20px 16px 60px; }
+      .ec-aside { width: 100%; flex-direction: row; overflow-x: auto; gap: 8px; }
+      .ec-nav-item { width: auto; white-space: nowrap; }
+      .ec-col-main { width: 100%; }
+    }
+    @media (max-width: 760px) {
+      .ed-row { flex-wrap: wrap; gap: 12px; }
+      .ed-tx { flex: 1 1 calc(100% - 64px); }
+      .ed-sum, .ed-badge, .ed-row .ed-btn { margin-left: 62px; }
+      .ed-row .ed-btn { width: 100%; margin-left: 0; }
+    }
+  </style>
+</head>
+<body class="orange-theme" data-screen-label="Финансы">
+<script>(function(){
+  try {
+    var s = localStorage.getItem('studradar_session');
+    var h = s && JSON.parse(s).role;
+    if (!h) { window.location.replace('employer.html'); return; }
+    if (h === 'student') { window.location.replace('catalog.html'); return; }
+  } catch(e){}
+})();</script>
+
+<!-- ===== HEADER ===== -->
+<header class="ec-hd">
+  <a href="employer-dashboard.html" class="ec-hd-logo">
+    <img src="assets/logo.svg" alt=""/>
+    <span>СтудРадар</span>
+  </a>
+  <nav class="ec-hd-menu" aria-label="Меню">
+    <a href="students.html" class="ec-chip">
+      <svg class="ic-accent" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M64.12,147.8a4,4,0,0,1-4,4.2H16a8,8,0,0,1-7.8-6.17,8.35,8.35,0,0,1,1.62-6.93A67.79,67.79,0,0,1,37,117.51a40,40,0,1,1,66.46-35.8,3.94,3.94,0,0,1-2.27,4.18A64.08,64.08,0,0,0,64,144C64,145.27,64,146.54,64.12,147.8Zm182-8.91A67.76,67.76,0,0,0,219,117.51a40,40,0,1,0-66.46-35.8,3.94,3.94,0,0,0,2.27,4.18A64.08,64.08,0,0,1,192,144c0,1.27,0,2.54-.12,3.8a4,4,0,0,0,4,4.2H240a8,8,0,0,0,7.8-6.17A8.33,8.33,0,0,0,246.17,138.89Zm-89,43.18a48,48,0,1,0-58.37,0A72.13,72.13,0,0,0,65.07,212,8,8,0,0,0,72,224H184a8,8,0,0,0,6.93-12A72.15,72.15,0,0,0,157.16,182.07Z"/></svg>
+      <span>Студенты</span>
+    </a>
+    <a href="employer-dashboard.html" class="ec-chip">
+      <svg class="ic-accent" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,24a16,16,0,0,0-7.16,1.69l-88,44a16,16,0,0,0,0,28.62l88,44a16,16,0,0,0,14.32,0l88-44a16,16,0,0,0,0-28.62l-88-44A16,16,0,0,0,128,24Z"/><path d="M219.16,152.84,128,198.42,36.84,152.84a8,8,0,1,0-7.16,14.31l92,46a8,8,0,0,0,7.16,0l92-46a8,8,0,1,0-7.16-14.31Z"/><path d="M219.16,190.84,128,236.42,36.84,190.84a8,8,0,1,0-7.16,14.31l92,46a8,8,0,0,0,7.16,0l92-46a8,8,0,1,0-7.16-14.31Z"/></svg>
+      <span>Мой кабинет</span>
+    </a>  </nav>
+  <div class="ec-hd-user">
+    <div class="ec-notif" id="ecNotif">
+      <button type="button" class="ec-notif-btn" id="notifBtn" aria-label="Уведомления" aria-haspopup="menu" aria-expanded="false">
+        <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216Z"/></svg>
+        <span class="ec-notif-dot">3</span>
+      </button>
+      <div class="ec-notif-menu" id="notifMenu" role="menu" hidden>
+        <div class="ec-notif-head">Уведомления</div>
+        <a class="ec-notif-item unread" href="employer-dashboard.html#responses" role="menuitem">
+          <span class="ec-notif-ic"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M232.07,186.76a80,80,0,0,0-62.5-114.17A80,80,0,1,0,23.93,138.76l-7.27,24.71a16,16,0,0,0,19.87,19.87l24.71-7.27a80.39,80.39,0,0,0,25.18,7.35,80,80,0,0,0,108.94,40.45l24.71,7.27a16,16,0,0,0,19.87-19.86Z"/></svg></span>
+          <span class="ec-notif-tx"><span class="t">Новый отклик</span><span class="s">«Лендинг для образовательного курса» — 3 кандидата</span></span>
+        </a>
+        <a class="ec-notif-item unread" href="employer-chat.html?id=1" role="menuitem">
+          <span class="ec-notif-ic"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Z"/></svg></span>
+          <span class="ec-notif-tx"><span class="t">Сообщение от Ксении Р.</span><span class="s">по задаче «Сопровождение гостей форума «Югра-Экспо»»</span></span>
+        </a>
+        <a class="ec-notif-item" href="employer-finance.html" role="menuitem">
+          <span class="ec-notif-ic"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M216,64H56a8,8,0,0,1,0-16H192a8,8,0,0,0,0-16H56A24,24,0,0,0,32,56V184a24,24,0,0,0,24,24H216a16,16,0,0,0,16-16V80A16,16,0,0,0,216,64Zm-36,80a12,12,0,1,1,12-12A12,12,0,0,1,180,144Z"/></svg></span>
+          <span class="ec-notif-tx"><span class="t">Средства заморожены по эскроу</span><span class="s">5 175 ₽ по задаче «Югра-Экспо»</span></span>
+        </a>
+        <a class="ec-notif-all" href="chats.html">Все уведомления</a>
+      </div>
+    </div>
+    <button type="button" class="ec-user" id="userBtn" aria-haspopup="menu" aria-expanded="false">
+      <span class="ec-user-ava" aria-hidden="true">
+        <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128,24a104,104,0,1,0,104,104A104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"/></svg>
+      </span>
+      <span class="ec-user-name" id="ecUserName">Ивент-агентство Югра 360</span>
+      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="feed-user-menu" role="menu" id="userMenu" hidden>
+      <a href="employer-profile.html" role="menuitem">Профиль</a>
+      <a href="settings.html" role="menuitem">Настройки</a>
+      <button type="button" class="feed-user-menu-logout" data-logout>Выйти</button>
+    </div>
+  </div>
+</header>
+<script src="shared.js"></script>
+
+<!-- ===== CABINET ===== -->
+<div class="ec-wrap">
+
+  <aside class="ec-aside" aria-label="Разделы кабинета">
+    <a class="ec-nav-item" href="employer-dashboard.html#work">В работе</a>
+    <a class="ec-nav-item" href="employer-dashboard.html#responses">Сбор откликов</a>
+    <a class="ec-nav-item" href="employer-dashboard.html#done">Завершенные задачи</a>
+    <a class="ec-nav-item" href="employer-documents.html">Документы</a>
+    <a class="ec-nav-item is-active" href="employer-finance.html">Финансы</a>
+    <a class="ec-nav-item" href="employer-profile.html">Профиль</a>
+  </aside>
+
+  <main class="ec-col-main">
+
+    <!-- ===== Баланс ===== -->
+    <section class="ec-card">
+      <h2 class="ec-card-title">Кошелёк</h2>
+      <p class="doc-section-desc">Баланс на платформе и средства, замороженные по эскроу до приёмки работ.</p>
+
+      <div class="ec-stats">
+        <div class="ec-stat ec-stat--accent">
+          <div class="lbl">Доступно на балансе</div>
+          <div class="num" id="finBalance">— ₽</div>
+        </div>
+        <div class="ec-stat">
+          <div class="lbl">Заморожено по&nbsp;безопасной сделке
+            <span class="ec-help-wrap">
+              <button type="button" class="ec-help" id="frozenHelp" aria-label="Что это?" aria-describedby="frozenExplain">?</button>
+              <span class="ec-explain" id="frozenExplain" role="tooltip">
+                Когда вы назначаете исполнителя, сумма заказа и&nbsp;комиссия платформы замораживаются на&nbsp;счёте по&nbsp;эскроу: деньги хранятся на&nbsp;платформе и&nbsp;недоступны для&nbsp;других задач. После приёмки работы средства уходят исполнителю; если заказ отменён по&nbsp;вине исполнителя или&nbsp;платформы — возвращаются вам.
+              </span>
+            </span>
+          </div>
+          <div class="num" id="finFrozen">2 000 ₽</div>
+        </div>
+      </div>
+
+      <div class="ed-list" style="margin-top:22px;">
+        <div class="ed-row">
+          <span class="ed-ico">
+            <svg width="22" height="22" viewBox="0 0 20 20" fill="none"><path d="M3 6h14v9H3z" stroke="currentColor" stroke-width="1.6"/><path d="M3 9h14M13 12h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </span>
+          <div class="ed-tx">
+            <div class="t">Пополнить кошелёк</div>
+            <div class="s">Средства для оплаты новых задач и резерва по эскроу</div>
+          </div>
+          <button type="button" class="ed-btn" data-topup>Пополнить</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== История операций ===== -->
+    <section class="ec-card">
+      <h2 class="ec-card-title">История операций</h2>
+      <p class="doc-section-desc">Движение средств по сделкам: заморозка в эскроу, выплаты исполнителям, возвраты и комиссия платформы.</p>
+
+      <div class="ed-list" id="finHistory"></div>
+    </section>
+
+  </main>
+</div>
+
+<div class="ed-toast" id="edToast">Готово</div>
+
+<script>
+(function () {
+  'use strict';
+  var toast = document.getElementById('edToast'), tt;
+  function showToast(m) { toast.textContent = m; toast.classList.add('is-shown'); clearTimeout(tt); tt = setTimeout(function () { toast.classList.remove('is-shown'); }, 2200); }
+  function fmtRub(n) { return Math.round(n).toLocaleString('ru-RU') + ' ₽'; }
+
+  // Wallet
+  var wallet = { balance: 15000, frozen: 2000 };
+  try {
+    var w = JSON.parse(localStorage.getItem('studradar_wallet') || 'null');
+    if (w && typeof w.balance === 'number') wallet = w;
+  } catch (e) {}
+  document.getElementById('finBalance').textContent = fmtRub(wallet.balance);
+  document.getElementById('finFrozen').textContent = fmtRub(wallet.frozen || 0);
+
+  document.querySelector('[data-topup]').addEventListener('click', function () {
+    showToast('Пополнение кошелька — скоро будет доступно');
+  });
+
+
+  // History from escrow transactions + sample payouts
+  var hist = [];
+  try { hist = JSON.parse(localStorage.getItem('studradar_escrow') || '[]'); } catch (e) {}
+  var iceSvg = '<svg width="22" height="22" viewBox="0 0 20 20" fill="none"><rect x="4" y="8" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M7 8V6a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="1.6"/></svg>';
+  var payoutSvg = '<svg width="22" height="22" viewBox="0 0 20 20" fill="none"><path d="M10 3v14M5 8l5-5 5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var rows = hist.map(function (e) {
+    var d = e.createdAt ? new Date(e.createdAt) : null;
+    var ds = d ? d.toLocaleDateString('ru-RU') : '';
+    return '<div class="ed-row"><span class="ed-ico">' + iceSvg + '</span>'
+      + '<div class="ed-tx"><div class="t">Заморозка по эскроу — «' + (e.taskTitle || 'задача') + '»</div>'
+      + '<div class="s">Исполнитель: ' + (e.executor || '—') + ' · комиссия ' + fmtRub(e.commission || 0) + ' · ' + ds + '</div></div>'
+      + '<span class="ed-sum neg">−' + fmtRub(e.total || 0) + '</span>'
+      + '<span class="ed-badge ed-badge--frozen">Заморожено</span></div>';
+  });
+  // Sample completed payouts
+  rows.push('<div class="ed-row"><span class="ed-ico">' + payoutSvg + '</span>'
+    + '<div class="ed-tx"><div class="t">Выплата исполнителю — «Фирменный стиль для онлайн-курса»</div>'
+    + '<div class="s">Олеся Чернова · 5 мая 2026</div></div>'
+    + '<span class="ed-sum neg">−' + fmtRub(15000) + '</span>'
+    + '<span class="ed-badge ed-badge--done">Завершено</span></div>');
+  rows.push('<div class="ed-row"><span class="ed-ico">' + payoutSvg + '</span>'
+    + '<div class="ed-tx"><div class="t">Выплата исполнителю — «Серия Reels для кофейни»</div>'
+    + '<div class="s">Мария Кузьмина · 2 апреля 2026</div></div>'
+    + '<span class="ed-sum neg">−' + fmtRub(10000) + '</span>'
+    + '<span class="ed-badge ed-badge--done">Завершено</span></div>');
+  document.getElementById('finHistory').innerHTML = rows.join('');
+})();
+</script>
+</body>
+</html>

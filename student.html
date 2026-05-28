@@ -1,0 +1,1784 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Профиль студента — СтудРадар</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Tektur:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script src="mobile-drawer.js" defer></script>
+  <script src="city-picker.js" defer></script>
+  <style>
+    /* ===== Employer cabinet header (same as личный кабинет) ===== */
+    .ec-hd {
+      --ec-accent: #DD5444; --ec-ink: #020327;
+      --ec-fill-04: hsla(238, 90%, 8%, 0.04); --ec-fill-06: hsla(238, 90%, 8%, 0.06);
+      --ec-ink-72: hsla(238, 90%, 8%, 0.72);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 40px; background: #F2F2F2;
+    }
+    .ec-hd-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+    .ec-hd-logo img { width: 40px; height: 40px; flex-shrink: 0; }
+    .ec-hd-logo span {
+      font-family: 'Tektur', sans-serif; font-weight: 600; font-size: 19px;
+      color: #000; letter-spacing: 0; white-space: nowrap;
+    }
+    .ec-hd-menu { display: flex; align-items: center; gap: 10px; }
+    .ec-hd .ec-chip {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 24px; border-radius: 80px;
+      background: var(--ec-fill-04); color: var(--ec-ink);
+      font-size: 16px; font-weight: 400; text-decoration: none;
+      border: 0; cursor: pointer; transition: background .15s;
+    }
+    .ec-hd .ec-chip:hover { background: var(--ec-fill-06); }
+    .ec-hd .ec-chip svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .ec-hd .ec-chip .ic-accent { color: var(--ec-accent); }
+    .ec-hd-user { position: relative; }
+    .ec-user {
+      display: flex; align-items: center; gap: 16px;
+      padding: 4px 28px 4px 4px; border-radius: 100px;
+      background: #E9E9EB; border: 1px solid hsla(0, 0%, 0%, 0.30); cursor: pointer;
+    }
+    .ec-user-ava {
+      width: 46px; height: 46px; border-radius: 50%; overflow: hidden; flex-shrink: 0;
+      background: #C9D4EA; display: flex; align-items: center; justify-content: center; color: #1153B5;
+    }
+    .ec-user-ava svg { width: 60%; height: 60%; }
+    .ec-user-name { font-size: 16px; color: var(--ec-ink); white-space: nowrap; }
+    .ec-user > svg { width: 20px; height: 20px; color: var(--ec-ink-72); }
+    @media (max-width: 980px) {
+      .ec-hd { padding: 16px 20px; }
+      .ec-hd-menu .ec-chip span { display: none; }
+    }
+  </style>
+</head>
+<body class="orange-theme profile-body" data-screen-label="06 Профиль студента">
+<script>(function(){try{var s=localStorage.getItem('studradar_session');var h=s&&JSON.parse(s).role;document.write('<style>'+(h?'[data-header="guest"]{display:none!important}':'[data-header="logged-in"]{display:none!important}')+'</style>');}catch(e){document.write('<style>[data-header="logged-in"]{display:none!important}</style>');}})();</script>
+
+<!-- ===== GUEST HEADER ===== -->
+<header class="header" data-header="guest">
+  <a href="index.html" class="logo">
+    <span class="logo-mark"><img src="assets/logo.svg" alt=""/></span>СТУДРАДАР
+  </a>
+
+  <nav class="toggle orange" aria-label="Я ищу">
+    <span class="toggle-pill"></span>
+    <a href="for-students.html">Студентам</a>
+    <a href="employer.html" class="active">Заказчику</a>
+  </nav>
+
+  <nav class="menu">
+    <a href="students.html" style="color:var(--orange)">Студенты</a>
+    <a href="for-students.html#how">О платформе</a>
+    <a href="blog.html">Блог</a>
+  </nav>
+
+  <a href="#location" class="location" title="Сменить город">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.6a6.7 6.7 0 0 0-6.7 6.7c0 5 6.7 10.1 6.7 10.1s6.7-5.1 6.7-10.1A6.7 6.7 0 0 0 10 1.6Zm0 9.1a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8Z"/></svg>
+    Ханты-Мансийск
+  </a>
+
+  <div class="header-right">
+    <a href="students.html" class="btn-login">Разместить задачу</a>
+    <a href="#login" class="link-login">Войти</a>
+    <a href="#menu" class="burger" aria-label="Меню">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="currentColor"><rect x="3" y="6" width="16" height="2" rx="1"/><rect x="3" y="14" width="16" height="2" rx="1"/></svg>
+    </a>
+  </div>
+</header>
+
+<!-- ===== HEADER (employer cabinet) ===== -->
+<header class="ec-hd" data-header="logged-in" style="display:none">
+  <a href="employer-dashboard.html" class="ec-hd-logo">
+    <img src="assets/logo.svg" alt=""/>
+    <span>СтудРадар</span>
+  </a>
+  <nav class="ec-hd-menu" aria-label="Меню">
+    <a href="students.html" class="ec-chip">
+      <svg class="ic-accent" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M64.12,147.8a4,4,0,0,1-4,4.2H16a8,8,0,0,1-7.8-6.17,8.35,8.35,0,0,1,1.62-6.93A67.79,67.79,0,0,1,37,117.51a40,40,0,1,1,66.46-35.8,3.94,3.94,0,0,1-2.27,4.18A64.08,64.08,0,0,0,64,144C64,145.27,64,146.54,64.12,147.8Zm182-8.91A67.76,67.76,0,0,0,219,117.51a40,40,0,1,0-66.46-35.8,3.94,3.94,0,0,0,2.27,4.18A64.08,64.08,0,0,1,192,144c0,1.27,0,2.54-.12,3.8a4,4,0,0,0,4,4.2H240a8,8,0,0,0,7.8-6.17A8.33,8.33,0,0,0,246.17,138.89Zm-89,43.18a48,48,0,1,0-58.37,0A72.13,72.13,0,0,0,65.07,212,8,8,0,0,0,72,224H184a8,8,0,0,0,6.93-12A72.15,72.15,0,0,0,157.16,182.07Z"/></svg>
+      <span>Студенты</span>
+    </a>
+    <a href="employer-dashboard.html" class="ec-chip">
+      <svg class="ic-accent" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,24a16,16,0,0,0-7.16,1.69l-88,44a16,16,0,0,0,0,28.62l88,44a16,16,0,0,0,14.32,0l88-44a16,16,0,0,0,0-28.62l-88-44A16,16,0,0,0,128,24Z"/><path d="M219.16,152.84,128,198.42,36.84,152.84a8,8,0,1,0-7.16,14.31l92,46a8,8,0,0,0,7.16,0l92-46a8,8,0,1,0-7.16-14.31Z"/><path d="M219.16,190.84,128,236.42,36.84,190.84a8,8,0,1,0-7.16,14.31l92,46a8,8,0,0,0,7.16,0l92-46a8,8,0,1,0-7.16-14.31Z"/></svg>
+      <span>Мой кабинет</span>
+    </a>
+  </nav>
+  <div class="ec-hd-user">
+    <div class="ec-notif" id="ecNotif">
+      <button type="button" class="ec-notif-btn" id="notifBtn" aria-label="Уведомления" aria-haspopup="menu" aria-expanded="false">
+        <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216Z"/></svg>
+        <span class="ec-notif-dot">3</span>
+      </button>
+      <div class="ec-notif-menu" id="notifMenu" role="menu" hidden>
+        <div class="ec-notif-head">Уведомления</div>
+        <a class="ec-notif-item unread" href="employer-dashboard.html#responses" role="menuitem">
+          <span class="ec-notif-ic"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M232.07,186.76a80,80,0,0,0-62.5-114.17A80,80,0,1,0,23.93,138.76l-7.27,24.71a16,16,0,0,0,19.87,19.87l24.71-7.27a80.39,80.39,0,0,0,25.18,7.35,80,80,0,0,0,108.94,40.45l24.71,7.27a16,16,0,0,0,19.87-19.86Z"/></svg></span>
+          <span class="ec-notif-tx"><span class="t">Новый отклик</span><span class="s">«Лендинг для образовательного курса» — 3 кандидата</span></span>
+        </a>
+        <a class="ec-notif-item unread" href="employer-chat.html?id=1" role="menuitem">
+          <span class="ec-notif-ic"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Z"/></svg></span>
+          <span class="ec-notif-tx"><span class="t">Сообщение от Ксении Р.</span><span class="s">по задаче «Сопровождение гостей форума «Югра-Экспо»»</span></span>
+        </a>
+        <a class="ec-notif-item" href="employer-finance.html" role="menuitem">
+          <span class="ec-notif-ic"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M216,64H56a8,8,0,0,1,0-16H192a8,8,0,0,0,0-16H56A24,24,0,0,0,32,56V184a24,24,0,0,0,24,24H216a16,16,0,0,0,16-16V80A16,16,0,0,0,216,64Zm-36,80a12,12,0,1,1,12-12A12,12,0,0,1,180,144Z"/></svg></span>
+          <span class="ec-notif-tx"><span class="t">Средства заморожены по эскроу</span><span class="s">5 175 ₽ по задаче «Югра-Экспо»</span></span>
+        </a>
+        <a class="ec-notif-all" href="chats.html">Все уведомления</a>
+      </div>
+    </div>
+    <button type="button" class="ec-user" id="userBtn" aria-haspopup="menu" aria-expanded="false">
+      <span class="ec-user-ava" aria-hidden="true">
+        <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128,24a104,104,0,1,0,104,104A104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"/></svg>
+      </span>
+      <span class="ec-user-name" id="ecUserName">Ивент-агентство Югра 360</span>
+      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="feed-user-menu" role="menu" id="userMenu" hidden>
+      <a href="employer-profile.html" role="menuitem">Профиль</a>
+      <a href="settings.html" role="menuitem">Настройки</a>
+      <button type="button" class="feed-user-menu-logout" data-logout>Выйти</button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== PAGE ===== -->
+<main class="profile-page">
+  <a class="profile-back" id="profileBack" href="students.html">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path d="M12 4 L6 10 L12 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span id="profileBackLabel">Все студенты</span>
+  </a>
+  <script>
+  (function(){
+    try {
+      var p = new URLSearchParams(window.location.search);
+      if (p.get('from') === 'employer-chat') {
+        var chatId = p.get('chat') || '1';
+        var link = document.getElementById('profileBack');
+        var label = document.getElementById('profileBackLabel');
+        if (link) link.href = 'employer-chat.html?id=' + chatId;
+        if (label) label.textContent = 'Назад в чат';
+      }
+    } catch(e) {}
+  })();
+  </script>
+
+  <div class="profile-layout">
+
+    <!-- LEFT SIDEBAR NAV -->
+    <aside class="profile-nav" aria-label="Разделы профиля">
+      <a href="#about" class="profile-nav-item is-active">О студенте</a>
+      <a href="#achievements" class="profile-nav-item">Достижения</a>
+      <a href="#orders" class="profile-nav-item">
+        <span>Выполненные заказы</span>
+        <span class="profile-nav-num">18</span>
+      </a>
+      <a href="#services" class="profile-nav-item">Услуги и цены</a>
+      <a href="#reviews" class="profile-nav-item">
+        <span>Отзывы</span>
+        <span class="profile-nav-num">60</span>
+      </a>
+    </aside>
+
+    <!-- MAIN COLUMN -->
+    <div class="profile-main">
+
+      <!-- ===== HERO ===== -->
+      <section class="profile-hero">
+        <img class="profile-hero-photo" src="assets/student-photo.png" alt="Анастасия Александрова"/>
+        <div class="profile-hero-actions">
+          <button type="button" class="profile-icon-btn" aria-label="Поделиться">
+            <svg width="28" height="28" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M16.5632 15.6255C16.5633 16.036 16.4735 16.4416 16.3001 16.8137C16.1267 17.1858 15.874 17.5154 15.5597 17.7795C15.2454 18.0435 14.8771 18.2355 14.4806 18.3421C14.0842 18.4486 13.6692 18.467 13.2649 18.3961C12.8606 18.3252 12.4767 18.1667 12.1401 17.9316C11.8036 17.6965 11.5226 17.3906 11.3169 17.0354C11.1112 16.6801 10.9857 16.2842 10.9493 15.8753C10.9129 15.4664 10.9665 15.0545 11.1062 14.6685L6.96557 12.0084C6.57011 12.3963 6.06891 12.6588 5.52483 12.7629C4.98076 12.867 4.41804 12.8082 3.90729 12.5937C3.39653 12.3793 2.96048 12.0188 2.65383 11.5574C2.34718 11.0961 2.18359 10.5545 2.18359 10.0005C2.18359 9.4466 2.34718 8.90498 2.65383 8.44364C2.96048 7.98231 3.39653 7.6218 3.90729 7.40735C4.41804 7.1929 4.98076 7.13405 5.52483 7.23819C6.06891 7.34233 6.57011 7.60482 6.96557 7.99273L11.1062 5.33648C10.8691 4.68496 10.8804 3.96891 11.1378 3.32517C11.3953 2.68142 11.881 2.15512 12.502 1.84682C13.123 1.53852 13.8358 1.46985 14.5043 1.65392C15.1727 1.83799 15.7499 2.2619 16.1256 2.84465C16.5012 3.4274 16.649 4.12812 16.5406 4.81293C16.4323 5.49774 16.0754 6.11861 15.5382 6.55692C15.001 6.99522 14.3211 7.22022 13.6285 7.18893C12.9358 7.15763 12.279 6.87223 11.7835 6.38727L7.64292 9.04742C7.8667 9.66582 7.8667 10.3431 7.64292 10.9615L11.7835 13.6216C12.1789 13.2347 12.6795 12.973 13.2228 12.8692C13.7662 12.7654 14.328 12.824 14.8382 13.0379C15.3483 13.2518 15.7841 13.6114 16.0909 14.0716C16.3977 14.5319 16.562 15.0724 16.5632 15.6255Z"/></svg>
+          </button>
+          <button type="button" class="profile-icon-btn" aria-label="В избранное">
+            <svg width="28" height="28" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M18.75 7.34375C18.75 12.8125 10.6414 17.2391 10.2961 17.4219C10.2051 17.4708 10.1033 17.4965 10 17.4965C9.89665 17.4965 9.79492 17.4708 9.70391 17.4219C9.35859 17.2391 1.25 12.8125 1.25 7.34375C1.25145 6.05955 1.76223 4.82837 2.6703 3.9203C3.57837 3.01223 4.80955 2.50145 6.09375 2.5C7.70703 2.5 9.11953 3.19375 10 4.36641C10.8805 3.19375 12.293 2.5 13.9062 2.5C15.1904 2.50145 16.4216 3.01223 17.3297 3.9203C18.2378 4.82837 18.7486 6.05955 18.75 7.34375Z"/></svg>
+          </button>
+        </div>
+
+        <div class="profile-hero-info">
+          <div class="profile-badge">
+            <img src="assets/SealCheck.svg" alt="" width="20" height="20"/>
+            <span>Студент верифицирован</span>
+            <svg width="14" height="8" viewBox="0 0 14 8" fill="none" aria-hidden="true">
+              <path d="M1 1 L7 7 L13 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <h1 class="profile-name">Анастасия Александрова</h1>
+
+          <div class="profile-rating">
+            <span class="profile-rating-item">
+              <img src="assets/Star.svg" alt="" width="20" height="20"/>
+              <span class="profile-rating-num">4.9</span>
+            </span>
+            <span class="profile-rating-item">
+              <img src="assets/ChatTeardropDots.svg" alt="" width="20" height="20"/>
+              <span class="profile-rating-num">18 отзывов</span>
+            </span>
+          </div>
+
+          <div class="profile-tags">
+            <span class="profile-tag">Письменный перевод</span>
+            <span class="profile-tag">Сопровождение иностранцев</span>
+            <span class="profile-tag">Репетитор</span>
+            <span class="profile-tag">Репетитор</span>
+            <span class="profile-tag">Репетитор</span>
+          </div>
+
+          <div class="profile-hero-divider"></div>
+
+          <div class="profile-meta">
+            <span>Ханты-Мансийск</span>
+            <span class="profile-meta-dot">·</span>
+            <span>ЮГУ</span>
+            <span class="profile-meta-dot">·</span>
+            <span>Лингвистика, 3 курс</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== CTA STRIP ===== -->
+      <section class="profile-cta">
+        <button type="button" class="profile-btn profile-btn--primary">Предложить задачу</button>
+        <button type="button" class="profile-btn profile-btn--secondary">Написать</button>
+        <span class="profile-cta-note">Отвечает в течение<br><strong>2 часов</strong></span>
+      </section>
+
+      <!-- ===== ABOUT ===== -->
+      <section class="profile-card" id="about">
+        <header class="profile-card-head">
+          <h2 class="profile-h2">О студенте</h2>
+          <button type="button" class="profile-collapse" aria-label="Свернуть"></button>
+        </header>
+        <div class="profile-card-body">
+          <p class="profile-bio">Учусь на третьем курсе лингвистики в ЮГУ, направление — перевод и переводоведение, английский язык. С первого курса работаю на форумах и конференциях в Ханты-Мансийске: переводила в режиме последовательного перевода, сопровождала делегации, выполняла хостес-функции на крупных событиях окружного уровня. Беру задачи в трёх направлениях: письменный перевод текстов общей и туристической тематики, устный последовательный перевод на встречах и переговорах, репетиторство по английскому для школьников 5–9 классов. До отклика на задачу обычно прошу прислать пример текста или короткое описание мероприятия, чтобы оценить, подходит ли мой уровень и будет ли результат полезен. Если вижу, что не справлюсь — честно говорю, не берусь ради опыта</p>
+
+          <h3 class="profile-h3">Навыки</h3>
+          <div class="profile-tags">
+            <span class="profile-tag">Английский B2</span>
+            <span class="profile-tag">Немецкий А2</span>
+            <span class="profile-tag">Перевод субтитров</span>
+            <span class="profile-tag">SmartCat</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== ACHIEVEMENTS ===== -->
+      <section class="profile-card" id="achievements">
+        <header class="profile-card-head">
+          <h2 class="profile-h2">Достижения</h2>
+          <button type="button" class="profile-collapse" aria-label="Свернуть"></button>
+        </header>
+        <div class="profile-card-body">
+          <ul class="profile-list">
+            <li><span class="profile-year">2026</span><span>Стажировка в туристско-информационном центре Югры</span></li>
+            <li><span class="profile-year">2026</span><span>Курс «Синхронный перевод: вход в профессию», Лингваконтакт</span></li>
+            <li><span class="profile-year">2025</span><span>Волонтёр-переводчик на чемпионате мира по ММА</span></li>
+            <li><span class="profile-year">2024</span><span>Сертификат IELTS 7.5</span></li>
+            <li><span class="profile-year">2022</span><span>II место на студенческой олимпиаде по устному переводу</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ===== ORDERS ===== -->
+      <section class="profile-card" id="orders">
+        <header class="profile-card-head">
+          <h2 class="profile-h2">Выполненные заказы<sup class="profile-h2-num" id="ordersCount">14</sup></h2>
+          <button type="button" class="profile-collapse" aria-label="Свернуть"></button>
+        </header>
+        <div class="profile-card-body">
+          <div id="ordersFilter" class="profile-filter-row"></div>
+          <div id="ordersList" class="profile-orders"></div>
+          <div class="profile-orders-more">
+            <a href="#" id="ordersShowMore" class="profile-more profile-more--accent">
+              <span class="profile-more-label">Показать ещё</span>
+              <svg width="20" height="8" viewBox="0 0 14 8" fill="none" aria-hidden="true"><path d="M1 1 L7 7 L13 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a href="#" id="ordersCollapseAll" class="profile-more profile-more--muted" hidden>
+              Свернуть все
+              <svg width="20" height="8" viewBox="0 0 14 8" fill="none" aria-hidden="true"><path d="M1 7 L7 1 L13 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SERVICES ===== -->
+      <section class="profile-card" id="services">
+        <header class="profile-card-head">
+          <h2 class="profile-h2">Услуги и цены</h2>
+          <button type="button" class="profile-collapse" aria-label="Свернуть"></button>
+        </header>
+        <div class="profile-card-body">
+          <ul class="profile-services">
+            <li>
+              <span class="profile-service-name">Английский для школьников 5–9 классов</span>
+              <span class="profile-service-price">600&nbsp;? / 60&nbsp;мин</span>
+            </li>
+            <li>
+              <span class="profile-service-name">Английский для подготовки к ОГЭ</span>
+              <span class="profile-service-price">800&nbsp;? / 60&nbsp;мин</span>
+            </li>
+            <li>
+              <span class="profile-service-name">Подготовка к IELTS / TOEFL</span>
+              <span class="profile-service-price">1000&nbsp;? / 60&nbsp;мин</span>
+            </li>
+          </ul>
+          <a href="#" class="profile-more">
+            Все услуги
+            <svg width="20" height="8" viewBox="0 0 14 8" fill="none" aria-hidden="true"><path d="M1 1 L7 7 L13 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </section>
+
+      <!-- ===== REVIEWS ===== -->
+      <section class="profile-card" id="reviews">
+        <header class="profile-card-head">
+          <h2 class="profile-h2">Отзывы<sup class="profile-h2-num">14</sup></h2>
+          <button type="button" class="profile-collapse" aria-label="Свернуть"></button>
+        </header>
+        <div class="profile-card-body">
+          <p class="profile-reviews-notice">Каждый отзыв перед публикацией проходит проверку на неподдельность. Анонимные сообщения не рассматриваются. Тексты не редактируются и не фильтруются — все прошедшие проверку публикуются «как есть».</p>
+
+          <div class="profile-reviews">
+            <article class="profile-review">
+              <div class="profile-review-side">
+                <div class="profile-review-stars" aria-label="5 из 5">
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                </div>
+                <div class="profile-review-date">1 апреля 2026</div>
+              </div>
+              <div class="profile-review-body">
+                <div class="profile-review-author">КВЦ «Югра-Экспо»</div>
+                <div class="profile-review-topic">Сопровождение делегаций на форуме</div>
+                <p class="profile-review-text">Работала с нашей командой все шесть дней форума. Хорошо ориентировалась в программе, корректно вела себя с гостями, оперативно решала бытовые вопросы. Готовы пригласить снова.</p>
+              </div>
+            </article>
+
+            <article class="profile-review">
+              <div class="profile-review-side">
+                <div class="profile-review-stars" aria-label="5 из 5">
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                </div>
+                <div class="profile-review-date">15 марта 2026</div>
+              </div>
+              <div class="profile-review-body">
+                <div class="profile-review-author">Технопарк Югры</div>
+                <div class="profile-review-topic">Координация стендов<span class="profile-meta-dot">•</span>IT-фестиваль</div>
+                <p class="profile-review-text">Отличный координатор: все 12 стендов нашей зоны работали по графику, презентации шли точно по таймингу. Перевод для англоязычных гостей — на высоте.</p>
+              </div>
+            </article>
+
+            <article class="profile-review">
+              <div class="profile-review-side">
+                <div class="profile-review-stars" aria-label="5 из 5">
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                </div>
+                <div class="profile-review-date">5 февраля 2026</div>
+              </div>
+              <div class="profile-review-body">
+                <div class="profile-review-author">Фонд поддержки предпринимательства Югры</div>
+                <div class="profile-review-topic">Регистрация на форуме</div>
+                <p class="profile-review-text">Быстро освоила нашу CRM, вежливо общалась с участниками. Хорошо справлялась в часы пиковой нагрузки. Команда подтверждает — берём ещё.</p>
+              </div>
+            </article>
+
+            <article class="profile-review">
+              <div class="profile-review-side">
+                <div class="profile-review-stars" aria-label="5 из 5">
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                </div>
+                <div class="profile-review-date">20 декабря 2025</div>
+              </div>
+              <div class="profile-review-body">
+                <div class="profile-review-author">Премия «Признание Югры»</div>
+                <div class="profile-review-topic">Хостес на церемонии</div>
+                <p class="profile-review-text">Выглядела безупречно, держалась с гостями уверенно и доброжелательно. Все лауреаты вышли на сцену вовремя — никаких задержек по нашему сектору.</p>
+              </div>
+            </article>
+
+            <!-- Дополнительные отзывы (скрыты по умолчанию) -->
+            <article class="profile-review profile-review--extra" hidden>
+              <div class="profile-review-side">
+                <div class="profile-review-stars" aria-label="5 из 5">
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                </div>
+                <div class="profile-review-date">8 ноября 2025</div>
+              </div>
+              <div class="profile-review-body">
+                <div class="profile-review-author">Оргкомитет «Югра-2026»</div>
+                <div class="profile-review-topic">Регистрация и навигация</div>
+                <p class="profile-review-text">Очень собранная и внимательная. На стойке регистрации очередь не задерживалась, все участники получили бейджи в срок.</p>
+              </div>
+            </article>
+
+            <article class="profile-review profile-review--extra" hidden>
+              <div class="profile-review-side">
+                <div class="profile-review-stars" aria-label="5 из 5">
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                </div>
+                <div class="profile-review-date">14 октября 2025</div>
+              </div>
+              <div class="profile-review-body">
+                <div class="profile-review-author">IT-парк Югры</div>
+                <div class="profile-review-topic">Сопровождение делегации</div>
+                <p class="profile-review-text">Сопровождала бизнес-делегацию из Казахстана. Английский — уверенный B2, деловой этикет на месте, делегация осталась довольна.</p>
+              </div>
+            </article>
+
+            <article class="profile-review profile-review--extra" hidden>
+              <div class="profile-review-side">
+                <div class="profile-review-stars" aria-label="5 из 5">
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                </div>
+                <div class="profile-review-date">22 сентября 2025</div>
+              </div>
+              <div class="profile-review-body">
+                <div class="profile-review-author">Креативное агентство «Радар»</div>
+                <div class="profile-review-topic">Промо-активация на стенде</div>
+                <p class="profile-review-text">Отработала смену 8 часов на стенде, всегда улыбчива и в тонусе. Сценарий активации выучила за вечер, импровизация — на отлично.</p>
+              </div>
+            </article>
+
+            <article class="profile-review profile-review--extra" hidden>
+              <div class="profile-review-side">
+                <div class="profile-review-stars" aria-label="5 из 5">
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                  <img src="assets/Star.svg" alt="" width="17" height="17"/>
+                </div>
+                <div class="profile-review-date">5 августа 2025</div>
+              </div>
+              <div class="profile-review-body">
+                <div class="profile-review-author">ООО «Сибнефтесервис»</div>
+                <div class="profile-review-topic">Корпоративный ивент</div>
+                <p class="profile-review-text">Помогала с организацией корпоратива на 200 человек: рассадка, координация подрядчиков, контроль тайминга. Команда отметила её спокойствие и собранность.</p>
+              </div>
+            </article>
+          </div>
+
+          <button type="button" class="profile-more" id="reviewsToggle" aria-expanded="false">
+            <span class="profile-more-label">Все отзывы</span>
+            <svg width="20" height="8" viewBox="0 0 14 8" fill="none" aria-hidden="true"><path d="M1 1 L7 7 L13 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <script>
+          (function(){
+            var btn = document.getElementById('reviewsToggle');
+            if (!btn) return;
+            var extras = document.querySelectorAll('.profile-review--extra');
+            var label = btn.querySelector('.profile-more-label');
+            var svg = btn.querySelector('svg');
+            // Set initial hidden state (override .profile-review display:grid)
+            extras.forEach(function(el){ el.removeAttribute('hidden'); el.style.display = 'none'; });
+            btn.addEventListener('click', function(){
+              var open = btn.getAttribute('aria-expanded') === 'true';
+              open = !open;
+              btn.setAttribute('aria-expanded', String(open));
+              extras.forEach(function(el){ el.style.display = open ? '' : 'none'; });
+              label.textContent = open ? 'Свернуть' : 'Все отзывы';
+              svg.style.transform = open ? 'rotate(180deg)' : '';
+              svg.style.transition = 'transform .2s';
+            });
+          })();
+          </script>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="for-students.html" class="logo">
+        <span class="logo-mark"><img src="assets/logo.svg" alt=""/></span>СТУДРАДАР
+      </a>
+      <p class="footer-tagline">Платформа для краткосрочной занятости студентов — задачи, портфолио, реальный опыт.</p>
+      <div class="footer-social">
+        <a href="#tg" title="Telegram">TG</a>
+        <a href="#vk" title="ВКонтакте">VK</a>
+      </div>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <div class="footer-col-title">Платформа</div>
+        <a href="#about">О нас</a>
+        <a href="blog.html">Блог</a>
+        <a href="#policy">Политика</a>
+        <a href="#terms">Соглашение</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Студентам</div>
+        <a href="catalog.html">Каталог задач</a>
+        <a href="for-students.html#tasks">Свежие задачи</a>
+        <a href="for-students.html#pro">PRO-подписка</a>
+        <a href="for-students.html#faq">Вопросы</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Бизнесу</div>
+        <a href="employer.html">Для работодателей</a>
+        <a href="students.html">Каталог студентов</a>
+        <a href="employer.html#pro">Business-тариф</a>
+        <a href="employer.html#faq">Вопросы</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Контакты</div>
+        <a href="#tg">Telegram-бот</a>
+        <a href="#vk">ВКонтакте</a>
+        <a href="mailto:hi@studradar.ru">hi@studradar.ru</a>
+        <a href="#location">Ханты-Мансийск</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 СтудРадар. Все права защищены.</span>
+    <span class="footer-city">
+      <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.6a6.7 6.7 0 0 0-6.7 6.7c0 5 6.7 10.1 6.7 10.1s6.7-5.1 6.7-10.1A6.7 6.7 0 0 0 10 1.6Zm0 9.1a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8Z"/></svg>
+      Ханты-Мансийск
+    </span>
+  </div>
+</footer>
+
+<script>
+(function() {
+  var toggle = document.querySelector('.toggle');
+  if (toggle) {
+    var pill = toggle.querySelector('.toggle-pill');
+    var links = Array.prototype.slice.call(toggle.querySelectorAll('a'));
+    function movePill(link, instant) {
+      var tRect = toggle.getBoundingClientRect();
+      var lRect = link.getBoundingClientRect();
+      var x = lRect.left - tRect.left - 6;
+      if (instant) { pill.style.transition = 'none'; pill.offsetHeight; }
+      pill.style.width = lRect.width + 'px';
+      pill.style.transform = 'translateX(' + x + 'px)';
+      if (instant) { pill.offsetHeight; pill.style.transition = ''; }
+    }
+    var active = toggle.querySelector('a.active');
+    if (active) movePill(active, true);
+    window.addEventListener('resize', function() { var a = toggle.querySelector('a.active'); if (a) movePill(a, true); });
+    links.forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        var href = this.getAttribute('href');
+        if (!href || href.startsWith('#')) return;
+        links.forEach(function(l) { l.classList.remove('active'); });
+        this.classList.add('active');
+        movePill(this, false);
+        e.preventDefault();
+        setTimeout(function() { window.location.href = href; }, 440);
+      });
+    });
+  }
+})();
+(function(){
+  var header = document.querySelector('.header');
+  var lastY = 0;
+  window.addEventListener('scroll', function(){
+    var y = window.scrollY;
+    if (y > lastY && y > 80) header.classList.add('header--hidden');
+    else header.classList.remove('header--hidden');
+    lastY = y;
+  }, {passive: true});
+})();
+
+// Sidebar nav: highlight on click
+(function(){
+  var navItems = document.querySelectorAll('.profile-nav-item');
+  navItems.forEach(function(item){
+    item.addEventListener('click', function(){
+      navItems.forEach(function(n){ n.classList.remove('is-active'); });
+      this.classList.add('is-active');
+    });
+  });
+})();
+
+// Card collapse: plus button toggles whole card body
+(function(){
+  document.querySelectorAll('.profile-collapse').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var card = btn.closest('.profile-card');
+      if (!card) return;
+      card.classList.toggle('is-collapsed');
+      btn.setAttribute('aria-label', card.classList.contains('is-collapsed') ? 'Развернуть' : 'Свернуть');
+    });
+  });
+})();
+
+// Order toggle: clicking anywhere on the header expands/collapses an order card
+(function(){
+  document.querySelectorAll('.profile-order-head').forEach(function(head){
+    head.addEventListener('click', function(){
+      var order = head.closest('.profile-order');
+      if (!order) return;
+      order.classList.toggle('is-open');
+      var btn = head.querySelector('.profile-order-toggle');
+      if (btn) btn.setAttribute('aria-label', order.classList.contains('is-open') ? 'Свернуть' : 'Развернуть');
+    });
+  });
+})();
+
+// Orders show-more / collapse-all
+(function(){
+  document.querySelectorAll('.profile-orders').forEach(function(list){
+    var wrap = list.parentElement.querySelector('.profile-orders-more');
+    if (!wrap) return;
+    var showLink = wrap.querySelector('.profile-orders-show');
+    var collapseLink = wrap.querySelector('.profile-orders-collapse');
+    var step = 3;
+    var initial = 3;
+
+    function update(){
+      var hidden = list.querySelectorAll('.profile-order.is-hidden');
+      var visible = list.querySelectorAll('.profile-order:not(.is-hidden)');
+      if (showLink) {
+        if (hidden.length === 0) {
+          showLink.hidden = true;
+        } else {
+          showLink.hidden = false;
+          var n = Math.min(step, hidden.length);
+          var label = showLink.querySelector('.profile-more-label');
+          if (label) label.textContent = 'Показать еще ' + n;
+        }
+      }
+      if (collapseLink) collapseLink.hidden = (visible.length <= initial);
+    }
+
+    if (showLink) {
+      showLink.addEventListener('click', function(e){
+        e.preventDefault();
+        var hidden = list.querySelectorAll('.profile-order.is-hidden');
+        for (var i = 0; i < step && i < hidden.length; i++) {
+          hidden[i].classList.remove('is-hidden');
+        }
+        update();
+      });
+    }
+    if (collapseLink) {
+      collapseLink.addEventListener('click', function(e){
+        e.preventDefault();
+        var orders = list.querySelectorAll('.profile-order');
+        orders.forEach(function(o, idx){
+          if (idx >= initial) o.classList.add('is-hidden');
+          o.classList.remove('is-open');
+        });
+        update();
+      });
+    }
+
+    update();
+  });
+})();
+
+// Order tabs: switch panels
+(function(){
+  document.querySelectorAll('.profile-order').forEach(function(order){
+    var tabs = order.querySelectorAll('.profile-tab');
+    var panels = order.querySelectorAll('.profile-tab-panel');
+    tabs.forEach(function(tab){
+      tab.addEventListener('click', function(){
+        tabs.forEach(function(t){ t.classList.remove('is-active'); });
+        panels.forEach(function(p){ p.classList.remove('is-active'); });
+        tab.classList.add('is-active');
+        var name = tab.getAttribute('data-tab');
+        var panel = order.querySelector('.profile-tab-panel[data-panel="' + name + '"]');
+        if (panel) panel.classList.add('is-active');
+      });
+    });
+  });
+})();
+</script>
+<script>
+(function() {
+  var _sid = parseInt(new URLSearchParams(window.location.search).get('id'), 10) || 1;
+  var ALL_ORDERS = {
+    /* -- 1 · Анна Петрова · Дизайн -- */
+    1: [
+      { id:1, category:'Ивенты', title:'Сопровождение гостей форума «Югра-Экспо»',
+        location:'Ханты-Мансийск, КВЦ «Югра-Экспо»', date:'Октябрь 2026', duration:'6 дней',
+        task:'Работала в составе команды хостес на форуме «Югра-Экспо» все шесть дней. Встреча и регистрация участников на стойке, сопровождение делегаций по выставочным площадкам, координация логистики между секциями.',
+        tags:['Координация','Хостес','Работа с VIP-гостями','Английский язык'], rating:5,
+        review:'Анна работала на форуме все шесть дней, сопровождала делегации из ХМАО, ЯНАО и Тюменской области. Хорошо ориентировалась в программе, корректно вела себя с гостями, оперативно решала бытовые вопросы. Готовы пригласить снова.',
+        reviewer:'КВЦ «Югра-Экспо»',
+        files:['Презентация программы форума.pdf','Список делегаций.pdf'],
+        photos:['assets/Photo/12.png','assets/Photo/13.png','assets/Photo/1.webp'] },
+      { id:2, category:'Ивенты', title:'Хостес на премии «Признание Югры»',
+        location:'Ханты-Мансийск, КВЦ «Югра-Экспо»', date:'Декабрь 2025', duration:'1 день',
+        task:'Работала в команде хостес на церемонии вручения региональной премии «Признание Югры». Встречала лауреатов на красной дорожке, координировала выход на сцену, помогала с гардеробом VIP-гостям.',
+        tags:['Хостес','Координация','Дресс-код','Гостеприимство'], rating:5,
+        review:'Анна выглядела безупречно, держалась с гостями уверенно и доброжелательно. Все лауреаты вышли на сцену вовремя — никаких задержек по нашему сектору.',
+        reviewer:'Премия «Признание Югры»',
+        files:['Сценарий церемонии.pdf'],
+        photos:['assets/Photo/11.png','assets/Photo/11.png'] },
+      { id:3, category:'Ивенты', title:'Помощник на бизнес-форуме «Югра-2026»',
+        location:'Ханты-Мансийск, КВЦ «Югра-Экспо»', date:'Сентябрь 2026', duration:'4 дня',
+        task:'Работа в зоне регистрации участников бизнес-форума: выдача бейджей, навигация по площадке, помощь спикерам с подключением презентационного оборудования.',
+        tags:['Регистрация','Навигация','Техподдержка'], rating:5,
+        review:'Очень собранная и внимательная. На стойке регистрации очередь не задерживалась, все участники получили бейджи в срок.',
+        reviewer:'Оргкомитет «Югра-2026»',
+        files:['Список спикеров.pdf'],
+        photos:['assets/Photo/12.png','assets/Photo/13.png','assets/Photo/1.webp'] },
+      { id:4, category:'Ивенты', title:'Регистратор на форуме молодых предпринимателей',
+        location:'Сургут, КЦ «Энергетик»', date:'Май 2026', duration:'3 дня',
+        task:'Регистрация участников и спикеров форума молодых предпринимателей. Работа в системе электронных пропусков, выдача стартовых пакетов, ответы на вопросы по программе.',
+        tags:['Регистрация','CRM','Клиентский сервис'], rating:5,
+        review:'Быстро освоила нашу CRM, вежливо общалась с участниками. Хорошо справлялась в часы пиковой нагрузки.',
+        reviewer:'Фонд поддержки предпринимательства Югры',
+        files:['Инструкция регистратора.pdf'],
+        photos:['assets/Photo/12.png','assets/Photo/11.png','assets/Photo/13.png'] },
+      { id:5, category:'Ивенты', title:'Координатор зоны «Технопарк» на IT-фестивале',
+        location:'Ханты-Мансийск, Технопарк Югры', date:'Март 2026', duration:'2 дня',
+        task:'Координация работы стендов резидентов технопарка на IT-фестивале: расписание презентаций, помощь с демонстрационным оборудованием, перевод для англоязычных гостей.',
+        tags:['Координация стендов','Английский язык','IT-тематика'], rating:5,
+        review:'Анна — отличный координатор. Все 12 стендов нашей зоны работали по графику, презентации шли точно по таймингу.',
+        reviewer:'Технопарк Югры',
+        files:['Карта стендов.pdf'],
+        photos:['assets/Photo/11.png','assets/Photo/12.png','assets/Photo/13.png'] },
+      { id:6, category:'Репетиторство', title:'Подготовка к ОГЭ по английскому',
+        location:'Ханты-Мансийск, онлайн', date:'Апрель 2026', duration:'8 занятий',
+        task:'Индивидуальные занятия с учеником 9 класса: отработка всех разделов ОГЭ — аудирование, чтение, грамматика, письмо, устная речь. Составила персональный план подготовки на 8 уроков.',
+        tags:['Репетиторство','Английский язык','ОГЭ','Подготовка к экзаменам'], rating:5,
+        review:'Анна очень терпелива, понятно объясняет сложный материал. Сын поднял балл с 28 до 41 за два месяца занятий — результат превзошёл ожидания.',
+        reviewer:'Родитель ученика',
+        files:['Программа занятий.pdf'],
+        photos:['assets/Photo/1.webp','assets/Photo/11.png'] },
+      { id:7, category:'Репетиторство', title:'Разговорный клуб для IT-компании',
+        location:'Ханты-Мансийск, офис «ДатаТим»', date:'Февраль 2026', duration:'4 занятия',
+        task:'Проведение разговорного клуба на английском для команды разработчиков: деловая коммуникация, переписка с иностранными партнёрами, технические презентации.',
+        tags:['Деловой английский','Корпоративное обучение','Разговорный клуб'], rating:5,
+        review:'Атмосфера занятий была очень комфортной, без стресса. Команда стала увереннее в переписке с зарубежными коллегами. Рекомендуем Анну как преподавателя.',
+        reviewer:'IT-компания «ДатаТим»',
+        files:['Программа клуба.pdf'],
+        photos:['assets/Photo/12.png','assets/Photo/13.png','assets/Photo/1.webp'] },
+      { id:8, category:'Репетиторство', title:'Подготовка к IELTS Academic',
+        location:'Онлайн', date:'Январь 2026', duration:'10 занятий',
+        task:'Подготовка к сдаче IELTS Academic: стратегии выполнения заданий по всем секциям, разбор типичных ошибок, два пробных теста с развёрнутой обратной связью.',
+        tags:['IELTS','Академический английский','Подготовка к экзаменам'], rating:5,
+        review:'Благодаря занятиям с Анной я сдала IELTS на 7.0, хотя рассчитывала на 6.5. Очень структурированный подход, много практики.',
+        reviewer:'Студентка 3 курса ЮГУ',
+        files:['Материалы занятий.pdf'],
+        photos:['assets/Photo/11.png','assets/Photo/1.webp'] },
+      { id:9, category:'IT', title:'Telegram-бот для записи в библиотеку ЮГУ',
+        location:'Ханты-Мансийск, удалённо', date:'Март 2026', duration:'2 недели',
+        task:'Разработка Telegram-бота на Python (aiogram) для онлайн-записи в читальный зал библиотеки ЮГУ: бронирование мест, напоминания, интеграция с Google Sheets.',
+        tags:['Python','Telegram Bot API','aiogram','Google Sheets'], rating:5,
+        review:'Анна сдала бота в срок, код чистый и хорошо документированный. Очереди в читальный зал сократились вдвое уже в первые две недели работы.',
+        reviewer:'Библиотека ЮГУ',
+        files:['Документация бота.pdf','Исходный код.zip'],
+        photos:['assets/Photo/11.png','assets/Photo/12.png'] },
+      { id:10, category:'IT', title:'Вёрстка лендинга образовательного центра',
+        location:'Удалённо', date:'Февраль 2026', duration:'1 неделя',
+        task:'Адаптивная HTML/CSS вёрстка лендинга для образовательного центра по дизайну макета в Figma. Анимации на CSS, оптимизация под мобильные устройства.',
+        tags:['HTML','CSS','Figma','Адаптивная вёрстка'], rating:5,
+        review:'Всё сверстано пиксель-в-пиксель по макету. Быстро, аккуратно, с пояснениями по коду. Будем обращаться снова.',
+        reviewer:'Образовательный центр «Старт»',
+        files:['Макет Figma.pdf','Исходники.zip'],
+        photos:['assets/Photo/13.png','assets/Photo/1.webp','assets/Photo/11.png'] },
+      { id:11, category:'SMM', title:'Ведение Instagram языковой школы',
+        location:'Удалённо', date:'Март–Апрель 2026', duration:'2 месяца',
+        task:'Ведение профиля языковой школы в Instagram: контент-план на 2 месяца, создание и публикация постов и сторис, базовая аналитика охватов.',
+        tags:['Instagram','Контент-план','Копирайтинг','Аналитика'], rating:5,
+        review:'За два месяца подписчики выросли с 1 200 до 2 800, охваты выросли в 2.4 раза. Анна пишет легко и по делу.',
+        reviewer:'Языковая школа «Speak UP»',
+        files:['Отчёт по аналитике.pdf'],
+        photos:['assets/Photo/1.webp','assets/Photo/11.png','assets/Photo/1.webp'] },
+      { id:12, category:'SMM', title:'Контент-план для кофейни',
+        location:'Удалённо', date:'Январь 2026', duration:'2 недели',
+        task:'Разработка контент-плана на 1 месяц для ВКонтакте и Instagram кофейни: темы, рубрики, заголовки, визуальный стиль. Подготовила 5 готовых постов.',
+        tags:['Контент-план','ВКонтакте','Instagram','Копирайтинг'], rating:5,
+        review:'Чёткий, понятный план с интересными рубриками. Легко передала его нашему SMM-специалисту — без лишних объяснений.',
+        reviewer:'Кофейня «Зерно»',
+        files:['Контент-план январь.pdf'],
+        photos:['assets/Photo/11.png','assets/Photo/13.png'] },
+      { id:13, category:'Дизайн', title:'Логотип и брендбук стартапа',
+        location:'Удалённо', date:'Апрель 2026', duration:'3 недели',
+        task:'Разработка логотипа и мини-брендбука для эко-стартапа: концепция, 3 варианта логотипа, утверждённый вариант и правила использования на белом и тёмном фоне.',
+        tags:['Логотип','Брендинг','Figma','Иллюстрация'], rating:5,
+        review:'Анна поняла нашу идею с первого брифа. Логотип получился чистым и современным. Команда в восторге.',
+        reviewer:'Стартап «GreenPath»',
+        files:['Брендбук GreenPath.pdf','Исходники.fig'],
+        photos:['assets/Photo/12.png','assets/Photo/12.png','assets/Photo/13.png'] },
+      { id:14, category:'Дизайн', title:'Инфографика для медицинского центра',
+        location:'Удалённо', date:'Февраль 2026', duration:'1 неделя',
+        task:'Создание серии инфографик (5 штук) для социальных сетей медицинского центра: профилактика, показания к процедурам, подготовка к анализам.',
+        tags:['Инфографика','Медицинский дизайн','Figma','Иллюстрация'], rating:5,
+        review:'Инфографики понятные, стильные, наша аудитория оценила. Публикации с ними набрали в 3 раза больше сохранений.',
+        reviewer:'Медицинский центр «Югра Мед»',
+        files:['Инфографика — 5 файлов.zip'],
+        photos:['assets/Photo/1.webp','assets/Photo/11.png'] }
+    ],
+    /* -- 2 · Игорь Левин · IT-разработка -- */
+    2: [
+      { id:1, category:'IT', title:'Telegram-бот для записи на услуги',
+        location:'Тюмень, удалённо', date:'Апрель 2026', duration:'2 недели',
+        task:'Разработка бота на Python (aiogram) для онлайн-записи к мастеру маникюра: выбор услуги, даты и времени, подтверждение и напоминания за час до визита.',
+        tags:['Python','aiogram','Telegram Bot API','PostgreSQL'], rating:5,
+        review:'Запись через бота уже составляет 70% всех заявок. Игорь сдал всё в срок, объяснил, как вносить изменения самостоятельно.',
+        reviewer:'Студия красоты «Луч»',
+        files:['Документация бота.pdf'],
+        photos:['assets/Photo/11.png','assets/Photo/12.png'] },
+      { id:2, category:'IT', title:'Интеграция CRM с Telegram',
+        location:'Удалённо', date:'Февраль 2026', duration:'10 дней',
+        task:'Написал Python-скрипт с вебхуками: автоматическая отправка уведомлений из AmoCRM в Telegram-канал компании при смене статусов сделок.',
+        tags:['Python','API','AmoCRM','Telegram Bot API'], rating:5,
+        review:'Скрипт работает стабильно уже два месяца. Игорь объяснил, как дорабатывать под наши нужды. Рекомендуем.',
+        reviewer:'ООО «Строй Регион»',
+        files:['Техническая документация.pdf'],
+        photos:['assets/Photo/13.png','assets/Photo/1.webp'] },
+      { id:3, category:'IT', title:'Сайт-портфолио на Tilda',
+        location:'Удалённо', date:'Март 2026', duration:'1 неделя',
+        task:'Сборка сайта-портфолио для фотографа на Tilda: главная страница, портфолио с фильтрами по категориям, форма записи на съёмку, интеграция с Яндекс.Метрика.',
+        tags:['Tilda','HTML/CSS','Аналитика','Интеграция'], rating:5,
+        review:'Игорь быстро понял наш стиль. Сайт готов в срок, уже получили первые заявки через форму.',
+        reviewer:'Фотограф Марина Ковалёва',
+        files:['Структура сайта.pdf'],
+        photos:['assets/Photo/11.png','assets/Photo/12.png'] },
+      { id:4, category:'IT', title:'HTML-шаблон корпоративной рассылки',
+        location:'Удалённо', date:'Январь 2026', duration:'3 дня',
+        task:'Адаптивная HTML-вёрстка email-шаблона: тёмная тема, кнопки CTA, корректное отображение на всех почтовых клиентах.',
+        tags:['HTML/CSS','Email-вёрстка','Адаптивность'], rating:5,
+        review:'На всех клиентах отображается корректно. Получили много позитивных откликов от читателей.',
+        reviewer:'Маркетинговое агентство «Стрела»',
+        files:['Шаблон рассылки.html'],
+        photos:['assets/Photo/13.png','assets/Photo/1.webp'] }
+    ],
+    /* -- 3 · Мария Кузьмина · Видео -- */
+    3: [
+      { id:1, category:'Видео', title:'Промо-ролик для стенда на выставке',
+        location:'Екатеринбург', date:'Март 2026', duration:'2 недели',
+        task:'Съёмка и монтаж промовидео для стенда компании на международной выставке: операторская работа, интервью с экспертами, инфографика, цветокоррекция.',
+        tags:['Premiere','Съёмка','Цветокор','Интервью'], rating:5,
+        review:'Ролик получился профессиональным. Гости выставки специально задерживались у нашего стенда из-за видео.',
+        reviewer:'ТД «УралЭкспорт»',
+        files:['Финальный ролик.mp4'],
+        photos:['assets/Photo/12.png','assets/Photo/13.png'] },
+      { id:2, category:'Видео', title:'Серия Reels для фитнес-клуба',
+        location:'Екатеринбург, удалённо', date:'Апрель–Май 2026', duration:'2 месяца',
+        task:'Съёмка и монтаж 12 Reels для Instagram фитнес-клуба: тренировки, советы тренеров, закулисье. Разработала визуальный стиль и шаблоны.',
+        tags:['Reels','After Effects','Съёмка','Монтаж'], rating:5,
+        review:'Подписчики выросли на 3 400 за два месяца. Reels от Марии стабильно набирают 15–40 тысяч просмотров.',
+        reviewer:'Фитнес-клуб «Energy»',
+        files:['Отчёт по охватам.pdf'],
+        photos:['assets/Photo/1.webp','assets/Photo/11.png','assets/Photo/11.png'] },
+      { id:3, category:'Видео', title:'Документальный мини-фильм о заводе',
+        location:'Екатеринбург', date:'Февраль 2026', duration:'3 недели',
+        task:'Производство 12-минутного документального фильма о 30-летней истории завода: архивные материалы, интервью с ветеранами, панорамы цехов, финальная озвучка.',
+        tags:['Premiere','After Effects','Цветокор','Документальное кино'], rating:5,
+        review:'Фильм показали на юбилейном торжестве, зал стоял. Мария очень профессионально работает с людьми в кадре.',
+        reviewer:'Завод «УралМаш-СПЦ»',
+        files:['Фильм финал.mp4','Сценарий.pdf'],
+        photos:['assets/Photo/12.png','assets/Photo/13.png'] },
+      { id:4, category:'Видео', title:'Анимационное интро для YouTube-канала',
+        location:'Удалённо', date:'Декабрь 2025', duration:'5 дней',
+        task:'Создание анимированного интро и аутро для образовательного YouTube-канала: моушн-графика, фирменные цвета, звуковой логотип.',
+        tags:['After Effects','Моушн-графика','Анимация'], rating:5,
+        review:'Интро выглядит дорого и профессионально. Зрители канала заметили обновление и оценили.',
+        reviewer:'Канал «Физика без скуки»',
+        files:['Интро.mp4','Аутро.mp4'],
+        photos:['assets/Photo/1.webp','assets/Photo/11.png'] },
+      { id:5, category:'Видео', title:'Видеоотзывы для интернет-магазина',
+        location:'Удалённо', date:'Январь 2026', duration:'1 неделя',
+        task:'Монтаж 6 видеоотзывов от клиентов: цветокоррекция, субтитры, анимированное лого, музыкальное сопровождение.',
+        tags:['Premiere','Цветокор','Субтитры','After Effects'], rating:5,
+        review:'Конверсия на карточках товаров выросла после добавления видеоотзывов.',
+        reviewer:'Магазин «ТехноДвор»',
+        files:['Отзывы — 6 роликов.zip'],
+        photos:['assets/Photo/12.png','assets/Photo/13.png'] }
+    ],
+    /* -- 4 · Артём Соколов · Контент -- */
+    4: [
+      { id:1, category:'Контент', title:'Контент-стратегия для EdTech-стартапа',
+        location:'Удалённо', date:'Март 2026', duration:'2 недели',
+        task:'Разработка контент-стратегии: анализ аудитории, конкурентный анализ, контент-план на 3 месяца по 5 каналам, KPI по каждому направлению.',
+        tags:['Маркетинг','Аналитика','Стратегия','Контент-план'], rating:5,
+        review:'Артём провёл глубокий анализ конкурентов, предложил нестандартные форматы. Стратегия уже даёт результаты.',
+        reviewer:'EdTech-стартап «МозгаТека»',
+        files:['Стратегия.pdf','Контент-план.xlsx'],
+        photos:['assets/Photo/1.webp','assets/Photo/11.png'] },
+      { id:2, category:'Контент', title:'Продающие тексты для лендинга',
+        location:'Удалённо', date:'Февраль 2026', duration:'1 неделя',
+        task:'Написание продающих текстов для лендинга онлайн-курса: заголовки, УТП, описание программы, блок FAQ, призывы к действию.',
+        tags:['Копирайтинг','UX Writing','Маркетинг'], rating:5,
+        review:'Конверсия лендинга выросла с 2.1% до 4.7% после замены текстов. Артём отлично понял нашу аудиторию.',
+        reviewer:'Онлайн-школа «ПроМаркет»',
+        files:['Тексты лендинга.pdf'],
+        photos:['assets/Photo/12.png','assets/Photo/13.png'] },
+      { id:3, category:'Контент', title:'Email welcome-цепочка для В2В',
+        location:'Удалённо', date:'Апрель 2026', duration:'10 дней',
+        task:'Написание серии из 5 писем welcome-цепочки: знакомство с продуктом, кейсы, специальное предложение, FAQ, оффер.',
+        tags:['Email-маркетинг','Копирайтинг','В2В'], rating:5,
+        review:'Open rate цепочки составил 34% — значительно выше нашего обычного уровня.',
+        reviewer:'SaaS-платформа «ЛОГОС»',
+        files:['Письма — 5 шт.pdf'],
+        photos:['assets/Photo/1.webp','assets/Photo/11.png'] },
+      { id:4, category:'Контент', title:'Посты для Telegram нефтяной компании',
+        location:'Удалённо', date:'Март–Апрель 2026', duration:'6 недель',
+        task:'Написание 24 постов для корпоративного Telegram-канала: новости отрасли, экспертные материалы, карточки с фактами, анонсы мероприятий.',
+        tags:['Telegram','Копирайтинг','Корпоративный контент','Аналитика'], rating:5,
+        review:'Подписчики выросли на 1 800 за полтора месяца. Артём работает быстро, соблюдает дедлайны, легко принимает правки.',
+        reviewer:'ПАО «ЮграОйл»',
+        files:['Контент-план.pdf','Тексты.docx'],
+        photos:['assets/Photo/11.png','assets/Photo/12.png'] },
+      { id:5, category:'Контент', title:'Сценарий корпоративного мероприятия',
+        location:'Ханты-Мансийск', date:'Май 2026', duration:'5 дней',
+        task:'Написание сценария корпоратива на 200 человек: открытие, конкурсы, награждение сотрудников, финальная часть. Составил тайминг и технические райдеры.',
+        tags:['Сценарий','Ивент','Копирайтинг'], rating:5,
+        review:'Сценарий был динамичным и понятным. Артём учёл все пожелания и написал несколько вариантов конкурсов на выбор.',
+        reviewer:'ПАО «Юграгаз»',
+        files:['Сценарий финал.pdf'],
+        photos:['assets/Photo/13.png','assets/Photo/1.webp'] }
+    ],
+    /* -- 5 · Полина Шмидт · Дизайн (фото) -- */
+    5: [
+      { id:1, category:'Дизайн', title:'Предметная съёмка для интернет-магазина',
+        location:'Тюмень', date:'Февраль 2026', duration:'2 дня',
+        task:'Предметная съёмка 40 SKU для карточек товаров интернет-магазина косметики: белый фон, студийное освещение, базовая обработка в Lightroom.',
+        tags:['Lightroom','Съёмка','Предметное фото','Ретушь'], rating:5,
+        review:'CTR карточек в магазине заметно вырос после замены фотографий.',
+        reviewer:'Магазин косметики «Blossom»',
+        files:['Фотографии — 40 шт.zip'],
+        photos:['assets/Photo/11.png','assets/Photo/12.png'] },
+      { id:2, category:'Дизайн', title:'Ретушь портретов для лукбука',
+        location:'Удалённо', date:'Март 2026', duration:'1 неделя',
+        task:'Ретушь 30 портретных фотографий для лукбука молодёжного бренда одежды: частотное разложение, цветокоррекция, сохранение натуральности кожи.',
+        tags:['Photoshop','Ретушь','Цветокор','Лукбук'], rating:5,
+        review:'Полина тонко работает с кожей — никакого эффекта «пластика», всё выглядит живо и естественно.',
+        reviewer:'Бренд одежды «Wild»',
+        files:['Лукбук — 30 фото.zip'],
+        photos:['assets/Photo/13.png','assets/Photo/1.webp'] },
+      { id:3, category:'Дизайн', title:'Фоторепортаж с открытия кафе',
+        location:'Тюмень', date:'Апрель 2026', duration:'1 день',
+        task:'Фоторепортаж с торжественного открытия кафе: интерьерные снимки, репортажные кадры с гостями, детали оформления, блюда. Обработка и сдача в течение 24 часов.',
+        tags:['Lightroom','Репортаж','Ретушь','Съёмка'], rating:5,
+        review:'Полина поймала нужную атмосферу. Уже используем фото для сайта и соцсетей.',
+        reviewer:'Кафе «Северный стиль»',
+        files:['Репортаж — 120 фото.zip'],
+        photos:['assets/Photo/11.png','assets/Photo/12.png'] },
+      { id:4, category:'Дизайн', title:'Серия постерных принтов',
+        location:'Удалённо', date:'Январь 2026', duration:'2 недели',
+        task:'Разработка 8 декоративных принтов для печати: минималистичные иллюстрации, типографика, подготовка файлов для форматов А3 и А2.',
+        tags:['Photoshop','Иллюстрация','Принт','Типографика'], rating:5,
+        review:'Принты разлетелись за первую неделю продаж. Уже заказали вторую серию.',
+        reviewer:'Арт-магазин «Формат»',
+        files:['Принты — 8 файлов.zip'],
+        photos:['assets/Photo/13.png','assets/Photo/1.webp'] }
+    ],
+    /* -- 6 · Алина Гордеева · IT-разработка -- */
+    6: [
+      { id:1, category:'IT', title:'REST API для образовательной платформы',
+        location:'Удалённо', date:'Март–Апрель 2026', duration:'6 недель',
+        task:'Проектирование и разработка REST API на FastAPI: авторизация через JWT, CRUD-операции для курсов, уроков и студентов, PostgreSQL, Docker-образ.',
+        tags:['FastAPI','Python','PostgreSQL','Docker'], rating:5,
+        review:'Алина написала качественный, хорошо задокументированный код. Сдала в срок, корректно внедрила ревью-правки.',
+        reviewer:'EdTech-платформа «УРОК+»',
+        files:['Документация API.pdf','Исходники.zip'],
+        photos:['assets/Photo/1.webp','assets/Photo/11.png'] },
+      { id:2, category:'IT', title:'SPA личного кабинета на React',
+        location:'Удалённо', date:'Январь–Февраль 2026', duration:'5 недель',
+        task:'Разработка SPA-интерфейса личного кабинета: дашборд, профиль, история транзакций, адаптивная верстка, интеграция с REST API.',
+        tags:['React','JavaScript','CSS','API'], rating:5,
+        review:'Компоненты написаны чисто, без лишних зависимостей. Алина предложила оптимизации, ускорившие загрузку на 40%.',
+        reviewer:'Финтех-сервис «КредитОК»',
+        files:['Исходники фронтенд.zip'],
+        photos:['assets/Photo/12.png','assets/Photo/13.png'] },
+      { id:3, category:'IT', title:'Чат-бот с GPT-интеграцией для HR',
+        location:'Удалённо', date:'Май 2026', duration:'2 недели',
+        task:'Telegram-бот для автоматического скрининга кандидатов: интеграция с OpenAI API, база резюме на PostgreSQL, дашборд HR-менеджера.',
+        tags:['Python','OpenAI API','PostgreSQL','Telegram Bot API'], rating:5,
+        review:'Бот полностью автоматизировал первый этап найма. Экономим около 10 часов HR-работы в неделю.',
+        reviewer:'Кадровое агентство «Штатный»',
+        files:['Документация бота.pdf'],
+        photos:['assets/Photo/1.webp','assets/Photo/11.png'] },
+      { id:4, category:'IT', title:'Интеграция ЮKassa в интернет-магазин',
+        location:'Удалённо', date:'Февраль–Март 2026', duration:'3 недели',
+        task:'Интеграция ЮKassa в интернет-магазин: серверная часть на Python, вебхуки для обработки платежей, логирование транзакций, тестирование в sandbox.',
+        tags:['Python','ЮKassa API','FastAPI','PostgreSQL'], rating:5,
+        review:'Всё работает гладко. Алина чётко соблюдала ТЗ, задавала правильные вопросы, сдала в срок.',
+        reviewer:'Интернет-магазин «Тюмень Шоп»',
+        files:['Документация интеграции.pdf'],
+        photos:['assets/Photo/12.png','assets/Photo/13.png'] },
+      { id:5, category:'IT', title:'Парсер данных для аналитики конкурентов',
+        location:'Удалённо', date:'Декабрь 2025', duration:'1 неделя',
+        task:'Python-парсер для сбора цен и ассортимента с 5 сайтов конкурентов: хранение в PostgreSQL, ежедневные отчёты на email.',
+        tags:['Python','BeautifulSoup','PostgreSQL','Автоматизация'], rating:5,
+        review:'Парсер работает уже полгода без сбоев. Помог скорректировать ценовую политику.',
+        reviewer:'Торговая сеть «Северный стиль»',
+        files:['Исходный код.zip'],
+        photos:['assets/Photo/1.webp','assets/Photo/11.png'] }
+    ],
+    /* -- 7 · Дарья Яковлева · Контент -- */
+    7: [
+      { id:1, category:'Контент', title:'SEO-статьи для строительного портала',
+        location:'Удалённо', date:'Март 2026', duration:'2 недели',
+        task:'Написание 6 SEO-оптимизированных статей для портала о строительстве: сбор семантики, структурирование, оптимизация мета-тегов, внутренняя перелинковка.',
+        tags:['SEO','Копирайтинг','Контент-план'], rating:5,
+        review:'Все статьи попали в топ-10 по целевым запросам в течение месяца. Дарья умеет сочетать читаемость и SEO.',
+        reviewer:'Портал «СтройГуру»',
+        files:['Статьи — 6 шт.docx'],
+        photos:['assets/Photo/11.png','assets/Photo/12.png'] },
+      { id:2, category:'Контент', title:'Email-рассылка для сети аптек',
+        location:'Удалённо', date:'Февраль 2026', duration:'1 неделя',
+        task:'Написание 3 писем для сезона ОРВИ: советы фармацевта, подборка средств, промокод. Тема — «Будь здоров».',
+        tags:['Email-маркетинг','Копирайтинг','Сторителлинг'], rating:5,
+        review:'Открываемость была 41% — гораздо выше нашего обычного. Письма написаны как совет, а не реклама.',
+        reviewer:'Аптечная сеть «Здравница»',
+        files:['Письма — 3 шт.pdf'],
+        photos:['assets/Photo/13.png','assets/Photo/1.webp'] },
+      { id:3, category:'Контент', title:'Описания товаров для маркетплейса',
+        location:'Удалённо', date:'Апрель 2026', duration:'10 дней',
+        task:'Написание 50 описаний для Wildberries и Ozon в категории «Товары для дома»: заголовки с ключами, структурированные описания, характеристики.',
+        tags:['Копирайтинг','SEO','Маркетплейс'], rating:5,
+        review:'Карточки стали показываться выше в поиске. Конверсия выросла. Дарья работает быстро и внимательно к деталям.',
+        reviewer:'Продавец HomeStyle на Wildberries',
+        files:['Описания — 50 шт.xlsx'],
+        photos:['assets/Photo/11.png','assets/Photo/12.png'] },
+      { id:4, category:'Контент', title:'UX-копирайтинг для фитнес-приложения',
+        location:'Удалённо', date:'Январь 2026', duration:'5 дней',
+        task:'Тексты для мобильного фитнес-приложения: онбординг-экраны, push-уведомления, подсказки в интерфейсе, сообщения об ошибках, тексты кнопок.',
+        tags:['UX Writing','Копирайтинг','Мобильные приложения'], rating:5,
+        review:'По A/B-тесту, онбординг с новыми текстами конвертировал на 23% лучше.',
+        reviewer:'Приложение «ФитПлан»',
+        files:['Тексты для UI.pdf'],
+        photos:['assets/Photo/13.png','assets/Photo/1.webp'] }
+    ],
+    /* -- 8 · Алина Русова · SMM -- */
+    8: [
+      { id:1, category:'SMM', title:'Ведение ВКонтакте молодёжного центра',
+        location:'Ханты-Мансийск, удалённо', date:'Март–Апрель 2026', duration:'2 месяца',
+        task:'Ведение группы ВКонтакте: контент-план, ежедневные публикации, ответы на комментарии, оформление группы, конкурс подписчиков.',
+        tags:['ВКонтакте','Контент-план','Комьюнити','Конкурс'], rating:5,
+        review:'Число участников группы выросло с 800 до 2 300, вовлечённость выросла в 3 раза.',
+        reviewer:'МБУ «Молодёжный центр Югры»',
+        files:['Отчёт за 2 месяца.pdf'],
+        photos:['assets/Photo/11.png','assets/Photo/12.png'] },
+      { id:2, category:'SMM', title:'Reels для ресторана',
+        location:'Ханты-Мансийск', date:'Февраль–Март 2026', duration:'1 месяц',
+        task:'Съёмка и монтаж 10 Reels для Instagram ресторана: блюда, закулисье кухни, рецепты от шефа, атмосфера. Трендовые форматы под алгоритмы.',
+        tags:['Instagram','Reels','Монтаж','SMM'], rating:5,
+        review:'Один Reels набрал 280 000 просмотров и привёл более 400 новых подписчиков.',
+        reviewer:'Ресторан «Кедровый»',
+        files:['Контент-план Reels.pdf'],
+        photos:['assets/Photo/13.png','assets/Photo/1.webp','assets/Photo/11.png'] },
+      { id:3, category:'SMM', title:'Telegram-канал агентства недвижимости',
+        location:'Удалённо', date:'Апрель 2026', duration:'6 недель',
+        task:'Создание и ведение Telegram-канала: стратегия контента, шаблоны постов, публикации 5 раз в неделю, анализ статистики.',
+        tags:['Telegram','Контент-план','Аналитика','Недвижимость'], rating:5,
+        review:'За полтора месяца канал набрал 1 200 подписчиков органически. Уже получили 3 заявки напрямую.',
+        reviewer:'АН «Надёжный дом»',
+        files:['Статистика канала.pdf'],
+        photos:['assets/Photo/11.png','assets/Photo/12.png'] },
+      { id:4, category:'SMM', title:'Продвижение личного бренда эксперта',
+        location:'Удалённо', date:'Январь–Февраль 2026', duration:'2 месяца',
+        task:'Ведение Instagram и VK бизнес-тренера: упаковка профиля, контент-стратегия, посты и сторис, взаимодействие с аудиторией.',
+        tags:['Instagram','ВКонтакте','Личный бренд','Стратегия'], rating:5,
+        review:'Instagram-аудитория выросла с 500 до 4 100. Стали приходить заявки на тренинги через соцсети.',
+        reviewer:'Бизнес-тренер Олег Семёнов',
+        files:['Аналитика за 2 месяца.pdf'],
+        photos:['assets/Photo/13.png','assets/Photo/1.webp'] }
+    ],
+    /* -- 9 · Елена Борисова · Ивенты -- */
+    9: [
+      { id:1, category:'Ивенты', title:'Координатор городского фестиваля',
+        location:'Тюмень', date:'Май 2026', duration:'3 дня',
+        task:'Координация волонтёрской команды из 20 человек на городском фестивале еды: распределение зон, инструктаж, оперативная связь, решение нештатных ситуаций.',
+        tags:['Ивент','Координация','Волонтёры','Логистика'], rating:5,
+        review:'Елена держала команду собранной все три дня. Ни одна нештатная ситуация не стала проблемой.',
+        reviewer:'Фестиваль «Тюмень Ест»',
+        files:['Тайминг мероприятия.pdf'],
+        photos:['assets/Photo/11.png','assets/Photo/12.png'] },
+      { id:2, category:'Ивенты', title:'Промо-акция в торговом центре',
+        location:'Тюмень', date:'Апрель 2026', duration:'2 дня',
+        task:'Демонстрация нового продукта в ТЦ: вовлечение посетителей, работа с возражениями, фиксация контактов потенциальных клиентов.',
+        tags:['Промо','Клиентский сервис','Продажи'], rating:5,
+        review:'Елена собрала 340 контактов за два дня — в 2 раза больше KPI.',
+        reviewer:'Бренд напитков «FreshUp»',
+        files:['База контактов.xlsx'],
+        photos:['assets/Photo/13.png','assets/Photo/1.webp'] },
+      { id:3, category:'Ивенты', title:'Модератор студенческой конференции',
+        location:'Тюмень, ТюмГУ', date:'Март 2026', duration:'1 день',
+        task:'Модерация двух секций научной конференции: слежение за регламентом, взаимодействие с докладчиками, ведение Q&A-сессий.',
+        tags:['Модерация','Конференция','Академическая среда'], rating:5,
+        review:'Вела секцию уверенно, корректно работала с затянувшимися докладами.',
+        reviewer:'ТюмГУ, Студ. научное общество',
+        files:['Программа конференции.pdf'],
+        photos:['assets/Photo/11.png','assets/Photo/12.png'] },
+      { id:4, category:'Ивенты', title:'Хостес на открытии ресторана',
+        location:'Тюмень', date:'Январь 2026', duration:'1 день',
+        task:'Встреча гостей на торжественном открытии ресторана: рассадка, вручение подарков, работа с VIP-посетителями.',
+        tags:['Хостес','Гостеприимство','VIP-гости'], rating:5,
+        review:'Улыбчивая, тактичная. Гости несколько раз хвалили персонал на открытии.',
+        reviewer:'Ресторан «Сибирский очаг»',
+        files:['Отчёт по мероприятию.pdf'],
+        photos:['assets/Photo/13.png','assets/Photo/1.webp'] },
+      { id:5, category:'Ивенты', title:'Администратор деловых встреч',
+        location:'Тюмень', date:'Февраль 2026', duration:'5 дней',
+        task:'Административное сопровождение серии деловых встреч: встреча гостей, регистрация, подготовка зала, кофе-брейки, протоколирование.',
+        tags:['Логистика','Административная работа','Деловые события'], rating:5,
+        review:'Внимательна к деталям. Все встречи прошли без организационных сбоев.',
+        reviewer:'Бизнес-центр «Тюмень Плаза»',
+        files:['Протоколы встреч.pdf'],
+        photos:['assets/Photo/11.png','assets/Photo/11.png'] }
+    ],
+    /* -- 10 · Тимур Исаев · IT-разработка -- */
+    10: [
+      { id:1, category:'IT', title:'Автоматизация отчётности в Google Sheets',
+        location:'Удалённо', date:'Апрель 2026', duration:'1 неделя',
+        task:'Python-скрипт для автоматического сбора данных из нескольких источников и заполнения еженедельного отчёта в Google Sheets через API.',
+        tags:['Python','Google Sheets API','Автоматизация'], rating:5,
+        review:'Тимур разобрался в нашей схеме за день. Скрипт экономит 5 часов ручной работы каждую неделю.',
+        reviewer:'УК «ЮграПроперти»',
+        files:['Документация скрипта.pdf'],
+        photos:['assets/Photo/12.png','assets/Photo/13.png'] },
+      { id:2, category:'IT', title:'Make-сценарий для интеграции сервисов',
+        location:'Удалённо', date:'Март 2026', duration:'5 дней',
+        task:'Настройка сценария в Make.com: передача данных из форм Tilda в Notion, создание сделок в AmoCRM, уведомления в Telegram.',
+        tags:['Make','Notion','AmoCRM','Telegram Bot API'], rating:5,
+        review:'Сложный сценарий с несколькими условиями работает без нареканий уже 2 месяца.',
+        reviewer:'Консалтинг «Формула роста»',
+        files:['Схема интеграции.pdf'],
+        photos:['assets/Photo/1.webp','assets/Photo/11.png'] },
+      { id:3, category:'IT', title:'Telegram-бот для HR-анкетирования',
+        location:'Удалённо', date:'Май 2026', duration:'1 неделя',
+        task:'Разработка бота для первичного анкетирования соискателей: сбор данных, сохранение ответов в Google Sheets, уведомление HR.',
+        tags:['Python','Telegram Bot API','Google Sheets'], rating:5,
+        review:'Бот выполняет задачу точно по ТЗ. Тимур предложил хорошие UX-улучшения по ходу разработки.',
+        reviewer:'HR-отдел «ЮграСтрой»',
+        files:['Документация бота.pdf'],
+        photos:['assets/Photo/12.png','assets/Photo/13.png'] }
+    ],
+    /* -- 11 · Олеся Чернова · Дизайн -- */
+    11: [
+      { id:1, category:'Дизайн', title:'Редизайн приложения доставки',
+        location:'Удалённо', date:'Март–Апрель 2026', duration:'3 недели',
+        task:'UI-редизайн мобильного приложения в Figma: новые компоненты, типографика, навигация, анимации. Передала разработчикам готовый Design System.',
+        tags:['Figma','UI/UX','Дизайн-система','Мобильный интерфейс'], rating:5,
+        review:'Олеся предложила решения, которые мы не рассматривали. Интерфейс стал заметно чище.',
+        reviewer:'Приложение «БыстрDrop»',
+        files:['Design System.fig','Макеты.fig'],
+        photos:['assets/Photo/1.webp','assets/Photo/11.png'] },
+      { id:2, category:'Дизайн', title:'Визуальный стиль Telegram-канала',
+        location:'Удалённо', date:'Февраль 2026', duration:'3 дня',
+        task:'Разработка визуального стиля: аватар, обложка, шаблоны постов (5 типов), иконки рубрик, гайд по использованию.',
+        tags:['Figma','Canva','Типографика','Брендинг'], rating:5,
+        review:'Канал выглядит профессионально. Шаблоны понятные, легко заполнять самостоятельно.',
+        reviewer:'Бьюти-блогер Анастасия Крут',
+        files:['Шаблоны.fig','Гайдлайн.pdf'],
+        photos:['assets/Photo/12.png','assets/Photo/13.png'] },
+      { id:3, category:'Дизайн', title:'Афиши и баннеры для культурного центра',
+        location:'Екатеринбург', date:'Январь–Февраль 2026', duration:'4 недели',
+        task:'Серия афиш и digital-баннеров для мероприятий культурного центра: концерты, выставки, лекции. Единый стиль с вариациями под каждое событие.',
+        tags:['Figma','Photoshop','Типографика','Принт'], rating:5,
+        review:'Нескольких посетителей спрашивали, кто делает наш дизайн — это лучший отзыв.',
+        reviewer:'КЦ «Уральская волна»',
+        files:['Афиши — 12 шт.zip'],
+        photos:['assets/Photo/1.webp','assets/Photo/11.png'] },
+      { id:4, category:'Дизайн', title:'Иллюстрации для детского приложения',
+        location:'Удалённо', date:'Апрель 2026', duration:'2 недели',
+        task:'20 иллюстраций для образовательного приложения для детей 6–10 лет: персонажи, фоны, иконки геймификации. Стиль flat с мягкой палитрой.',
+        tags:['Figma','Иллюстрация','Детский дизайн','Canva'], rating:5,
+        review:'Иллюстрации яркие, но не перегруженные. Дети фокус-группы сразу полюбили персонажей.',
+        reviewer:'EdTech-студия «Умничка»',
+        files:['Иллюстрации — 20 шт.zip'],
+        photos:['assets/Photo/11.png','assets/Photo/12.png'] },
+      { id:5, category:'Дизайн', title:'Визуальный стиль для кофейни',
+        location:'Екатеринбург', date:'Март 2026', duration:'2 недели',
+        task:'Разработка визуального стиля: логотип, цветовая палитра, типографика, шаблоны для сторис и постов, брендбук на 20 страниц.',
+        tags:['Figma','Брендинг','Типографика','Логотип'], rating:5,
+        review:'Брендинг получился тёплым и узнаваемым. Адаптировали под меню и упаковку — везде смотрится отлично.',
+        reviewer:'Кофейня «Тёплый угол»',
+        files:['Брендбук.pdf','Исходники.fig'],
+        photos:['assets/Photo/13.png','assets/Photo/1.webp'] }
+    ],
+    /* -- 12 · Кирилл Захаров · IT-разработка -- */
+    12: [
+      { id:1, category:'IT', title:'Мобильное приложение для фитнес-клуба',
+        location:'Удалённо', date:'Февраль–Апрель 2026', duration:'10 недель',
+        task:'Кроссплатформенное приложение на Flutter: личный кабинет, расписание занятий, запись, push-уведомления, интеграция с API клуба.',
+        tags:['Flutter','Dart','API','Push-уведомления'], rating:5,
+        review:'Кирилл сдал в срок, без критических багов. Уже 400+ активных пользователей за первый месяц.',
+        reviewer:'Фитнес-клуб «Атлет»',
+        files:['APK-сборка.zip','Документация.pdf'],
+        photos:['assets/Photo/11.png','assets/Photo/12.png'] },
+      { id:2, category:'IT', title:'Backend маркетплейса услуг',
+        location:'Удалённо', date:'Январь–Февраль 2026', duration:'6 недель',
+        task:'Backend на Node.js: REST API, авторизация JWT, PostgreSQL, кэширование Redis, Docker Compose для развёртывания.',
+        tags:['Node.js','PostgreSQL','Redis','Docker'], rating:5,
+        review:'Прошли нагрузочное тестирование на 500 RPS без деградации.',
+        reviewer:'Стартап «МастерОК»',
+        files:['Исходники backend.zip','Документация.pdf'],
+        photos:['assets/Photo/13.png','assets/Photo/1.webp'] },
+      { id:3, category:'IT', title:'CI/CD-пайплайн для SaaS',
+        location:'Удалённо', date:'Март 2026', duration:'2 недели',
+        task:'Настройка GitHub Actions: автотесты, сборка Docker-образов, деплой на VPS через SSH, уведомления в Telegram.',
+        tags:['Docker','GitHub Actions','CI/CD','DevOps'], rating:5,
+        review:'Время от коммита до деплоя сократилось с 40 минут до 7.',
+        reviewer:'SaaS-платформа «КлубОК»',
+        files:['Конфигурация CI/CD.yaml'],
+        photos:['assets/Photo/11.png','assets/Photo/12.png'] },
+      { id:4, category:'IT', title:'Telegram Mini App для регистрации на событие',
+        location:'Удалённо', date:'Май 2026', duration:'2 недели',
+        task:'Telegram Mini App: форма регистрации, QR-код участника, список сессий форума.',
+        tags:['Node.js','Telegram Mini Apps','PostgreSQL','API'], rating:5,
+        review:'Кирилл сдал рабочий прототип за 5 дней. На мероприятии зарегистрировалось 1 200 участников через Mini App.',
+        reviewer:'Форум «ТюменьТех»',
+        files:['Исходники.zip'],
+        photos:['assets/Photo/13.png','assets/Photo/1.webp'] }
+    ],
+    /* -- 13 · Соня Мельник · Контент -- */
+    13: [
+      { id:1, category:'Контент', title:'Сценарии Reels для кулинарного блога',
+        location:'Удалённо', date:'Апрель–Май 2026', duration:'6 недель',
+        task:'20 сценариев для Reels кулинарного блога: структура, хук, раскадровка, текст закадрового голоса. Форматы: рецепты, лайфхаки, сравнения.',
+        tags:['Сценарий','Reels','Сторителлинг','Контент-план'], rating:5,
+        review:'Соня моментально поняла тональность блога. Видео по её сценариям стабильно набирают 50k+ просмотров.',
+        reviewer:'Кулинарный блогер Катерина Вит',
+        files:['Сценарии — 20 шт.pdf'],
+        photos:['assets/Photo/11.png','assets/Photo/11.png'] },
+      { id:2, category:'Контент', title:'Тексты для сайта агентства переводов',
+        location:'Удалённо', date:'Март 2026', duration:'1 неделя',
+        task:'Тексты для сайта: главная, «О нас», страница услуг, 3 кейса, FAQ. Объём 5 000 знаков.',
+        tags:['Копирайтинг','UX Writing','SEO'], rating:5,
+        review:'Запросы с сайта выросли в 1.5 раза после обновления контента.',
+        reviewer:'Бюро переводов «Lingua Pro»',
+        files:['Тексты сайта.docx'],
+        photos:['assets/Photo/12.png','assets/Photo/13.png'] },
+      { id:3, category:'Контент', title:'Сценарий корпоративного видеоролика',
+        location:'Ханты-Мансийск', date:'Февраль 2026', duration:'5 дней',
+        task:'Сценарий 5-минутного промо-ролика о компании: структура, хронология, текст диктора, раскадровка основных сцен.',
+        tags:['Сценарий','Видео','Стратегия'], rating:5,
+        review:'Режиссёр работал по сценарию без правок. Ролик смотрится цельно и профессионально.',
+        reviewer:'ГК «ЮграИнвест»',
+        files:['Сценарий финал.pdf'],
+        photos:['assets/Photo/1.webp','assets/Photo/11.png'] },
+      { id:4, category:'Контент', title:'Описания профилей мастеров на маркетплейсе',
+        location:'Удалённо', date:'Январь 2026', duration:'1 неделя',
+        task:'Написание описаний для 15 мастеров handmade: продающий текст, ключевые слова, призыв к действию. Обработка брифов от каждого мастера.',
+        tags:['Копирайтинг','Маркетплейс','SEO'], rating:5,
+        review:'Профили с новыми текстами получили в среднем на 60% больше просмотров за первую неделю.',
+        reviewer:'Маркетплейс «РукаМастера»',
+        files:['Описания профилей.docx'],
+        photos:['assets/Photo/12.png','assets/Photo/13.png'] }
+    ],
+    /* -- 14 · Влад Орехов · SMM -- */
+    14: [
+      { id:1, category:'SMM', title:'Таргет ВКонтакте для онлайн-школы',
+        location:'Удалённо', date:'Март–Апрель 2026', duration:'6 недель',
+        task:'Таргетированная реклама во ВКонтакте для курса по веб-разработке: сегментация аудиторий, A/B-тесты креативов, оптимизация ставок, отчёты.',
+        tags:['Таргет','VK Ads','A/B тесты','Аналитика'], rating:5,
+        review:'Влад снизил стоимость лида с 480 до 190 рублей за 3 недели работы.',
+        reviewer:'Онлайн-школа «КодПро»',
+        files:['Отчёт по рекламе.pdf'],
+        photos:['assets/Photo/1.webp','assets/Photo/11.png'] },
+      { id:2, category:'SMM', title:'Анализ конкурентов в Instagram',
+        location:'Удалённо', date:'Февраль 2026', duration:'5 дней',
+        task:'Анализ 10 конкурентов: контент-стратегия, частота публикаций, вовлечённость, форматы рекламы. Итоговый отчёт с рекомендациями.',
+        tags:['Аналитика','Instagram','Конкурентный анализ','SMM'], rating:5,
+        review:'Детальный отчёт. Рекомендации помогли перестроить контент-план и улучшить показатели.',
+        reviewer:'Студия дизайна интерьеров «Форм»',
+        files:['Анализ конкурентов.pdf'],
+        photos:['assets/Photo/12.png','assets/Photo/13.png'] },
+      { id:3, category:'SMM', title:'Ретаргетинг для интернет-магазина',
+        location:'Удалённо', date:'Апрель 2026', duration:'2 недели',
+        task:'Настройка ретаргетинга в ВКонтакте и Яндекс.Директ: пиксели, аудитории, динамические объявления, оптимизация.',
+        tags:['Таргет','VK Ads','Ретаргетинг','Аналитика'], rating:5,
+        review:'ROAS ретаргетинговых кампаний составил 420%.',
+        reviewer:'Магазин «КомфортДом»',
+        files:['Отчёт ретаргетинг.pdf'],
+        photos:['assets/Photo/1.webp','assets/Photo/11.png'] },
+      { id:4, category:'SMM', title:'Рекламный запуск нового продукта в VK',
+        location:'Удалённо', date:'Май 2026', duration:'1 месяц',
+        task:'Медиаплан, создание креативов, сплит-тесты, оптимизация в реальном времени, итоговая аналитика по запуску.',
+        tags:['VK Ads','Таргет','A/B тесты','Медиапланирование'], rating:5,
+        review:'Первые 500 продаж за 10 дней после запуска. Влад держал связь ежедневно.',
+        reviewer:'FMCG-бренд «СеверСвежесть»',
+        files:['Медиаплан.pdf','Итоговый отчёт.pdf'],
+        photos:['assets/Photo/11.png','assets/Photo/12.png'] }
+    ],
+    /* -- 15 · Ксения Фомина · SMM -- */
+    15: [
+      { id:1, category:'SMM', title:'Ведение Telegram-канала HR-агентства',
+        location:'Удалённо', date:'Февраль–Март 2026', duration:'6 недель',
+        task:'Стратегия и ведение Telegram-канала: контент-план, публикации 6 раз в неделю, интерактивные опросы, рубрики советов по карьере.',
+        tags:['Telegram','Контент-план','Карьера','Комьюнити'], rating:5,
+        review:'Канал вырос с 300 до 2 100 подписчиков без платного продвижения.',
+        reviewer:'HR-агентство «Карьера+»',
+        files:['Статистика канала.pdf'],
+        photos:['assets/Photo/13.png','assets/Photo/1.webp'] },
+      { id:2, category:'SMM', title:'Комьюнити-менеджмент ВКонтакте',
+        location:'Удалённо', date:'Апрель 2026', duration:'2 месяца',
+        task:'Управление сообществом музыкального проекта ВКонтакте: ответы, модерация, конкурсы, анонсы мероприятий, рубрики вовлечения.',
+        tags:['ВКонтакте','Комьюнити','Модерация','Вовлечённость'], rating:5,
+        review:'Активность выросла в 4 раза. Ксения сформировала настоящее комьюнити.',
+        reviewer:'Музыкальный проект «Сибирь Live»',
+        files:['Отчёт по активности.pdf'],
+        photos:['assets/Photo/11.png','assets/Photo/12.png'] },
+      { id:3, category:'SMM', title:'Telegram финтех-стартапа',
+        location:'Удалённо', date:'Январь–Февраль 2026', duration:'2 месяца',
+        task:'Создание и ведение Telegram-канала: новости продукта, обучающие посты, кейсы пользователей, опросы.',
+        tags:['Telegram','Контент-план','Финтех','Копирайтинг'], rating:5,
+        review:'Подписчики выросли с 600 до 5 200 за два месяца. Ксения пишет просто о сложном.',
+        reviewer:'Финтех-стартап «Кошелёк+»',
+        files:['Статистика.pdf'],
+        photos:['assets/Photo/13.png','assets/Photo/1.webp'] },
+      { id:4, category:'SMM', title:'Таргет ВКонтакте для курса по SMM',
+        location:'Удалённо', date:'Март 2026', duration:'3 недели',
+        task:'Таргетированная реклама во ВКонтакте: аудитории, тексты объявлений, баннеры, аналитика, оптимизация.',
+        tags:['Таргет','ВКонтакте','SMM','Аналитика'], rating:5,
+        review:'Цена заявки составила 210 рублей при плановом KPI 350 рублей.',
+        reviewer:'Образовательный центр «Навыки»',
+        files:['Отчёт по рекламе.pdf'],
+        photos:['assets/Photo/11.png','assets/Photo/12.png'] }
+    ],
+    /* -- 16 · Роман Тимофеев · Видео -- */
+    16: [
+      { id:1, category:'Видео', title:'Аэросъёмка строительного объекта',
+        location:'Ханты-Мансийск', date:'Апрель 2026', duration:'2 дня',
+        task:'Аэросъёмка строящегося ЖК: облёт периметра, динамические планы, ракурсы для демонстрации масштаба. Монтаж в DaVinci Resolve.',
+        tags:['Drone','DaVinci','Аэросъёмка','Монтаж'], rating:5,
+        review:'Роман знает, как расставить точки съёмки для максимального эффекта. Застройщик использовал материал в рекламной кампании.',
+        reviewer:'Застройщик «ХМАО Строй»',
+        files:['Финальный ролик.mp4'],
+        photos:['assets/Photo/13.png','assets/Photo/1.webp','assets/Photo/11.png'] },
+      { id:2, category:'Видео', title:'Корпоративный ролик нефтяной компании',
+        location:'Ханты-Мансийск', date:'Март 2026', duration:'2 недели',
+        task:'Съёмка и монтаж корпоративного ролика: производственные мощности, интервью с руководством, аэросъёмка промышленной площадки.',
+        tags:['Premiere','Drone','Интервью','Цветокор'], rating:5,
+        review:'Ролик произвёл сильное впечатление на партнёрской конференции.',
+        reviewer:'ООО «СеверНефтьСервис»',
+        files:['Финальный ролик.mp4','Исходники.zip'],
+        photos:['assets/Photo/11.png','assets/Photo/12.png'] },
+      { id:3, category:'Видео', title:'Анимационный explainer для инвесторов',
+        location:'Удалённо', date:'Февраль 2026', duration:'10 дней',
+        task:'2-минутный анимационный ролик для презентации: motion-графика, инфографика с данными, анимация логотипа.',
+        tags:['DaVinci','Анимация','Motion Graphics','Инфографика'], rating:5,
+        review:'Инвесторы спрашивали, какая студия делала — приятно было назвать студента.',
+        reviewer:'Технологический стартап «ПоляА»',
+        files:['Explainer.mp4'],
+        photos:['assets/Photo/13.png','assets/Photo/1.webp'] },
+      { id:4, category:'Видео', title:'Монтаж обучающих видео для IT-курса',
+        location:'Удалённо', date:'Январь–Февраль 2026', duration:'6 недель',
+        task:'Монтаж 15 видеоуроков: склейка записей экрана, субтитры, анимированные переходы, финальный рендер.',
+        tags:['Premiere','DaVinci','Субтитры','Обучение'], rating:5,
+        review:'Студенты отмечают высокое качество монтажа в отзывах на курс.',
+        reviewer:'Онлайн-курс «Python от нуля»',
+        files:['Уроки — 15 шт.zip'],
+        photos:['assets/Photo/11.png','assets/Photo/12.png'] },
+      { id:5, category:'Видео', title:'Таймлапс строительства',
+        location:'Ханты-Мансийск', date:'Апрель–Май 2026', duration:'6 недель',
+        task:'Установка камеры на объекте и съёмка таймлапса: монтаж итогового ролика с музыкой, цветокоррекция, титры с датами.',
+        tags:['Drone','DaVinci','Таймлапс','Документальное видео'], rating:5,
+        review:'Более 180 000 просмотров суммарно в строительном Telegram-канале.',
+        reviewer:'ГК «СтройЮгра»',
+        files:['Таймлапс финал.mp4'],
+        photos:['assets/Photo/13.png','assets/Photo/1.webp'] }
+    ]
+  };
+  var ORDERS = ALL_ORDERS[_sid] || ALL_ORDERS[1];
+
+  var INITIAL = 3, STEP = 3;
+  var activeCategory = null;
+  var visibleCount = INITIAL;
+
+  var filterEl   = document.getElementById('ordersFilter');
+  var listEl     = document.getElementById('ordersList');
+  var showMoreEl = document.getElementById('ordersShowMore');
+  var collapseEl = document.getElementById('ordersCollapseAll');
+  var countEl    = document.getElementById('ordersCount');
+
+  function openLightbox(src) {
+    var lb = document.getElementById('artifactLightbox');
+    if (!lb) return;
+    lb.querySelector('.artifact-lb-img').src = src;
+    lb.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    var lb = document.getElementById('artifactLightbox');
+    if (!lb) return;
+    lb.hidden = true;
+    lb.querySelector('.artifact-lb-img').src = '';
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('artifact-lb-backdrop') || e.target.classList.contains('artifact-lb-close')) {
+      closeLightbox();
+    }
+  });
+  document.addEventListener('keydown', function(e) {
+    var lb = document.getElementById('artifactLightbox');
+    if (e.key === 'Escape' && lb && !lb.hidden) closeLightbox();
+  });
+
+  var PIN   = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#1153B5" stroke-width="1.6" aria-hidden="true"><path d="M10 18s6-5 6-10a6 6 0 1 0-12 0c0 5 6 10 6 10Z"/><circle cx="10" cy="8" r="2"/></svg>';
+  var CAL   = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#1153B5" stroke-width="1.6" aria-hidden="true"><rect x="3" y="4" width="14" height="13" rx="2"/><path d="M3 8h14M7 2v3M13 2v3"/></svg>';
+  var FILE  = '<svg width="18" height="20" viewBox="0 0 20 22" fill="none"><path d="M4 1h9l5 5v14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1Z" stroke="#1153B5" stroke-width="1.5"/><path d="M13 1v5h5" stroke="#1153B5" stroke-width="1.5"/></svg>';
+  var CHV   = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 15 L12 9 L18 15" stroke="#020327" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var ARR_L = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M9 2 L4 7 L9 12" stroke="#020327" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var ARR_R = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 2 L10 7 L5 12" stroke="#020327" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var XCLS  = '<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 2 L10 10 M10 2 L2 10" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>';
+
+  function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function stars(n) { var s=''; for(var i=0;i<n;i++) s+='<img src="assets/Star.svg" alt="" width="22" height="22"/>'; return s; }
+
+  function makeOrder(o, open) {
+    var photoBlocks = o.photos.map(function(p) {
+      return '<div class="profile-artifact" data-photo="' + esc(p) + '" style="background-image:url(\'' + p + '\');background-size:cover;background-position:center;"></div>';
+    }).join('');
+    return '<article class="profile-order' + (open ? ' is-open' : '') + '" data-category="' + esc(o.category) + '">'
+      + '<header class="profile-order-head">'
+      +   '<div class="profile-order-headline">'
+      +     '<h3 class="profile-order-title">' + esc(o.title) + '</h3>'
+      +     '<div class="profile-order-meta">'
+      +       '<span class="profile-order-meta-item">' + PIN + esc(o.location) + '</span>'
+      +       '<span class="profile-order-meta-item">' + CAL + esc(o.date) + '<span class="profile-meta-dot">·</span>' + esc(o.duration) + '</span>'
+      +     '</div>'
+      +   '</div>'
+      +   '<button type="button" class="profile-order-toggle" aria-label="' + (open ? 'Свернуть' : 'Развернуть') + '">' + CHV + '</button>'
+      + '</header>'
+      + '<div class="profile-order-tabs" role="tablist">'
+      +   '<button type="button" class="profile-tab is-active" data-tab="task">О задаче</button>'
+      +   '<button type="button" class="profile-tab" data-tab="review">Отзыв заказчика</button>'
+      +   '<button type="button" class="profile-tab" data-tab="artifacts">Артефакты</button>'
+      + '</div>'
+      + '<div class="profile-order-body">'
+      +   '<div class="profile-tab-panel is-active" data-panel="task">'
+      +     '<p>' + esc(o.task) + '</p>'
+      +     '<hr class="profile-order-sep"/>'
+      +     '<div class="profile-tags profile-tags--sm">'
+      +       o.tags.map(function(t) { return '<span class="profile-tag profile-tag--sm">' + esc(t) + '</span>'; }).join('')
+      +     '</div>'
+      +   '</div>'
+      +   '<div class="profile-tab-panel" data-panel="review">'
+      +     '<div class="profile-review-stars profile-review-stars--lg" aria-label="' + o.rating + ' из 5">' + stars(o.rating) + '</div>'
+      +     '<p class="profile-tab-review-text">' + esc(o.review) + '</p>'
+      +     '<hr class="profile-order-sep"/>'
+      +     '<div class="profile-review-author-row">'
+      +       '<span class="profile-review-author-logo" aria-hidden="true"></span>'
+      +       '<span class="profile-review-author-name">' + esc(o.reviewer) + '</span>'
+      +     '</div>'
+      +   '</div>'
+      +   '<div class="profile-tab-panel" data-panel="artifacts">'
+      +     '<div class="profile-artifacts-row">'
+      +       '<button type="button" class="profile-artifacts-arrow profile-artifacts-arrow--left" aria-label="Назад">' + ARR_L + '</button>'
+      +       photoBlocks
+      +       '<button type="button" class="profile-artifacts-arrow profile-artifacts-arrow--right" aria-label="Вперёд">' + ARR_R + '</button>'
+      +     '</div>'
+      +     '<ul class="profile-files">'
+      +       o.files.map(function(f) { return '<li><a class="profile-file-link" href="data:application/octet-stream," download="' + esc(f) + '"><span class="profile-file-icon" aria-hidden="true">' + FILE + '</span><span>' + esc(f) + '</span></a></li>'; }).join('')
+      +     '</ul>'
+      +   '</div>'
+      + '</div>'
+      + '</article>';
+  }
+
+  function filtered() {
+    return activeCategory ? ORDERS.filter(function(o) { return o.category === activeCategory; }) : ORDERS;
+  }
+
+  function bindOrder(order) {
+    order.querySelectorAll('.profile-artifact[data-photo]').forEach(function(art) {
+      art.addEventListener('click', function() { openLightbox(art.getAttribute('data-photo')); });
+    });
+    order.querySelector('.profile-order-head').addEventListener('click', function() {
+      order.classList.toggle('is-open');
+      var btn = order.querySelector('.profile-order-toggle');
+      if (btn) btn.setAttribute('aria-label', order.classList.contains('is-open') ? 'Свернуть' : 'Развернуть');
+    });
+    var tabs   = order.querySelectorAll('.profile-tab');
+    var panels = order.querySelectorAll('.profile-tab-panel');
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        tabs.forEach(function(t) { t.classList.remove('is-active'); });
+        panels.forEach(function(p) { p.classList.remove('is-active'); });
+        tab.classList.add('is-active');
+        var p = order.querySelector('.profile-tab-panel[data-panel="' + tab.getAttribute('data-tab') + '"]');
+        if (p) p.classList.add('is-active');
+      });
+    });
+  }
+
+  function render() {
+    var items = filtered();
+    var cats  = {};
+    ORDERS.forEach(function(o) { cats[o.category] = (cats[o.category] || 0) + 1; });
+    var filterHTML = '<button type="button" class="profile-pill' + (activeCategory ? '' : ' is-active') + '" data-cat="">Все</button>';
+    Object.keys(cats).forEach(function(cat) {
+      var active = activeCategory === cat;
+      filterHTML += '<button type="button" class="profile-pill' + (active ? ' profile-pill--filled' : '') + '" data-cat="' + esc(cat) + '">'
+        + '<span>' + esc(cat) + '</span><span class="profile-pill-num">' + cats[cat] + '</span>' + (active ? XCLS : '') + '</button>';
+    });
+    filterEl.innerHTML = filterHTML;
+    filterEl.querySelectorAll('[data-cat]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var cat = btn.getAttribute('data-cat');
+        activeCategory = (cat && cat !== activeCategory) ? cat : null;
+        visibleCount = INITIAL;
+        render();
+      });
+    });
+
+    var slice = items.slice(0, visibleCount);
+    listEl.innerHTML = slice.map(function(o, i) { return makeOrder(o, i === 0); }).join('');
+    listEl.querySelectorAll('.profile-order').forEach(bindOrder);
+
+    var remaining = items.length - visibleCount;
+    if (remaining > 0) {
+      showMoreEl.querySelector('.profile-more-label').textContent = 'Показать ещё ' + Math.min(STEP, remaining);
+      showMoreEl.hidden = false;
+    } else {
+      showMoreEl.hidden = true;
+    }
+    collapseEl.hidden = (visibleCount <= INITIAL);
+    if (countEl) countEl.textContent = ORDERS.length;
+  }
+
+  showMoreEl.addEventListener('click', function(e) {
+    e.preventDefault();
+    visibleCount = Math.min(visibleCount + STEP, filtered().length);
+    render();
+  });
+  collapseEl.addEventListener('click', function(e) {
+    e.preventDefault();
+    visibleCount = INITIAL;
+    render();
+  });
+
+  render();
+})();
+</script>
+<script>
+(function(){
+  var FEMALE_PLACEHOLDER = 'assets/avatar.png';
+  var MALE_PLACEHOLDER = 'assets/Студенты/i (2).webp';
+  var STUDENTS = [
+    { id:1,  photo:'assets/Студенты/девушки/image 354.png',  name:'Анна Петрова',        rate:4.9, deals:12, city:'Ханты-Мансийск', uni:'ЮГУ',   year:3, spec:'Дизайн',        skills:['Figma','UI/UX','Брендинг','Иллюстрация'],
+      services:[['Дизайн логотипа','от 5 000 ₽'],['Лендинг в Figma','от 12 000 ₽'],['Оформление соцсетей (10 постов)','4 000 ₽']] },
+    { id:2,  photo:'assets/Студенты/парни/image 343.png',  name:'Игорь Левин',          rate:4.8, deals:7,  city:'Тюмень',         uni:'ТюмГУ', year:2, spec:'IT-разработка',  skills:['Tilda','HTML/CSS','JavaScript','REST API'],
+      services:[['Лендинг на Tilda под ключ','от 15 000 ₽'],['Доработка существующего сайта','800 ₽ / час'],['Интеграция форм с CRM','3 000 ₽']] },
+    { id:3,  photo:'assets/Студенты/девушки/image 355.png',  name:'Мария Кузьмина',       rate:5.0, deals:18, city:'Екатеринбург',   uni:'УрФУ',  year:4, spec:'Видео',          skills:['Premiere Pro','After Effects','Съёмка','Цветокоррекция'],
+      services:[['Reels с монтажом','от 2 500 ₽'],['Свадебный/семейный ролик','от 12 000 ₽'],['Цветокоррекция готового видео','1 500 ₽ / мин']] },
+    { id:4,  photo:'assets/Студенты/парни/image 344.png',  name:'Артём Соколов',        rate:4.9, deals:23, city:'Ханты-Мансийск', uni:'ЮГУ',   year:1, spec:'Контент',        skills:['Копирайтинг','Контент-план','Сторителлинг','SEO-тексты'],
+      services:[['Контент-стратегия','от 8 000 ₽'],['Статья 5 000 знаков','2 500 ₽'],['Сценарий Reels','1 200 ₽']] },
+    { id:5,  photo:'assets/Студенты/девушки/image 356.png',  name:'Полина Шмидт',         rate:4.7, deals:5,  city:'Тюмень',         uni:'ТюмГУ', year:3, spec:'Дизайн',         skills:['Lightroom','Photoshop','Ретушь','Предметная съёмка'],
+      services:[['Предметная съёмка (5 кадров)','3 500 ₽'],['Портретная сессия','5 000 ₽'],['Ретушь 1 фото','400 ₽']] },
+    { id:6,  photo:'assets/Студенты/девушки/image 357.png',  name:'Алина Гордеева',       rate:5.0, deals:31, city:'Екатеринбург',   uni:'УрФУ',  year:4, spec:'IT-разработка',  skills:['Python','FastAPI','React','PostgreSQL'],
+      services:[['Telegram-бот под ключ','от 20 000 ₽'],['Веб-приложение MVP','от 60 000 ₽'],['Час разработки на Python','1 200 ₽ / час']] },
+    { id:7,  photo:'assets/Студенты/девушки/image 358.png',  name:'Дарья Яковлева',       rate:4.6, deals:4,  city:'Ханты-Мансийск', uni:'ЮГУ',   year:2, spec:'Контент',        skills:['Копирайтинг','SEO','Email-рассылки','Сторителлинг'],
+      services:[['SEO-статья 5 000 знаков','2 000 ₽'],['Email-цепочка из 5 писем','5 000 ₽'],['Тексты для лендинга','от 4 000 ₽']] },
+    { id:8,  photo:'assets/Студенты/девушки/image 359.png',  name:'Алина Русова',         rate:4.8, deals:9,  city:'Ханты-Мансийск', uni:'ЮГУ',   year:3, spec:'SMM',            skills:['Instagram','ВКонтакте','Telegram','Reels'],
+      services:[['Ведение Instagram (месяц)','18 000 ₽'],['Контент-план на 30 дней','5 000 ₽'],['Reels с монтажом','1 800 ₽']] },
+    { id:9,  photo:'assets/Студенты/девушки/image 360.png', name:'Елена Борисова',       rate:4.9, deals:15, city:'Тюмень',         uni:'ТюмГУ', year:4, spec:'Ивенты',         subTag:'Координация',    skills:['Организация','Координация','Логистика','Промо'],
+      services:[['Координация мероприятия (день)','8 000 ₽'],['Сопровождение делегации','4 500 ₽ / день'],['Промо-активность (4 часа)','2 500 ₽']] },
+    { id:10, photo:'assets/Студенты/парни/image 345.png', name:'Тимур Исаев',          rate:4.7, deals:3,  city:'Ханты-Мансийск', uni:'ЮГУ',   year:1, spec:'IT-разработка',  skills:['Python','Notion','Google Sheets','Автоматизация'],
+      services:[['Настройка Notion-системы','6 000 ₽'],['Автоматизация Google Sheets','4 000 ₽'],['Python-скрипт под задачу','от 3 000 ₽']] },
+    { id:11, photo:'assets/Студенты/девушки/image 361.png', name:'Олеся Чернова',        rate:4.9, deals:8,  city:'Екатеринбург',   uni:'УрФУ',  year:2, spec:'Дизайн',         skills:['Figma','Photoshop','Canva','Типографика'],
+      services:[['Презентация (20 слайдов)','7 000 ₽'],['Дизайн упаковки','от 8 000 ₽'],['Баннеры (комплект из 3)','2 500 ₽']] },
+    { id:12, photo:'assets/Студенты/парни/image 346.png', name:'Кирилл Захаров',       rate:5.0, deals:27, city:'Тюмень',         uni:'ТюмГУ', year:4, spec:'IT-разработка',  skills:['Flutter','Node.js','MongoDB','Docker'],
+      services:[['Мобильное приложение MVP','от 80 000 ₽'],['CRM-интеграция','от 25 000 ₽'],['Час разработки на Flutter','1 500 ₽ / час']] },
+    { id:13, photo:'assets/Студенты/девушки/image 362.png', name:'Соня Мельник',         rate:4.8, deals:6,  city:'Ханты-Мансийск', uni:'ЮГУ',   year:3, spec:'Контент',        skills:['Сценарии','Reels','Копирайтинг','Монтаж'],
+      services:[['Сценарий Reels','1 500 ₽'],['Сценарий ролика 1–3 мин','4 000 ₽'],['Тексты для соцсетей (10 постов)','3 500 ₽']] },
+    { id:14, photo:'assets/Студенты/парни/image 347.png', name:'Влад Орехов',          rate:4.6, deals:5,  city:'Екатеринбург',   uni:'УрФУ',  year:3, spec:'SMM',            skills:['Таргет','VK Реклама','Аналитика','A/B-тесты'],
+      services:[['Настройка таргета ВКонтакте','8 000 ₽'],['Ведение рекламы (месяц)','15 000 ₽'],['Аналитика кампании + отчёт','3 000 ₽']] },
+    { id:15, photo:'assets/Студенты/девушки/image 363.png', name:'Ксения Фомина', rate:4.9, deals:20, city:'Тюмень', uni:'ТюмГУ', year:2, spec:'SMM', skills:['ВКонтакте','Telegram','Контент-план','Таргет'],
+      services:[['Ведение ВК и Telegram (месяц)','16 000 ₽'],['Контент-план на 30 дней','4 500 ₽'],['Запуск таргета','6 000 ₽']] },
+    { id:16, photo:'assets/Студенты/парни/image 348.png', name:'Роман Тимофеев', rate:4.8, deals:14, city:'Ханты-Мансийск', uni:'ЮГУ', year:4, spec:'Видео', skills:['Premiere Pro','DaVinci Resolve','Аэросъёмка','Анимация'],
+      services:[['Корпоративный ролик (до 3 мин)','от 25 000 ₽'],['Аэросъёмка','6 000 ₽ / час'],['Монтаж готового материала','4 000 ₽ / мин']] },
+
+    { id:17, photo:'assets/Студенты/1 (13).png', name:'София Каримова',   rate:5.0, deals:22, city:'Ханты-Мансийск', uni:'ЮГУ',   year:3, spec:'Ивенты', subTag:'Навигация',     skills:['Навигация','Английский B2','Стрессоустойчивость','Гостеприимство'],
+      services:[['Навигация гостей (4 часа)','2 000 ₽'],['Навигация гостей (день)','4 500 ₽'],['Двуязычная навигация (английский)','5 500 ₽ / день']] },
+    { id:18, photo:'assets/Студенты/парни/image 349.png', name:'Даниил Ерохин',    rate:4.9, deals:31, city:'Ханты-Мансийск', uni:'ЮГУ',   year:4, spec:'Ивенты', subTag:'Сопровождение', skills:['Сопровождение','Деловой этикет','Английский B2','Координация'],
+      services:[['Сопровождение делегации (день)','6 000 ₽'],['VIP-сопровождение','8 000 ₽ / день'],['Бизнес-сопровождение с английским','9 500 ₽ / день']] },
+    { id:19, photo:'assets/Студенты/1 (15).png', name:'Алиса Воронина',   rate:5.0, deals:18, city:'Тюмень',         uni:'ТюмГУ', year:3, spec:'Ивенты', subTag:'Сопровождение', skills:['Встреча в аэропорту','Логистика','Английский B2','Авто'],
+      services:[['Встреча 1 гостя в аэропорту','2 500 ₽'],['Встреча группы + трансфер','от 4 500 ₽'],['Сопровождение между точками','1 200 ₽ / час']] },
+    { id:20, photo:'assets/Студенты/парни/image 350.png', name:'Артур Минибаев',   rate:4.9, deals:27, city:'Ханты-Мансийск', uni:'ЮГУ',   year:4, spec:'Ивенты', subTag:'Сопровождение', skills:['Атташе','Английский C1','Протокол','Дипломатия'],
+      services:[['Атташе на 1 день','12 000 ₽'],['Атташе на весь визит (3–5 дней)','9 000 ₽ / день'],['Протокольное сопровождение','7 000 ₽ / день']] },
+    { id:21, photo:'assets/Студенты/1 (17).png', name:'Виктория Лазарева',rate:4.8, deals:24, city:'Екатеринбург',   uni:'УрФУ',  year:3, spec:'Ивенты', subTag:'Фото-видео',    skills:['Репортаж','Фото','Mobile-video','Lightroom'],
+      services:[['Репортажная съёмка (4 часа)','6 000 ₽'],['Фотосъёмка дня мероприятия','12 000 ₽'],['Mobile-video с монтажом','4 000 ₽']] },
+    { id:22, photo:'assets/Студенты/1 (18).png', name:'Мирослава Гончар', rate:4.9, deals:14, city:'Ханты-Мансийск', uni:'ЮГУ',   year:2, spec:'Ивенты', subTag:'Хостес',        skills:['Хостес','Дресс-код','Этикет','Английский B1'],
+      services:[['Хостес 4 часа','2 200 ₽'],['Хостес полный день','4 800 ₽'],['VIP-хостес с английским','6 500 ₽ / день']] },
+    { id:23, photo:'assets/Студенты/парни/image 351.png', name:'Егор Шапошников',  rate:4.8, deals:19, city:'Тюмень',         uni:'ТюмГУ', year:4, spec:'Ивенты', subTag:'Координация',   skills:['Регистрация','CRM','Тайм-менеджмент','Командная работа'],
+      services:[['Дежурство на стойке регистрации (день)','3 800 ₽'],['Координация зоны регистрации','5 500 ₽ / день'],['Настройка и обучение CRM на площадке','4 000 ₽']] },
+    { id:24, photo:'assets/Студенты/1 (21).png', name:'Камилла Юсупова',  rate:5.0, deals:21, city:'Ханты-Мансийск', uni:'ЮГУ',   year:3, spec:'Ивенты', subTag:'Перевод',       skills:['Английский C1','Немецкий B2','Китайский HSK4','Перевод'],
+      services:[['Устный последовательный перевод (час)','1 800 ₽'],['Сопровождение с переводом (день)','9 000 ₽'],['Письменный перевод (1 800 знаков)','600 ₽']] },
+    { id:25, photo:'assets/Студенты/парни/image 352.png', name:'Никита Поляков',   rate:4.7, deals:16, city:'Екатеринбург',   uni:'УрФУ',  year:4, spec:'Ивенты', subTag:'Координация',   skills:['Управление командой','Брифинги','Excel','Тайм-менеджмент'],
+      services:[['Тимлид команды волонтёров (день)','6 500 ₽'],['Составление графика смен','3 500 ₽'],['Проведение брифинга команды','2 000 ₽']] },
+    { id:26, photo:'assets/Студенты/i (3).webp', name:'Алёна Беляева',    rate:4.9, deals:11, city:'Ханты-Мансийск', uni:'ЮГУ',   year:2, spec:'Ивенты', subTag:'Промо',         skills:['Промо','Активации','Сценарии','Энергия'],
+      services:[['Промо-смена 4 часа','1 800 ₽'],['Промо-смена день','3 800 ₽'],['Активация на стенде с подготовкой','5 000 ₽']] },
+    { id:27, photo:'assets/Студенты/парни/image 353.png', name:'Тимофей Лучкин',   rate:4.8, deals:13, city:'Тюмень',         uni:'ТюмГУ', year:3, spec:'Ивенты', subTag:'Координация',   skills:['Кейтеринг','Тайминг','Сервировка','Внимание к деталям'],
+      services:[['Координация кейтеринга (день)','5 500 ₽'],['Сервировка и расстановка','3 000 ₽'],['Тайминг банкета','4 000 ₽']] },
+    { id:28, photo:'assets/Студенты/student-education-concept-young-woman-with-books-notes-pen-standing-white-background_1258-217780.avif', name:'Юлия Терещенко',   rate:5.0, deals:25, city:'Ханты-Мансийск', uni:'ЮГУ',   year:4, spec:'Ивенты', subTag:'Backstage',     skills:['Backstage','Тех. сопровождение','Petlichka','Командная работа'],
+      services:[['Ассистент спикеров (день)','5 000 ₽'],['Backstage-координация','6 500 ₽ / день'],['Настройка петличек и презентаций','2 500 ₽']] },
+    { id:29, photo:'assets/Студенты/1 (14).png', name:'Эмиль Хайруллин',  rate:4.8, deals:17, city:'Екатеринбург',   uni:'УрФУ',  year:3, spec:'Ивенты', subTag:'Фото-видео',    skills:['Live-стримы','Reels','OBS','SMM'],
+      services:[['Прямая трансляция (4 часа)','7 000 ₽'],['SMM ивента в реальном времени','5 500 ₽ / день'],['Reels с монтажом в день съёмки','2 500 ₽']] },
+    { id:30, photo:'assets/student-photo.png', name:'Ангелина Сухова',  rate:4.9, deals:20, city:'Тюмень',         uni:'ТюмГУ', year:3, spec:'Ивенты', subTag:'Навигация',     skills:['Координация зон','Навигация','Гардероб','Внимательность'],
+      services:[['Координация гардероба (день)','3 200 ₽'],['Навигация по этажам','3 800 ₽ / день'],['Координация зон (3+ зоны)','5 500 ₽ / день']] },
+
+    { id:31, photo:'assets/Студенты/1 (16).png', name:'Илья Кравцов',      rate:4.9, deals:21, city:'Екатеринбург',   uni:'УрФУ',  year:4, spec:'Дизайн',        skills:['After Effects','Моушн','Lottie','Cinema 4D'],
+      services:[['Лого-анимация (5–10 сек)','6 000 ₽'],['Объяснительный ролик (до 60 сек)','от 18 000 ₽'],['Анимация Lottie для сайта','3 500 ₽ / штука']] },
+    { id:32, photo:'assets/avatar.png', name:'Виктория Журавлёва', rate:4.8, deals:18, city:'Тюмень',         uni:'ТюмГУ', year:3, spec:'IT-разработка', skills:['WordPress','Elementor','PHP','Хостинг'],
+      services:[['Сайт на WordPress под ключ','от 22 000 ₽'],['Перенос сайта на новый хостинг','3 500 ₽'],['Доработка темы / правки','700 ₽ / час']] },
+    { id:33, photo:'assets/Студенты/1 (19).png', name:'Михаил Степанов',   rate:4.7, deals:9,  city:'Ханты-Мансийск', uni:'ЮГУ',   year:4, spec:'Контент',        skills:['Adobe Audition','Reaper','Сценарии','Дикторская речь'],
+      services:[['Подкаст под ключ (1 выпуск)','от 7 000 ₽'],['Монтаж и шумоподавление (1 час материала)','3 500 ₽'],['Сценарий выпуска','2 500 ₽']] },
+    { id:34, photo:'assets/Студенты/девушки/image 354.png', name:'Дарина Гайнуллина',  rate:4.9, deals:17, city:'Тюмень',         uni:'ТюмГУ', year:3, spec:'SMM',            skills:['LinkedIn','B2B','Позиционирование','Копирайтинг'],
+      services:[['Упаковка LinkedIn-профиля','9 000 ₽'],['Ведение LinkedIn (месяц)','22 000 ₽'],['Стратегия выхода на B2B-сегмент','12 000 ₽']] },
+    { id:35, photo:'assets/Студенты/1 (22).png', name:'Святослав Бабенко',  rate:5.0, deals:23, city:'Екатеринбург',   uni:'УрФУ',  year:4, spec:'Видео',          skills:['DJI Mavic','Аэросъёмка','LUT','Lightroom'],
+      services:[['Аэросъёмка объекта недвижимости','от 8 000 ₽'],['Аэропанорама природы','5 000 ₽'],['Час съёмки с дрона','4 500 ₽ / час']] },
+    { id:36, photo:'assets/Студенты/девушки/image 355.png', name:'Ева Левченко',       rate:4.8, deals:14, city:'Екатеринбург',   uni:'УрФУ',  year:3, spec:'Дизайн',         skills:['3ds Max','Corona','Photoshop','Чертежи'],
+      services:[['3D-визуализация комнаты (1 ракурс)','от 6 000 ₽'],['Визуализация квартиры (4 ракурса)','от 22 000 ₽'],['Корректировки и доработки','1 500 ₽ / правка']] },
+    { id:37, photo:'assets/Студенты/i.webp', name:'Артём Бойко',        rate:4.9, deals:30, city:'Ханты-Мансийск', uni:'ЮГУ',   year:4, spec:'IT-разработка',  skills:['Selenium','Postman','TestRail','SQL'],
+      services:[['Ручное тестирование сайта','от 6 000 ₽'],['Чек-лист и тест-план','3 500 ₽'],['Автоматизация UI-тестов (час)','1 200 ₽ / час']] },
+    { id:38, photo:'assets/Студенты/девушки/image 356.png', name:'Полина Зимина',      rate:4.8, deals:7,  city:'Екатеринбург',   uni:'УрФУ',  year:2, spec:'Контент',        skills:['Сценарии','Стенд-ап','Юмор','Сторителлинг'],
+      services:[['Сценарий короткого ролика (до 60 сек)','1 800 ₽'],['Стенд-ап номер на 5 минут','5 000 ₽'],['Подача и репетиция (час)','1 500 ₽ / час']] },
+    { id:39, photo:'assets/Студенты/девушки/image 357.png', name:'Лидия Ким',          rate:5.0, deals:13, city:'Ханты-Мансийск', uni:'ЮГУ',   year:4, spec:'Ивенты', subTag:'Перевод', skills:['РЖЯ','Сурдоперевод','Инклюзия','Этика общения'],
+      services:[['Сурдоперевод выступления (час)','2 500 ₽'],['Сурдосопровождение мероприятия (день)','11 000 ₽'],['Аудит доступности мероприятия','4 500 ₽']] },
+    { id:40, photo:'assets/Студенты/i (1).webp', name:'Олег Туманов',       rate:4.8, deals:22, city:'Тюмень',         uni:'ТюмГУ', year:4, spec:'Ивенты', subTag:'Backstage', skills:['Звукорежиссура','Микширование','Behringer','Sennheiser'],
+      services:[['Sound-check и звук на мероприятии (день)','7 500 ₽'],['Установка и настройка микрофонов','3 000 ₽'],['Час звукорежиссёра','1 800 ₽ / час']] },
+
+    { id:41, photo:'assets/Студенты/smiling-young-male-student-eyeglasses-holding-book-isolated-white-background_663194-777.avif', name:'Глеб Шумилов',     rate:4.9, deals:14, city:'Ханты-Мансийск', uni:'ЮГУ',   year:4, spec:'Ивенты', subTag:'Ведущий',  skills:['Деловой ведущий','Импровизация','Сценарии','Дикторская речь'],
+      services:[['Ведение делового мероприятия (день)','15 000 ₽'],['Церемония награждения (2–3 часа)','9 000 ₽'],['Написание сценария ведения','4 500 ₽']] },
+    { id:42, photo:'assets/Студенты/девушки/image 358.png', name:'Алиса Семёнова',   rate:4.8, deals:11, city:'Тюмень',         uni:'ТюмГУ', year:3, spec:'Ивенты', subTag:'Ведущий',  skills:['Свадьбы','Юбилеи','Конкурсы','Микрофон'],
+      services:[['Ведение свадьбы (6 часов)','22 000 ₽'],['Ведение юбилея (4 часа)','14 000 ₽'],['Подбор конкурсов и сценария','3 500 ₽']] },
+    { id:43, photo:'assets/Студенты/парни/image 343.png', name:'Марк Литвинов',    rate:4.7, deals:9,  city:'Екатеринбург',   uni:'УрФУ',  year:4, spec:'Ивенты', subTag:'Ведущий',  skills:['Конференции','Английский C1','Тайминг','Деловой стиль'],
+      services:[['Ведение конференции (день)','18 000 ₽'],['Двуязычное ведение RU/EN (день)','24 000 ₽'],['Модерация панели (2 часа)','6 500 ₽']] },
+    { id:44, photo:'assets/Студенты/девушки/image 359.png', name:'Юлиана Бекетова',  rate:4.9, deals:16, city:'Ханты-Мансийск', uni:'ЮГУ',   year:3, spec:'Ивенты', subTag:'Аниматор', skills:['Детские праздники','Костюмы','Шоу мыльных пузырей','Аквагрим'],
+      services:[['Программа на детский праздник (1 час)','3 500 ₽'],['Программа на 2 часа + шоу','6 500 ₽'],['Аквагрим (час работы)','1 800 ₽ / час']] },
+    { id:45, photo:'assets/Студенты/парни/image 344.png', name:'Артемий Зорин',    rate:4.8, deals:10, city:'Тюмень',         uni:'ТюмГУ', year:2, spec:'Ивенты', subTag:'Аниматор', skills:['Супергерои','Сценарии','Игры','Анимация'],
+      services:[['Аниматор-супергерой (1 час)','3 000 ₽'],['Программа на 2 часа','5 500 ₽'],['Выезд на школьный праздник','7 000 ₽']] },
+    { id:46, photo:'assets/Студенты/девушки/image 360.png', name:'Виолетта Снегирёва', rate:4.7, deals:7,  city:'Екатеринбург',  uni:'УрФУ',  year:3, spec:'Ивенты', subTag:'Аниматор', skills:['Семейные праздники','Реквизит','Кукольный театр','Импровизация'],
+      services:[['Семейная программа (1,5 часа)','4 200 ₽'],['Кукольный мини-спектакль','3 500 ₽'],['Анимация на фестивале (день)','9 000 ₽']] }
+  ];
+
+  // Профили исполнителей из чата (employer-chat.html) — имена соответствуют нику в чате
+  var PROFILES = {
+    ksenia:   { name:'Ксения Романова',  photo:'assets/Студенты/1 (17).png', rate:5.0, deals:14, city:'Ханты-Мансийск', uni:'ЮГУ',   year:3, spec:'Ивенты',        skills:['Сопровождение гостей','Координация','Английский B2','Тайм-менеджмент'] },
+    marina_k: { name:'Марина Ковалёва',  photo:'assets/Студенты/1 (21).png', rate:4.9, deals:98, city:'Тюмень',         uni:'ТюмГУ', year:4, spec:'Ивенты',        skills:['Ивенты','Сопровождение','Логистика','Промо'] },
+    marina_f: { name:'Марина Фёдорова',  photo:'assets/Студенты/i (2).webp', rate:4.8, deals:16, city:'Екатеринбург',   uni:'УрФУ',  year:3, spec:'Ивенты',        skills:['Английский B2','Сопровождение гостей','Координация','Деловой этикет'] },
+    maria_s:  { name:'Мария Соловьёва',  photo:'assets/Студенты/i (3).webp', rate:5.0, deals:5,  city:'Ханты-Мансийск', uni:'ЮГУ',   year:2, spec:'Ивенты',        skills:['Сопровождение','Организация','Работа с гостями','Промо'] },
+    tatiana:  { name:'Татьяна Зяблова',  photo:'assets/Студенты/1 (13).png', rate:5.0, deals:19, city:'Тюмень',         uni:'ТюмГУ', year:4, spec:'Ивенты',        skills:['Координация гостевых зон','Форумы','Логистика','Управление командой'] },
+    anna_ch:  { name:'Анна Черных',      photo:'assets/Студенты/1 (16).png', rate:4.7, deals:17, city:'Ханты-Мансийск', uni:'ЮГУ',   year:3, spec:'Ивенты',        skills:['Сопровождение гостей','Промо','Координация','Коммуникации'] },
+    kirill:   { name:'Кирилл Захаров',   photo:'assets/Студенты/i (1).webp', rate:4.9, deals:42, city:'Тюмень',         uni:'ТюмГУ', year:4, spec:'IT-разработка',  skills:['Telegram Bot API','Node.js','Python','PostgreSQL'] },
+    alina:    { name:'Алина Рыбакова',   photo:'assets/Студенты/1 (20).png', rate:4.8, deals:31, city:'Екатеринбург',   uni:'УрФУ',  year:3, spec:'SMM',            skills:['Контент-план','Копирайтинг','Instagram','Telegram'] },
+    olesya:   { name:'Олеся Чернова',    photo:'assets/Студенты/i.webp',     rate:4.9, deals:24, city:'Екатеринбург',   uni:'УрФУ',  year:2, spec:'Дизайн',         skills:['Figma','Прототипирование','UI/UX','Вёрстка'] },
+    pavel:    { name:'Павел Дмитриев',   photo:'assets/Студенты/1 (22).png', rate:4.7, deals:11, city:'Ханты-Мансийск', uni:'ЮГУ',   year:3, spec:'Дизайн',         skills:['Figma','Лендинги','UI/UX','Адаптив'] },
+    darya:    { name:'Дарья Крылова',    photo:'assets/Студенты/i (3).webp', rate:5.0, deals:7,  city:'Тюмень',         uni:'ТюмГУ', year:4, spec:'Дизайн',         skills:['Образовательные лендинги','Figma','UX-копирайтинг','Прототипы'] },
+    maria_k2: { name:'Мария Кузьмина',   photo:'assets/Студенты/1 (15).png', rate:4.9, deals:98, city:'Екатеринбург',   uni:'УрФУ',  year:4, spec:'Видео',          skills:['Reels','Premiere Pro','Съёмка','Монтаж'] }
+  };
+
+  var params = new URLSearchParams(window.location.search);
+  var pid = params.get('pid');
+  var s = null;
+  if (pid && PROFILES[pid]) {
+    s = PROFILES[pid];
+  } else {
+    var id = parseInt(params.get('id'), 10);
+    if (!id) return;
+    for (var i = 0; i < STUDENTS.length; i++) { if (STUDENTS[i].id === id) { s = STUDENTS[i]; break; } }
+  }
+  if (!s) return;
+
+  document.title = s.name + ' — СтудРадар';
+
+  var photo = document.querySelector('.profile-hero-photo');
+  if (photo) { photo.src = s.photo; photo.alt = s.name; }
+
+  document.querySelectorAll('.profile-name').forEach(function(el){ el.textContent = s.name; });
+
+  var ratingNums = document.querySelectorAll('.profile-rating-num');
+  if (ratingNums[0]) ratingNums[0].textContent = s.rate;
+  if (ratingNums[1]) ratingNums[1].textContent = s.deals + ' задач';
+
+  var metaSpans = Array.from(document.querySelectorAll('.profile-meta span')).filter(function(el){
+    return !el.classList.contains('profile-meta-dot');
+  });
+  if (metaSpans[0]) metaSpans[0].textContent = s.city;
+  if (metaSpans[1]) metaSpans[1].textContent = s.uni;
+  if (metaSpans[2]) metaSpans[2].textContent = s.spec + ', ' + s.year + ' курс';
+
+  var tagsWrap = document.querySelector('.profile-tags');
+  if (tagsWrap) {
+    tagsWrap.innerHTML = s.skills.map(function(sk){
+      return '<span class="profile-tag">' + sk + '</span>';
+    }).join('');
+  }
+
+  if (s.services && s.services.length) {
+    var servicesWrap = document.querySelector('#services .profile-services');
+    if (servicesWrap) {
+      servicesWrap.innerHTML = s.services.map(function(it){
+        return '<li>' +
+          '<span class="profile-service-name">' + it[0] + '</span>' +
+          '<span class="profile-service-price">' + it[1].replace(/ /g, '&nbsp;') + '</span>' +
+        '</li>';
+      }).join('');
+    }
+  }
+})();
+</script>
+<script src="shared.js"></script>
+<script src="registration.js"></script>
+
+<div id="artifactLightbox" hidden>
+  <div class="artifact-lb-backdrop"></div>
+  <button class="artifact-lb-close" aria-label="Закрыть">&#215;</button>
+  <img class="artifact-lb-img" src="" alt="">
+</div>
+
+<script>
+(function(){
+  var proposeBtn = document.querySelector('.profile-cta .profile-btn--primary');
+  if (!proposeBtn) return;
+
+  function isLoggedIn() {
+    try {
+      var s = JSON.parse(localStorage.getItem('studradar_session') || 'null');
+      return !!(s && s.role);
+    } catch(e) { return false; }
+  }
+
+  proposeBtn.addEventListener('click', function() {
+    if (!isLoggedIn()) {
+      if (window.StudRadarReg) {
+        window.StudRadarReg.open({ role: 'employer', next: 'employer-new-task.html' });
+      }
+      return;
+    }
+    window.location.href = 'employer-new-task.html';
+  });
+})();
+</script>
+</body>
+</html>

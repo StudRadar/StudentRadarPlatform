@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Лента задач — СтудРадар</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&family=Manrope:wght@400;500;600;700&family=Tektur:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script src="mobile-drawer.js" defer></script>
+  <script src="city-picker.js" defer></script>
+</head>
+<body data-screen-label="03 Лента задач">
+<script>(function(){try{var s=localStorage.getItem('studradar_session');var h=s&&JSON.parse(s).role;document.write('<style>'+(h?'[data-header="guest"]{display:none!important}':'[data-header="logged-in"]{display:none!important}')+'</style>');}catch(e){document.write('<style>[data-header="logged-in"]{display:none!important}</style>');}})();</script>
+
+<!-- ===== GUEST HEADER ===== -->
+<header class="header" data-header="guest">
+  <a href="for-students.html" class="logo">
+    <span class="logo-mark"><img src="assets/logo.svg" alt=""/></span>СТУДРАДАР
+  </a>
+  <nav class="toggle" aria-label="Я ищу">
+    <span class="toggle-pill"></span>
+    <a href="for-students.html" class="active">Студентам</a>
+    <a href="employer.html">Заказчику</a>
+  </nav>
+  <nav class="menu">
+    <a href="catalog.html" style="color:var(--blue)">Задачи</a>
+    <a href="for-students.html#how">О платформе</a>
+    <a href="blog.html">Блог</a>
+  </nav>
+  <a href="#location" class="location" title="Сменить город">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.6a6.7 6.7 0 0 0-6.7 6.7c0 5 6.7 10.1 6.7 10.1s6.7-5.1 6.7-10.1A6.7 6.7 0 0 0 10 1.6Zm0 9.1a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8Z"/></svg>
+    Ханты-Мансийск
+  </a>
+  <div class="header-right">
+    <a href="catalog.html" class="btn-login">Найти подработку</a>
+    <a href="#login" class="link-login">Войти</a>
+    <a href="#menu" class="burger" aria-label="Меню">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="currentColor"><rect x="3" y="6" width="16" height="2" rx="1"/><rect x="3" y="14" width="16" height="2" rx="1"/></svg>
+    </a>
+  </div>
+</header>
+
+<!-- ===== HEADER (logged-in) ===== -->
+<header class="feed-header" data-header="logged-in" style="display:none">
+  <a href="for-students.html" class="feed-logo">
+    <span class="feed-logo-mark"><img src="assets/logo.svg" alt=""/></span>
+    <span class="feed-logo-text">СтудРадар</span>
+  </a>
+
+  <nav class="feed-nav" aria-label="Меню">
+    <a href="catalog.html" class="feed-chip is-active">
+      <svg class="feed-chip-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M15.625 2.5H12.7922C12.441 2.10681 12.0108 1.79223 11.5296 1.57684C11.0484 1.36145 10.5272 1.25011 10 1.25011C9.47282 1.25011 8.95158 1.36145 8.47041 1.57684C7.98924 1.79223 7.55899 2.10681 7.20781 2.5H4.375C4.04348 2.5 3.72554 2.6317 3.49112 2.86612C3.2567 3.10054 3.125 3.41848 3.125 3.75V16.875C3.125 17.2065 3.2567 17.5245 3.49112 17.7589C3.72554 17.9933 4.04348 18.125 4.375 18.125H15.625C15.9565 18.125 16.2745 17.9933 16.5089 17.7589C16.7433 17.5245 16.875 17.2065 16.875 16.875V3.75C16.875 3.41848 16.7433 3.10054 16.5089 2.86612C16.2745 2.6317 15.9565 2.5 15.625 2.5Z"/></svg>
+      <span>Лента задач</span>
+    </a>
+    <a href="profile.html" class="feed-chip">
+      <svg class="feed-chip-icon" width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,24a16,16,0,0,0-7.16,1.69l-88,44a16,16,0,0,0,0,28.62l88,44a16,16,0,0,0,14.32,0l88-44a16,16,0,0,0,0-28.62l-88-44A16,16,0,0,0,128,24Z"/><path d="M219.16,152.84,128,198.42,36.84,152.84a8,8,0,1,0-7.16,14.31l92,46a8,8,0,0,0,7.16,0l92-46a8,8,0,1,0-7.16-14.31Z"/><path d="M219.16,190.84,128,236.42,36.84,190.84a8,8,0,1,0-7.16,14.31l92,46a8,8,0,0,0,7.16,0l92-46a8,8,0,1,0-7.16-14.31Z"/></svg>
+      <span>Мой кабинет</span>
+    </a>
+  </nav>
+
+  <div class="feed-user-wrap">
+    <button type="button" class="feed-user" aria-haspopup="menu" aria-expanded="false" id="userBtn">
+      <span class="feed-user-avatar"></span>
+      <span class="feed-user-name"></span>
+      <svg class="feed-user-caret" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="feed-user-menu" role="menu" id="userMenu" hidden>
+      <a href="profile.html" role="menuitem">Профиль</a>
+      <a href="documents.html" role="menuitem">Документы</a>
+      <a href="settings.html" role="menuitem">Настройки</a>
+      <button type="button" class="feed-user-menu-logout" data-logout>Выйти</button>
+    </div>
+  </div>
+</header>
+
+<script src="shared.js"></script>
+
+<!-- ===== MAIN ===== -->
+<main class="feed-page">
+
+  <!-- Search -->
+  <div class="feed-search">
+    <input class="feed-search-input" type="search" placeholder="Какую задачу ищете?" aria-label="Поиск"/>
+    <button class="feed-search-btn" type="button" aria-label="Найти">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><circle cx="9.5" cy="9.5" r="6.5" stroke="currentColor" stroke-width="1.6"/><path d="M14.5 14.5l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+
+  <!-- Filters + sort -->
+  <div class="feed-filters-wrap">
+    <div class="feed-pills" role="tablist">
+      <button type="button" class="feed-pill is-active">Все</button>
+      <button type="button" class="feed-pill">Ивенты</button>
+      <button type="button" class="feed-pill">Дизайн</button>
+      <button type="button" class="feed-pill">IT-разработка</button>
+      <button type="button" class="feed-pill">Контент</button>
+      <button type="button" class="feed-pill">SMM</button>
+      <button type="button" class="feed-pill">Видео</button>
+      <button type="button" class="feed-pill">Перевод</button>
+      <button type="button" class="feed-pill">Репетиторство</button>
+    </div>
+    <div class="feed-sorts">
+      <div class="feed-sort-wrap">
+        <button type="button" class="feed-sort" id="sortBtn">
+          <span id="sortLabel">Сначала новые</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <ul class="feed-sort-menu" id="sortMenu" hidden role="listbox">
+          <li data-sort="new" class="is-active">Сначала новые</li>
+          <li data-sort="old">Сначала старые</li>
+          <li data-sort="price-hi">Высокая оплата</li>
+          <li data-sort="price-lo">Низкая оплата</li>
+        </ul>
+      </div>
+      <div class="feed-sort-wrap">
+        <button type="button" class="feed-sort" id="formatBtn">
+          <span id="formatLabel">Формат: любой</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <ul class="feed-sort-menu" id="formatMenu" hidden role="listbox">
+          <li data-format="any" class="is-active">Любой</li>
+          <li data-format="remote">Удалённо</li>
+          <li data-format="onsite">С выездом</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Count -->
+  <div class="feed-count" id="feed-count">Найдено <b id="feed-count-num">0</b> задач</div>
+
+  <!-- Cards grid -->
+  <div class="feed-grid" id="feed-grid"></div>
+
+  <div id="feed-empty" style="display:none; padding: 60px 0; text-align:center; color: rgba(2,3,39,0.4); font-size:16px;">Ничего не найдено — попробуйте изменить запрос или фильтр</div>
+</main>
+
+<script>
+(function(){
+  var isLoggedIn = false;
+  try { var _s = localStorage.getItem('studradar_session'); if (_s && JSON.parse(_s).role) isLoggedIn = true; } catch(e) {}
+
+  // ── Task data ──────────────────────────────────────────────
+  var TASKS = [
+    { id:1,  urgent:true,  tag:'Ивенты',        title:'Сопровождение гостей «IT-форума»',          people:'10 человек', loc:'Студенческая ул., 19', date:'12–13 июня 2026',   price:'2 000 ₽',  label:'За задание / чел', venue:'КВЦ «Югра-Экспо»',   rating:'4.9', responses:8,  time:'2 часа назад'   },
+    { id:2,  urgent:false, tag:'Контент',        title:'Перевод текстов с русского на китайский',    people:'1 человек',  loc:'Удалённо',             date:'До 15 июня',        price:'8 500 ₽',  label:'За проект',         venue:'ВЭД Экспорт',        rating:'4.8', responses:7,  time:'4 часа назад'   },
+    { id:3,  urgent:false, tag:'IT-разработка',  title:'Telegram-бот для сети кофеен',               people:'1 человек',  loc:'Удалённо',             date:'До 5 июня',         price:'25 000 ₽', label:'За проект',         venue:'Кофе Хаус',          rating:'4.8', responses:6,  time:'6 часов назад'  },
+    { id:4,  urgent:false, tag:'Контент',        title:'Тексты для лендинга кофейни',                people:'1 человек',  loc:'Удалённо',             date:'До 28 мая',         price:'4 000 ₽',  label:'За проект',         venue:'Кофе Хаус',          rating:'4.8', responses:3,  time:'8 часов назад'  },
+    { id:5,  urgent:true,  tag:'Ивенты',         title:'Лингвистическое сопровождение делегации',    people:'4 человека',  loc:'пр. Мира, 25',         date:'1 июня 2026',       price:'3 500 ₽',  label:'За смену / чел',    venue:'Технопарк Югры',     rating:'4.6', responses:21, time:'1 час назад'    },
+    { id:6,  urgent:false, tag:'SMM',            title:'Ведение Telegram-канала бренда',             people:'1 человек',  loc:'Удалённо',             date:'До 1 июня',         price:'12 500 ₽', label:'В месяц',           venue:'Ритейл Плюс',        rating:'4.5', responses:9,  time:'12 часов назад' },
+    { id:7,  urgent:false, tag:'Видео',          title:'Reels-серия для бренда одежды',              people:'1 человек',  loc:'Удалённо',             date:'До 28 мая',         price:'9 000 ₽',  label:'За проект',         venue:'Ритейл Плюс',        rating:'4.5', responses:14, time:'10 часов назад' },
+    { id:8,  urgent:false, tag:'IT-разработка',  title:'Вёрстка email-шаблонов для рассылки',        people:'1 человек',  loc:'Удалённо',             date:'До 20 мая',         price:'6 000 ₽',  label:'За проект',         venue:'Технопарк Югры',     rating:'4.6', responses:4,  time:'1 день назад'   },
+    { id:9,  urgent:false, tag:'Дизайн',         title:'Иллюстрации для детского журнала',           people:'1 человек',  loc:'Удалённо',             date:'До 10 июня',        price:'14 000 ₽', label:'За проект',         venue:'Медиа Юг',           rating:'4.9', responses:7,  time:'2 дня назад'    },
+    { id:10, urgent:false, tag:'SMM',            title:'Контент-план и посты для Instagram',         people:'1 человек',  loc:'Удалённо',             date:'До 25 мая',         price:'6 500 ₽',  label:'За месяц',          venue:'Ритейл Плюс',        rating:'4.5', responses:5,  time:'1 день назад'   },
+    { id:11, urgent:true,  tag:'Ивенты',         title:'Фотограф на студенческий форум',             people:'2 человека', loc:'ул. Чехова, 11',       date:'20 мая 2026',       price:'8 000 ₽',  label:'За мероприятие',    venue:'Технопарк Югры',     rating:'4.6', responses:11, time:'3 часа назад'   },
+    { id:12, urgent:false, tag:'Контент',        title:'Сценарий для YouTube-ролика компании',       people:'1 человек',  loc:'Удалённо',             date:'До 15 июня',        price:'5 000 ₽',  label:'За сценарий',       venue:'Медиа Юг',           rating:'4.9', responses:2,  time:'2 дня назад'    },
+    { id:13, urgent:false, tag:'Дизайн',         title:'Логотип и презентация для стартапа',         people:'1 человек',  loc:'Удалённо',             date:'До 1 июля',         price:'10 000 ₽', label:'За проект',         venue:'Стартап Лаб',        rating:'4.7', responses:16, time:'3 дня назад'    },
+    { id:14, urgent:false, tag:'IT-разработка',  title:'Парсер данных для аналитики продаж',         people:'1 человек',  loc:'Удалённо',             date:'До 30 мая',         price:'18 000 ₽', label:'За проект',         venue:'Стартап Лаб',        rating:'4.7', responses:8,  time:'2 дня назад'    },
+    { id:15, urgent:false, tag:'Видео',          title:'Монтаж обучающего курса (10 уроков)',         people:'1 человек',  loc:'Удалённо',             date:'До 20 июня',        price:'15 000 ₽', label:'За проект',         venue:'Медиа Юг',           rating:'4.9', responses:6,  time:'3 дня назад'    },
+    { id:16, urgent:false, tag:'Видео',          title:'Съёмка и монтаж корпоративного ролика',      people:'2 человека', loc:'ул. Строителей, 5',    date:'25 мая 2026',       price:'22 000 ₽', label:'За проект',         venue:'Технопарк Югры',     rating:'4.6', responses:10, time:'1 день назад'   },
+    { id:17, urgent:false, tag:'Перевод',        title:'Письменный перевод научной статьи (EN→RU)',  people:'1 человек',  loc:'Удалённо',             date:'До 12 июня',        price:'7 000 ₽',  label:'За проект',         venue:'НИИ Прикладных систем', rating:'4.8', responses:5,  time:'3 часа назад'   },
+    { id:18, urgent:true,  tag:'Перевод',        title:'Устный перевод на деловой встрече (RU↔EN)',   people:'1 человек',  loc:'пр. Мира, 25',         date:'4 июня 2026',       price:'5 500 ₽',  label:'За смену',          venue:'ВЭД Экспорт',        rating:'4.9', responses:9,  time:'40 минут назад' },
+    { id:19, urgent:false, tag:'Перевод',        title:'Перевод субтитров видеокурса (EN→RU)',       people:'1 человек',  loc:'Удалённо',             date:'До 25 июня',        price:'9 500 ₽',  label:'За проект',         venue:'Медиа Юг',           rating:'4.7', responses:6,  time:'5 часов назад'  },
+    { id:20, urgent:false, tag:'Перевод',        title:'Последовательный перевод для делегации',     people:'2 человека', loc:'ул. Строителей, 5',    date:'10 июня 2026',      price:'4 000 ₽',  label:'За смену / чел',    venue:'Технопарк Югры',     rating:'4.6', responses:12, time:'1 день назад'   },
+    { id:21, urgent:false, tag:'Репетиторство',  title:'Репетитор по математике (ОГЭ, 9 класс)',     people:'1 человек',  loc:'Удалённо',             date:'С 1 июня, 2 мес',   price:'800 ₽',    label:'За занятие',        venue:'Частный заказчик',   rating:'5.0', responses:4,  time:'2 часа назад'   },
+    { id:22, urgent:false, tag:'Репетиторство',  title:'Репетитор по английскому — разговорная практика', people:'1 человек', loc:'Удалённо',         date:'Гибкий график',     price:'900 ₽',    label:'За занятие',        venue:'Частный заказчик',   rating:'4.9', responses:8,  time:'6 часов назад'  },
+    { id:23, urgent:true,  tag:'Репетиторство',  title:'Репетитор по физике для подготовки к ЕГЭ',   people:'1 человек',  loc:'Удалённо',             date:'С 5 июня',          price:'1 100 ₽',  label:'За занятие',        venue:'Частный заказчик',   rating:'4.8', responses:7,  time:'3 часа назад'   },
+    { id:24, urgent:false, tag:'Репетиторство',  title:'Репетитор по программированию (Python)',     people:'1 человек',  loc:'Удалённо',             date:'Гибкий график',     price:'1 200 ₽',  label:'За занятие',        venue:'Частный заказчик',   rating:'4.9', responses:5,  time:'1 день назад'   },
+  ];
+
+  // ── SVG icons ─────────────────────────────────────────────
+  var I = {
+    people: '<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M5.00816 11.547C5.01028 11.5893 5.00377 11.6317 4.98901 11.6714C4.97426 11.7111 4.95158 11.7474 4.92235 11.7781C4.89312 11.8088 4.85794 11.8333 4.81897 11.8499C4.78 11.8666 4.73805 11.8752 4.69566 11.8751H1.24879C1.10772 11.8753 0.970732 11.8278 0.860095 11.7403C0.749458 11.6528 0.671682 11.5304 0.639413 11.3931C0.61932 11.2991 0.620246 11.2018 0.642125 11.1082C0.664005 11.0146 0.706296 10.927 0.765975 10.8517C1.31739 10.1204 2.04901 9.54464 2.88941 9.18059C2.52045 8.84418 2.23746 8.42427 2.06416 7.95601C1.89086 7.48775 1.83228 6.98478 1.89333 6.48922C1.95438 5.99367 2.13329 5.51996 2.41507 5.10776C2.69685 4.69557 3.07329 4.35689 3.51287 4.1201C3.95246 3.88332 4.44238 3.7553 4.94161 3.74679C5.44084 3.73828 5.93484 3.84952 6.38224 4.07118C6.82963 4.29285 7.21741 4.61849 7.51307 5.02084C7.80874 5.42319 8.00369 5.89053 8.0816 6.38371C8.09166 6.45003 8.07978 6.51783 8.04777 6.57678C8.01576 6.63572 7.96536 6.6826 7.90426 6.71028C7.03737 7.11104 6.30321 7.7514 5.7884 8.5558C5.27359 9.36021 4.99961 10.2951 4.99879 11.2501C4.99879 11.3501 4.99879 11.4486 5.00816 11.547ZM19.2269 10.8509C18.6768 10.1205 17.9468 9.54502 17.1082 9.18059C17.4771 8.84418 17.7601 8.42427 17.9334 7.95601C18.1067 7.48775 18.1653 6.98478 18.1042 6.48922C18.0432 5.99367 17.8643 5.51996 17.5825 5.10776C17.3007 4.69557 16.9243 4.35689 16.4847 4.1201C16.0451 3.88332 15.5552 3.7553 15.056 3.74679C14.5567 3.73828 14.0627 3.84952 13.6153 4.07118C13.1679 4.29285 12.7802 4.61849 12.4845 5.02084C12.1888 5.42319 11.9939 5.89053 11.916 6.38371C11.9059 6.45003 11.9178 6.51783 11.9498 6.57678C11.9818 6.63572 12.0322 6.6826 12.0933 6.71028C12.9602 7.11104 13.6944 7.7514 14.2092 8.5558C14.724 9.36021 14.998 10.2951 14.9988 11.2501C14.9988 11.3501 14.9988 11.4486 14.9894 11.547C14.9873 11.5893 14.9938 11.6317 15.0086 11.6714C15.0233 11.7111 15.046 11.7474 15.0752 11.7781C15.1045 11.8088 15.1396 11.8333 15.1786 11.8499C15.2176 11.8666 15.2595 11.8752 15.3019 11.8751H18.7488C18.8899 11.8753 19.0268 11.8278 19.1375 11.7403C19.2481 11.6528 19.3259 11.5304 19.3582 11.3931C19.3784 11.2989 19.3774 11.2014 19.3554 11.1077C19.3334 11.0139 19.2908 10.9262 19.2308 10.8509H19.2269ZM12.2738 14.2243C12.8961 13.7477 13.3534 13.0881 13.5815 12.3382C13.8095 11.5883 13.7969 10.7857 13.5453 10.0434C13.2936 9.30104 12.8157 8.65618 12.1787 8.19947C11.5417 7.74275 10.7775 7.49713 9.99371 7.49713C9.20987 7.49713 8.44574 7.74275 7.80871 8.19947C7.17167 8.65618 6.69377 9.30104 6.44216 10.0434C6.19055 10.7857 6.17789 11.5883 6.40595 12.3382C6.63401 13.0881 7.09133 13.7477 7.71363 14.2243C6.60936 14.7028 5.68728 15.5222 5.08238 16.5626C5.02752 16.6576 4.99864 16.7654 4.99865 16.8752C4.99865 16.9849 5.02754 17.0927 5.08242 17.1877C5.13729 17.2827 5.21621 17.3616 5.31124 17.4164C5.40627 17.4713 5.51407 17.5001 5.62379 17.5001H14.3738C14.4835 17.5001 14.5913 17.4713 14.6863 17.4164C14.7814 17.3616 14.8603 17.2827 14.9152 17.1877C14.97 17.0927 14.9989 16.9849 14.9989 16.8752C14.9989 16.7654 14.9701 16.6576 14.9152 16.5626C14.309 15.5215 13.3852 14.7021 12.2793 14.2243H12.2738Z"/></svg>',
+    pin:    '<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.5A6.5 6.5 0 0 0 3.5 8c0 4.875 6.5 10 6.5 10s6.5-5.125 6.5-10A6.5 6.5 0 0 0 10 1.5Zm0 8.5a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z"/></svg>',
+    cal:    '<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M16 3.5h-1.5V2.5a.75.75 0 1 0-1.5 0v1H6.5V2.5a.75.75 0 1 0-1.5 0v1H4A1.5 1.5 0 0 0 2.5 5v11A1.5 1.5 0 0 0 4 17.5h12a1.5 1.5 0 0 0 1.5-1.5V5A1.5 1.5 0 0 0 16 3.5Zm0 12.5H4V8h12v8Z"/></svg>',
+    heart:  '<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M14.5 3.25c-1.7 0-3.18.73-4.13 1.97-.93-1.24-2.42-1.97-4.12-1.97A5.13 5.13 0 0 0 1.25 8.38c0 5.75 7.45 9.87 8.35 10.36a.75.75 0 0 0 .73 0c.9-.49 8.42-4.61 8.42-10.36a5.13 5.13 0 0 0-5.13-5.13Z"/></svg>',
+    bolt:   '<svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M8 0L1.5 8h4l-1 6L11 6H7l1-6Z"/></svg>',
+    star:   '<svg width="14" height="14" viewBox="0 0 14 14" fill="#1153B5"><path d="M7 1l1.85 3.75L13 5.4l-3 2.92.7 4.13L7 10.5l-3.7 1.95L4 8.32 1 5.4l4.15-.65L7 1Z"/></svg>',
+  };
+
+  // ── Render ─────────────────────────────────────────────────
+  var grid  = document.getElementById('feed-grid');
+  var count = document.getElementById('feed-count-num');
+  var empty = document.getElementById('feed-empty');
+
+  function cardHTML(t) {
+    return '<article class="task-card" data-id="' + t.id + '">'
+      + '<header class="task-card-head">'
+      +   '<div class="task-card-badges">'
+      +     (t.urgent ? '<span class="task-badge task-badge--urgent">' + I.bolt + 'Срочно</span>' : '')
+      +     '<span class="task-tag task-tag--cat">' + t.tag + '</span>'
+      +   '</div>'
+      +   '<div class="task-card-icons"><button type="button" class="task-icon-btn" aria-label="В избранное">' + I.heart + '</button></div>'
+      + '</header>'
+      + '<div class="task-card-main">'
+      +   '<div class="task-card-desc">'
+      +     '<h3 class="task-card-title">' + t.title + '</h3>'
+      +     '<ul class="task-card-meta">'
+      +       '<li>' + I.people + t.people + '</li>'
+      +       '<li>' + I.pin    + t.loc    + '</li>'
+      +       '<li>' + I.cal    + t.date   + '</li>'
+      +     '</ul>'
+      +   '</div>'
+      +   '<div class="task-card-price"><span class="task-card-price-num">' + t.price + '</span><span class="task-card-price-label">' + t.label + '</span></div>'
+      + '</div>'
+      + '<footer class="task-card-foot">'
+      +   '<div class="task-card-venue"><span class="task-card-venue-img"></span>'
+      +     '<div class="task-card-venue-meta"><span class="task-card-venue-name">' + t.venue + '</span>'
+      +     '<span class="task-card-venue-rating">' + I.star + t.rating + '</span></div>'
+      +   '</div>'
+      +   '<div class="task-card-stats"><span class="task-card-responses"><span class="task-card-responses-num">' + t.responses + '</span> откликов</span><span class="task-card-time">' + t.time + '</span></div>'
+      + '</footer>'
+      + '</article>';
+  }
+
+  function render(list) {
+    if (list.length === 0) {
+      grid.innerHTML = '';
+      empty.style.display = '';
+    } else {
+      grid.innerHTML = list.map(cardHTML).join('');
+      empty.style.display = 'none';
+      grid.querySelectorAll('.task-icon-btn').forEach(function(btn) {
+        var card   = btn.closest('.task-card');
+        var taskId = parseInt(card && card.getAttribute('data-id'));
+        var t      = TASKS.filter(function(x){ return x.id === taskId; })[0];
+        // Restore saved state
+        if (t && window.StudRadar && StudRadar.isFavorite(taskId)) btn.classList.add('is-active');
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          if (!t) return;
+          // Animate
+          btn.classList.remove('fav-pop');
+          void btn.offsetWidth;
+          btn.classList.add('fav-pop');
+          btn.addEventListener('animationend', function(){ btn.classList.remove('fav-pop'); }, { once: true });
+          // Persist
+          if (window.StudRadar) {
+            var favObj = {
+              id: t.id, status: 'favorites', urgent: t.urgent,
+              category: t.tag, title: t.title,
+              people: parseInt(t.people) || 1,
+              address: t.loc, date: t.date,
+              price: parsePrice(t.price),
+              customer: t.venue, customerRating: parseFloat(t.rating) || 0,
+              messages: 0
+            };
+            var added = StudRadar.toggleFavorite(favObj);
+            btn.classList.toggle('is-active', added);
+          } else {
+            btn.classList.toggle('is-active');
+          }
+        });
+      });
+      grid.querySelectorAll('.task-card').forEach(function(card) {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', function(e) {
+          if (e.target.closest('.task-icon-btn')) return;
+          window.location.href = 'task.html?id=' + (card.dataset.id || '1');
+        });
+      });
+    }
+    count.textContent = list.length;
+  }
+
+  // ── Filter + search state ──────────────────────────────────
+  var activeTag    = 'Все';
+  var searchQ      = '';
+  var activeSort   = 'new';
+  var activeFormat = 'any';
+
+  function parsePrice(str) {
+    return parseInt((str || '').replace(/\D/g, ''), 10) || 0;
+  }
+
+  function filtered() {
+    var list = TASKS.filter(function(t) {
+      var tagOk    = activeTag === 'Все' || t.tag === activeTag;
+      var q        = searchQ.toLowerCase();
+      var searchOk = !q || (t.title + ' ' + t.tag + ' ' + t.venue + ' ' + t.loc).toLowerCase().indexOf(q) !== -1;
+      var fmtOk    = activeFormat === 'any' ||
+                     (activeFormat === 'remote' && t.loc === 'Удалённо') ||
+                     (activeFormat === 'onsite' && t.loc !== 'Удалённо');
+      return tagOk && searchOk && fmtOk;
+    });
+    list.sort(function(a, b) {
+      if (activeSort === 'new') {
+        var aEv = a.tag === 'Ивенты' ? 1 : 0;
+        var bEv = b.tag === 'Ивенты' ? 1 : 0;
+        if (bEv !== aEv) return bEv - aEv;
+        return b.id - a.id;
+      }
+      if (activeSort === 'old')      return a.id - b.id;
+      if (activeSort === 'price-hi') return parsePrice(b.price) - parsePrice(a.price);
+      if (activeSort === 'price-lo') return parsePrice(a.price) - parsePrice(b.price);
+      return 0;
+    });
+    return list;
+  }
+
+  function update() { render(filtered()); }
+
+  // ── Pills ──────────────────────────────────────────────────
+  document.querySelectorAll('.feed-pill').forEach(function(pill) {
+    pill.addEventListener('click', function() {
+      document.querySelectorAll('.feed-pill').forEach(function(p) { p.classList.remove('is-active'); });
+      pill.classList.add('is-active');
+      activeTag = pill.textContent.trim();
+      update();
+    });
+  });
+
+  // ── Search ─────────────────────────────────────────────────
+  var searchInput = document.querySelector('.feed-search-input');
+  var searchBtn   = document.querySelector('.feed-search-btn');
+  if (searchInput) {
+    searchInput.addEventListener('input', function() { searchQ = this.value.trim(); update(); });
+    searchInput.addEventListener('keydown', function(e) { if (e.key === 'Escape') { this.value = ''; searchQ = ''; update(); } });
+  }
+  if (searchBtn) {
+    searchBtn.addEventListener('click', function() { if (searchInput) { searchQ = searchInput.value.trim(); update(); } });
+  }
+
+  // ── Sort / format dropdowns ────────────────────────────────
+  var sortBtn    = document.getElementById('sortBtn');
+  var sortMenu   = document.getElementById('sortMenu');
+  var sortLabel  = document.getElementById('sortLabel');
+  var formatBtn  = document.getElementById('formatBtn');
+  var formatMenu = document.getElementById('formatMenu');
+  var formatLabel = document.getElementById('formatLabel');
+
+  function closeDropdowns() {
+    if (sortMenu)   sortMenu.hidden   = true;
+    if (formatMenu) formatMenu.hidden = true;
+  }
+
+  if (sortBtn && sortMenu) {
+    sortBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var wasOpen = !sortMenu.hidden;
+      closeDropdowns();
+      sortMenu.hidden = wasOpen;
+    });
+    sortMenu.querySelectorAll('li').forEach(function(li) {
+      li.addEventListener('click', function() {
+        activeSort = li.dataset.sort;
+        sortLabel.textContent = li.textContent;
+        sortMenu.querySelectorAll('li').forEach(function(x) { x.classList.remove('is-active'); });
+        li.classList.add('is-active');
+        sortMenu.hidden = true;
+        update();
+      });
+    });
+  }
+
+  if (formatBtn && formatMenu) {
+    formatBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var wasOpen = !formatMenu.hidden;
+      closeDropdowns();
+      formatMenu.hidden = wasOpen;
+    });
+    formatMenu.querySelectorAll('li').forEach(function(li) {
+      li.addEventListener('click', function() {
+        activeFormat = li.dataset.format;
+        formatLabel.textContent = 'Формат: ' + li.textContent.toLowerCase();
+        formatMenu.querySelectorAll('li').forEach(function(x) { x.classList.remove('is-active'); });
+        li.classList.add('is-active');
+        formatMenu.hidden = true;
+        update();
+      });
+    });
+  }
+
+  document.addEventListener('click', closeDropdowns);
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeDropdowns(); });
+
+  // ── Initial render ─────────────────────────────────────────
+  update();
+})();
+</script>
+<script src="registration.js"></script>
+<script>
+(function() {
+  var toggle = document.querySelector('.toggle');
+  if (!toggle) return;
+  var pill = toggle.querySelector('.toggle-pill');
+  if (!pill) return;
+  var links = Array.prototype.slice.call(toggle.querySelectorAll('a'));
+
+  function movePill(link, instant) {
+    var tRect = toggle.getBoundingClientRect();
+    var lRect = link.getBoundingClientRect();
+    var x = lRect.left - tRect.left - 6;
+    if (instant) { pill.style.transition = 'none'; pill.offsetHeight; }
+    pill.style.width = lRect.width + 'px';
+    pill.style.transform = 'translateX(' + x + 'px)';
+    if (instant) { pill.offsetHeight; pill.style.transition = ''; }
+  }
+
+  var active = toggle.querySelector('a.active');
+  if (active) movePill(active, true);
+
+  function updateLoginText(href) {}
+
+  window.addEventListener('resize', function() {
+    var a = toggle.querySelector('a.active');
+    if (a) movePill(a, true);
+  });
+
+  links.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      var href = this.getAttribute('href');
+      if (!href || href.startsWith('#')) return;
+      links.forEach(function(l) { l.classList.remove('active'); });
+      this.classList.add('active');
+      movePill(this, false);
+      if (href.indexOf('employer') !== -1) toggle.classList.add('orange');
+      else toggle.classList.remove('orange');
+      updateLoginText(href);
+      e.preventDefault();
+      setTimeout(function() { window.location.href = href; }, 440);
+    });
+  });
+})();
+</script>
+</body>
+</html>

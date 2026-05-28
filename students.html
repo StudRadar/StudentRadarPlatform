@@ -1,0 +1,959 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Каталог студентов — СтудРадар</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&family=Manrope:wght@400;500;600;700&family=Tektur:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script src="mobile-drawer.js" defer></script>
+  <script src="city-picker.js" defer></script>
+  <style>
+    /* ── Page layout ── */
+    .sp-main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 80px 60px;
+      gap: 50px;
+    }
+
+    /* ── Filter section ── */
+    .sp-filters {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    /* Search bar */
+    .sp-search {
+      width: 100%;
+      height: 66px;
+      background: #fff;
+      border-radius: 60px;
+      padding: 6px 6px 6px 28px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sp-search-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font: 400 17px/110% 'Manrope', sans-serif;
+      color: rgba(2,3,39,0.72);
+    }
+    .sp-search-input::placeholder { color: rgba(2,3,39,0.72); }
+    .sp-search-input:focus { color: #020327; }
+    .sp-search:focus-within { box-shadow: 0 0 0 2px #1153B5; }
+    .sp-search-btn {
+      width: 54px;
+      height: 54px;
+      flex-shrink: 0;
+      background: rgba(0,0,0,0.05);
+      border-radius: 80px;
+      border: 1px solid rgba(0,0,0,0.30);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .sp-search-btn:hover { background: rgba(0,0,0,0.10); }
+
+    /* Chips row */
+    .sp-chips-row {
+      width: 100%;
+      min-height: 68px;
+      background: #fff;
+      border-radius: 60px;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .sp-chips-left {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+    .sp-chip {
+      height: 48px;
+      padding: 0 18px;
+      border-radius: 80px;
+      background: rgba(2,3,39,0.04);
+      font: 500 15px/1 'Manrope', sans-serif;
+      color: rgba(2,3,39,0.72);
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.18s, color 0.18s;
+    }
+    .sp-chip:hover { background: rgba(2,3,39,0.08); }
+    .sp-chip.active { background: #DD5444; color: #fff; }
+    .sp-chips-right {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .sp-dropdown {
+      position: relative;
+      height: 48px;
+      border-radius: 80px;
+      background: rgba(2,3,39,0.04);
+      font: 500 15px/1 'Manrope', sans-serif;
+      color: #020327;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      transition: background 0.18s;
+    }
+    .sp-dropdown:hover { background: rgba(2,3,39,0.08); }
+    .sp-dropdown select {
+      width: 100%;
+      height: 100%;
+      padding: 0 36px 0 16px;
+      border: none;
+      outline: none;
+      background: transparent;
+      font: 500 15px/1 'Manrope', sans-serif;
+      color: #020327;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      text-overflow: ellipsis;
+    }
+    .sp-dropdown svg {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    /* ── Results ── */
+    .sp-results {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 19px;
+    }
+    .sp-count {
+      font: 400 16px/120% 'Manrope', sans-serif;
+      color: #020327;
+    }
+    .sp-count b { color: #1153B5; font-weight: 400; }
+
+    /* ── Grid ── */
+    .sp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    /* ── Card ── */
+    .sc2 {
+      background: #fff;
+      border-radius: 32px;
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.25s, transform 0.25s;
+    }
+    .sc2:hover {
+      box-shadow: 0 8px 40px rgba(2,3,39,0.10);
+      transform: translateY(-2px);
+    }
+    .sc2-upper {
+      display: flex;
+      gap: 28px;
+      padding: 10px 10px 0;
+    }
+    .sc2-avatar {
+      width: 113px;
+      height: 145px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #E8EBF8, #D0D5F0);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .sc2-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .sc2-info {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .sc2-name-block {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-top: 16px;
+    }
+    .sc2-name {
+      font: 600 20px/1.35 'Manrope', sans-serif;
+      color: #020327;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sc2-meta {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .sc2-rating, .sc2-reviews {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      font: 600 18px/114% 'Manrope', sans-serif;
+      color: rgba(2,3,39,0.72);
+    }
+    .sc2-info-bar {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      padding: 16px 0;
+      border-top: 1px solid rgba(2,3,39,0.06);
+      font: 500 14px/1 'Manrope', sans-serif;
+      color: #020327;
+      flex-wrap: wrap;
+    }
+    .sc2-sep { color: rgba(2,3,39,0.40); }
+
+    .sc2-lower {
+      padding: 14px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .sc2-title {
+      font: 700 18px/140% 'Tektur', sans-serif;
+      color: #020327;
+      text-transform: uppercase;
+      margin: 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .sc2-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .sc2-tag {
+      padding: 8px 12px;
+      border-radius: 25px;
+      background: rgba(2,3,39,0.06);
+      font: 500 14px/140% 'Manrope', sans-serif;
+      color: rgba(2,3,39,0.72);
+    }
+
+    /* ── Load more ── */
+    .sp-more-wrap {
+      display: flex;
+      justify-content: center;
+      margin-top: 4px;
+    }
+    .sp-more-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: none;
+      border: none;
+      color: #DD5444;
+      font: 500 16px/1 'Manrope', sans-serif;
+      cursor: pointer;
+      padding: 10px 0;
+      transition: opacity 0.18s;
+    }
+    .sp-more-btn:hover { opacity: 0.75; }
+
+    /* ── Empty ── */
+    .sp-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+    }
+    .sp-empty strong {
+      display: block;
+      font: 600 20px 'Manrope', sans-serif;
+      color: #020327;
+      margin-bottom: 8px;
+    }
+    .sp-empty span { color: rgba(2,3,39,0.4); font-size: 16px; }
+
+    /* ── Responsive ── */
+    @media (max-width: 1280px) {
+      .sp-main { padding: 32px 24px 60px; }
+      .sp-filters, .sp-results { width: 100%; }
+    }
+    @media (max-width: 900px) {
+      .sp-grid { grid-template-columns: 1fr; }
+      .sp-chips-left { flex-wrap: wrap; }
+    }
+    @media (max-width: 768px) {
+      .sp-chips-row {
+        border-radius: 20px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+      .sp-chips-left {
+        flex-wrap: nowrap !important;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 2px;
+      }
+      .sp-chips-left::-webkit-scrollbar { display: none; }
+      .sp-chip { flex-shrink: 0; }
+      .sp-chips-right {
+        flex-wrap: nowrap !important;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 2px;
+        width: 100%;
+      }
+      .sp-chips-right::-webkit-scrollbar { display: none; }
+      .sp-chips-right .sp-dropdown { flex-shrink: 0; min-width: auto; }
+      .sp-chips-right .sp-dropdown[style*="max-width"] { max-width: none !important; }
+      .sp-chips-right .sp-dropdown select { width: auto; padding-right: 32px; }
+    }
+
+    /* ===== Employer cabinet header (same as личный кабинет) ===== */
+    .ec-hd {
+      --ec-accent: #DD5444; --ec-ink: #020327;
+      --ec-fill-04: hsla(238, 90%, 8%, 0.04); --ec-fill-06: hsla(238, 90%, 8%, 0.06);
+      --ec-ink-72: hsla(238, 90%, 8%, 0.72);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 40px; background: #F2F2F2;
+    }
+    .ec-hd-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+    .ec-hd-logo img { width: 40px; height: 40px; flex-shrink: 0; }
+    .ec-hd-logo span {
+      font-family: 'Tektur', sans-serif; font-weight: 600; font-size: 19px;
+      color: #000; letter-spacing: 0; white-space: nowrap;
+    }
+    .ec-hd-menu { display: flex; align-items: center; gap: 10px; }
+    .ec-hd .ec-chip {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 24px; border-radius: 80px;
+      background: var(--ec-fill-04); color: var(--ec-ink);
+      font-size: 16px; font-weight: 400; text-decoration: none;
+      border: 0; cursor: pointer; transition: background .15s;
+    }
+    .ec-hd .ec-chip:hover { background: var(--ec-fill-06); }
+    .ec-hd .ec-chip svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .ec-hd .ec-chip .ic-accent { color: var(--ec-accent); }
+    .ec-hd-user { position: relative; }
+    .ec-user {
+      display: flex; align-items: center; gap: 16px;
+      padding: 4px 28px 4px 4px; border-radius: 100px;
+      background: #E9E9EB; border: 1px solid hsla(0, 0%, 0%, 0.30);
+      cursor: pointer;
+    }
+    .ec-user-ava {
+      width: 46px; height: 46px; border-radius: 50%; overflow: hidden;
+      flex-shrink: 0; background: #C9D4EA;
+      display: flex; align-items: center; justify-content: center; color: #1153B5;
+    }
+    .ec-user-ava svg { width: 60%; height: 60%; }
+    .ec-user-name { font-size: 16px; color: var(--ec-ink); white-space: nowrap; }
+    .ec-user > svg { width: 20px; height: 20px; color: var(--ec-ink-72); }
+    @media (max-width: 980px) {
+      .ec-hd { padding: 16px 20px; }
+      .ec-hd-menu .ec-chip span { display: none; }
+    }
+  </style>
+</head>
+<body class="orange-theme" data-screen-label="05 Каталог студентов">
+<script>(function(){try{var s=localStorage.getItem('studradar_session');var h=s&&JSON.parse(s).role;document.write('<style>'+(h?'[data-header="guest"]{display:none!important}':'[data-header="logged-in"]{display:none!important}')+'</style>');}catch(e){document.write('<style>[data-header="logged-in"]{display:none!important}</style>');}})();</script>
+
+<!-- ===== GUEST HEADER ===== -->
+<header class="header" data-header="guest">
+  <a href="index.html" class="logo">
+    <span class="logo-mark"><img src="assets/logo.svg" alt=""/></span>СТУДРАДАР
+  </a>
+
+  <nav class="toggle orange" aria-label="Я ищу">
+    <span class="toggle-pill"></span>
+    <a href="for-students.html">Студентам</a>
+    <a href="employer.html" class="active">Заказчику</a>
+  </nav>
+
+  <nav class="menu">
+    <a href="students.html" style="color:var(--orange)">Студенты</a>
+    <a href="for-students.html#how">О платформе</a>
+    <a href="blog.html">Блог</a>
+  </nav>
+
+  <a href="#location" class="location" title="Сменить город">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.6a6.7 6.7 0 0 0-6.7 6.7c0 5 6.7 10.1 6.7 10.1s6.7-5.1 6.7-10.1A6.7 6.7 0 0 0 10 1.6Zm0 9.1a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8Z"/></svg>
+    Ханты-Мансийск
+  </a>
+
+  <div class="header-right">
+    <a href="students.html" class="btn-login">Разместить задачу</a>
+    <a href="#login" class="link-login">Войти</a>
+    <a href="#menu" class="burger" aria-label="Меню">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="currentColor"><rect x="3" y="6" width="16" height="2" rx="1"/><rect x="3" y="14" width="16" height="2" rx="1"/></svg>
+    </a>
+  </div>
+</header>
+
+<!-- ===== LOGGED-IN HEADER (employer cabinet) ===== -->
+<header class="ec-hd" data-header="logged-in" style="display:none">
+  <a href="employer-dashboard.html" class="ec-hd-logo">
+    <img src="assets/logo.svg" alt=""/>
+    <span>СтудРадар</span>
+  </a>
+
+  <nav class="ec-hd-menu" aria-label="Меню">
+    <a href="students.html" class="ec-chip">
+      <svg class="ic-accent" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M64.12,147.8a4,4,0,0,1-4,4.2H16a8,8,0,0,1-7.8-6.17,8.35,8.35,0,0,1,1.62-6.93A67.79,67.79,0,0,1,37,117.51a40,40,0,1,1,66.46-35.8,3.94,3.94,0,0,1-2.27,4.18A64.08,64.08,0,0,0,64,144C64,145.27,64,146.54,64.12,147.8Zm182-8.91A67.76,67.76,0,0,0,219,117.51a40,40,0,1,0-66.46-35.8,3.94,3.94,0,0,0,2.27,4.18A64.08,64.08,0,0,1,192,144c0,1.27,0,2.54-.12,3.8a4,4,0,0,0,4,4.2H240a8,8,0,0,0,7.8-6.17A8.33,8.33,0,0,0,246.17,138.89Zm-89,43.18a48,48,0,1,0-58.37,0A72.13,72.13,0,0,0,65.07,212,8,8,0,0,0,72,224H184a8,8,0,0,0,6.93-12A72.15,72.15,0,0,0,157.16,182.07Z"/></svg>
+      <span>Студенты</span>
+    </a>
+    <a href="employer-dashboard.html" class="ec-chip">
+      <svg class="ic-accent" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,24a16,16,0,0,0-7.16,1.69l-88,44a16,16,0,0,0,0,28.62l88,44a16,16,0,0,0,14.32,0l88-44a16,16,0,0,0,0-28.62l-88-44A16,16,0,0,0,128,24Z"/><path d="M219.16,152.84,128,198.42,36.84,152.84a8,8,0,1,0-7.16,14.31l92,46a8,8,0,0,0,7.16,0l92-46a8,8,0,1,0-7.16-14.31Z"/><path d="M219.16,190.84,128,236.42,36.84,190.84a8,8,0,1,0-7.16,14.31l92,46a8,8,0,0,0,7.16,0l92-46a8,8,0,1,0-7.16-14.31Z"/></svg>
+      <span>Мой кабинет</span>
+    </a>  </nav>
+
+  <div class="ec-hd-user">
+    <div class="ec-notif" id="ecNotif">
+      <button type="button" class="ec-notif-btn" id="notifBtn" aria-label="Уведомления" aria-haspopup="menu" aria-expanded="false">
+        <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216Z"/></svg>
+        <span class="ec-notif-dot">3</span>
+      </button>
+      <div class="ec-notif-menu" id="notifMenu" role="menu" hidden>
+        <div class="ec-notif-head">Уведомления</div>
+        <a class="ec-notif-item unread" href="employer-dashboard.html#responses" role="menuitem">
+          <span class="ec-notif-ic"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M232.07,186.76a80,80,0,0,0-62.5-114.17A80,80,0,1,0,23.93,138.76l-7.27,24.71a16,16,0,0,0,19.87,19.87l24.71-7.27a80.39,80.39,0,0,0,25.18,7.35,80,80,0,0,0,108.94,40.45l24.71,7.27a16,16,0,0,0,19.87-19.86Z"/></svg></span>
+          <span class="ec-notif-tx"><span class="t">Новый отклик</span><span class="s">«Лендинг для образовательного курса» — 3 кандидата</span></span>
+        </a>
+        <a class="ec-notif-item unread" href="employer-chat.html?id=1" role="menuitem">
+          <span class="ec-notif-ic"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Z"/></svg></span>
+          <span class="ec-notif-tx"><span class="t">Сообщение от Ксении Р.</span><span class="s">по задаче «Сопровождение гостей форума «Югра-Экспо»»</span></span>
+        </a>
+        <a class="ec-notif-item" href="employer-finance.html" role="menuitem">
+          <span class="ec-notif-ic"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M216,64H56a8,8,0,0,1,0-16H192a8,8,0,0,0,0-16H56A24,24,0,0,0,32,56V184a24,24,0,0,0,24,24H216a16,16,0,0,0,16-16V80A16,16,0,0,0,216,64Zm-36,80a12,12,0,1,1,12-12A12,12,0,0,1,180,144Z"/></svg></span>
+          <span class="ec-notif-tx"><span class="t">Средства заморожены по эскроу</span><span class="s">5 175 ₽ по задаче «Югра-Экспо»</span></span>
+        </a>
+        <a class="ec-notif-all" href="chats.html">Все уведомления</a>
+      </div>
+    </div>
+    <button type="button" class="ec-user" id="userBtn" aria-haspopup="menu" aria-expanded="false">
+      <span class="ec-user-ava" aria-hidden="true">
+        <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128,24a104,104,0,1,0,104,104A104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"/></svg>
+      </span>
+      <span class="ec-user-name" id="ecUserName">Ивент-агентство Югра 360</span>
+      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="feed-user-menu" role="menu" id="userMenu" hidden>
+      <a href="employer-profile.html" role="menuitem">Профиль</a>
+      <a href="settings.html" role="menuitem">Настройки</a>
+      <button type="button" class="feed-user-menu-logout" data-logout>Выйти</button>
+    </div>
+  </div>
+</header>
+
+<script src="shared.js"></script>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="sp-main">
+
+  <!-- Filters -->
+  <div class="sp-filters">
+    <!-- Search -->
+    <div class="sp-search">
+      <input
+        class="sp-search-input"
+        id="sp-search"
+        type="text"
+        placeholder="Какого студента ищете?"
+        autocomplete="off"
+        aria-label="Поиск студентов"
+      />
+      <button class="sp-search-btn" type="button" aria-label="Найти">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M17.2 16.4L13.5 12.6c1.1-1.3 1.6-3 1.5-4.7-.1-1.7-.9-3.2-2.1-4.4C11.6 2.4 10 1.7 8.3 1.8 6.5 1.8 5 2.5 3.7 3.7 2.5 4.9 1.8 6.5 1.8 8.2c0 1.7.7 3.4 1.9 4.6 1.2 1.2 2.9 1.9 4.6 1.9 1.6.1 3.3-.4 4.6-1.5l3.8 3.8c.1.1.3.2.5.2s.3-.1.5-.2c.2-.3.2-.6-.5-1.6ZM3 8.4C3 5.4 5.4 3 8.4 3c3 0 5.4 2.4 5.4 5.4 0 3-2.4 5.4-5.4 5.4C5.4 13.8 3 11.4 3 8.4Z" fill="black" fill-opacity="0.5"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Category chips + dropdowns -->
+    <div class="sp-chips-row">
+      <div class="sp-chips-left" id="sp-chips">
+        <button class="sp-chip active" data-cat="Все">Все</button>
+        <button class="sp-chip" data-cat="Ивенты">Ивенты</button>
+        <button class="sp-chip" data-cat="Дизайн">Дизайн</button>
+        <button class="sp-chip" data-cat="IT-разработка">IT-разработка</button>
+        <button class="sp-chip" data-cat="Контент">Контент</button>
+        <button class="sp-chip" data-cat="SMM">SMM</button>
+        <button class="sp-chip" data-cat="Видео">Видео</button>
+      </div>
+      <div class="sp-chips-right">
+        <label class="sp-dropdown" aria-label="Сортировка">
+          <select id="sp-sort" aria-label="Сортировка">
+            <option value="rating">По рейтингу</option>
+            <option value="deals">По задачам</option>
+            <option value="name">По имени</option>
+          </select>
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M4.5 7 9 11.5 13.5 7" stroke="#020327" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </label>
+        <label class="sp-dropdown" aria-label="Курс">
+          <select id="sp-year" aria-label="Курс">
+            <option value="">Курс</option>
+            <option value="1">1 курс</option>
+            <option value="2">2 курс</option>
+            <option value="3">3 курс</option>
+            <option value="4">4 курс</option>
+          </select>
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M4.5 7 9 11.5 13.5 7" stroke="#020327" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </label>
+        <label class="sp-dropdown" aria-label="Учебное заведение" style="max-width:160px">
+          <select id="sp-uni" aria-label="Учебное заведение">
+            <option value="">ВУЗ</option>
+            <optgroup label="ХМАО-Югра">
+              <option value="ЮГУ">ЮГУ</option>
+              <option value="СурГУ">СурГУ</option>
+              <option value="НВГУ">НВГУ</option>
+              <option value="СПК">Сургутский политех</option>
+              <option value="ХМТПК">ХМ технолого-педагогич.</option>
+            </optgroup>
+            <optgroup label="Другие">
+              <option value="ТюмГУ">ТюмГУ</option>
+              <option value="УрФУ">УрФУ</option>
+            </optgroup>
+          </select>
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M4.5 7 9 11.5 13.5 7" stroke="#020327" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </label>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sp-subchips" id="sp-subchips" style="display:none; margin:18px 0 8px; padding:0 4px; flex-wrap:wrap; gap:10px;">
+    <button class="sp-chip sp-subchip active" data-sub="">Все направления</button>
+    <button class="sp-chip sp-subchip" data-sub="Сопровождение">Сопровождение</button>
+    <button class="sp-chip sp-subchip" data-sub="Навигация">Навигация</button>
+    <button class="sp-chip sp-subchip" data-sub="Хостес">Хостес</button>
+    <button class="sp-chip sp-subchip" data-sub="Фото-видео">Фото-видео</button>
+    <button class="sp-chip sp-subchip" data-sub="Координация">Координация</button>
+    <button class="sp-chip sp-subchip" data-sub="Перевод">Перевод</button>
+    <button class="sp-chip sp-subchip" data-sub="Промо">Промо</button>
+    <button class="sp-chip sp-subchip" data-sub="Backstage">Backstage</button>
+    <button class="sp-chip sp-subchip" data-sub="Ведущий">Ведущий</button>
+    <button class="sp-chip sp-subchip" data-sub="Аниматор">Аниматор</button>
+  </div>
+
+  <!-- Results -->
+  <div class="sp-results">
+    <div class="sp-count" id="sp-count"></div>
+    <div class="sp-grid" id="sp-grid"></div>
+    <div class="sp-more-wrap" id="sp-more-wrap" style="display:none">
+      <button class="sp-more-btn" id="sp-more-btn" type="button">
+        <span id="sp-more-label">Показать ещё</span>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M5 8l5 5 5-5" stroke="#DD5444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="index.html" class="logo">
+        <span class="logo-mark"><img src="assets/logo.svg" alt=""/></span>СТУДРАДАР
+      </a>
+      <p class="footer-tagline">Платформа для краткосрочной занятости студентов — задачи, портфолио, реальный опыт.</p>
+      <div class="footer-social">
+        <a href="#tg" title="Telegram">TG</a>
+        <a href="#vk" title="ВКонтакте">VK</a>
+      </div>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <div class="footer-col-title">Платформа</div>
+        <a href="#about">О нас</a>
+        <a href="blog.html">Блог</a>
+        <a href="#policy">Политика</a>
+        <a href="#terms">Соглашение</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Студентам</div>
+        <a href="catalog.html">Каталог задач</a>
+        <a href="for-students.html#tasks">Свежие задачи</a>
+        <a href="for-students.html#pro">PRO-подписка</a>
+        <a href="for-students.html#faq">Вопросы</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Бизнесу</div>
+        <a href="employer.html">Для работодателей</a>
+        <a href="students.html">Каталог студентов</a>
+        <a href="employer.html#pro">Business-тариф</a>
+        <a href="employer.html#faq">Вопросы</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Контакты</div>
+        <a href="#tg">Telegram-бот</a>
+        <a href="#vk">ВКонтакте</a>
+        <a href="mailto:hi@studradar.ru">hi@studradar.ru</a>
+        <a href="#location">Ханты-Мансийск</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 СтудРадар. Все права защищены.</span>
+    <span class="footer-city">
+      <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.6a6.7 6.7 0 0 0-6.7 6.7c0 5 6.7 10.1 6.7 10.1s6.7-5.1 6.7-10.1A6.7 6.7 0 0 0 10 1.6Zm0 9.1a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8Z"/></svg>
+      Ханты-Мансийск
+    </span>
+  </div>
+</footer>
+
+<script>
+/* ── Toggle pill ── */
+(function() {
+  var toggle = document.querySelector('.toggle');
+  if (!toggle) return;
+  var pill = toggle.querySelector('.toggle-pill');
+  if (!pill) return;
+  var links = Array.prototype.slice.call(toggle.querySelectorAll('a'));
+  function movePill(link, instant) {
+    var tRect = toggle.getBoundingClientRect();
+    var lRect = link.getBoundingClientRect();
+    var x = lRect.left - tRect.left - 6;
+    if (instant) { pill.style.transition = 'none'; pill.offsetHeight; }
+    pill.style.width = lRect.width + 'px';
+    pill.style.transform = 'translateX(' + x + 'px)';
+    if (instant) { pill.offsetHeight; pill.style.transition = ''; }
+  }
+  var active = toggle.querySelector('a.active');
+  if (active) movePill(active, true);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function() { var a = toggle.querySelector('a.active'); if (a) movePill(a, true); });
+  }
+
+  function updateLoginText(href) {}
+
+  window.addEventListener('resize', function() { var a = toggle.querySelector('a.active'); if (a) movePill(a, true); });
+  links.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      var href = this.getAttribute('href');
+      if (!href || href.startsWith('#')) return;
+      links.forEach(function(l) { l.classList.remove('active'); });
+      this.classList.add('active');
+      movePill(this, false);
+      updateLoginText(href);
+      e.preventDefault();
+      setTimeout(function() { window.location.href = href; }, 440);
+    });
+  });
+})();
+
+/* ── Header scroll hide ── */
+(function(){
+  var header = document.querySelector('.header');
+  if (!header) return;
+  var lastY = 0;
+  window.addEventListener('scroll', function(){
+    var y = window.scrollY;
+    if (y > lastY && y > 80) header.classList.add('header--hidden');
+    else header.classList.remove('header--hidden');
+    lastY = y;
+  }, {passive: true});
+})();
+
+/* ── Students data ── */
+var STUDENTS = [
+  { id:1,  photo:'assets/Студенты/девушки/image 354.png', name:'Анна Петрова',        uni:'ЮГУ',   year:3, spec:'Дизайн',        rate:4.9, deals:12, city:'Ханты-Мансийск', title:'Оформлю фирменный стиль и соцсети для вашего бренда',         skills:['Figma','UI/UX','Брендинг','Иллюстрация'] },
+  { id:2,  photo:'assets/Студенты/парни/image 343.png',   name:'Игорь Левин',          uni:'ТюмГУ', year:2, spec:'IT-разработка',  rate:4.8, deals:7,  city:'Тюмень',         title:'Соберу Tilda-лендинг или настрою интеграции',                 skills:['Tilda','HTML/CSS','JavaScript','REST API'] },
+  { id:3,  photo:'assets/Студенты/девушки/image 355.png', name:'Мария Кузьмина',       uni:'УрФУ',  year:4, spec:'Видео',          rate:5.0, deals:18, city:'Екатеринбург',   title:'Сниму и смонтирую Reels, YouTube-ролики и рекламу',           skills:['Premiere Pro','After Effects','Съёмка','Цветокоррекция'] },
+  { id:4,  photo:'assets/Студенты/парни/image 344.png',   name:'Артём Соколов',        uni:'ЮГУ',   year:1, spec:'Контент',        rate:4.9, deals:23, city:'Ханты-Мансийск', title:'Разработаю контент-стратегию и фирменный стиль для бренда',   skills:['Копирайтинг','Контент-план','Сторителлинг','SEO-тексты'] },
+  { id:5,  photo:'assets/Студенты/девушки/image 356.png', name:'Полина Шмидт',         uni:'ТюмГУ', year:3, spec:'Дизайн',         rate:4.7, deals:5,  city:'Тюмень',         title:'Сделаю предметную или портретную фотосессию и ретушь',        skills:['Lightroom','Photoshop','Ретушь','Предметная съёмка'] },
+  { id:6,  photo:'assets/Студенты/девушки/image 357.png', name:'Алина Гордеева',       uni:'УрФУ',  year:4, spec:'IT-разработка',  rate:5.0, deals:31, city:'Екатеринбург',   title:'Разработаю Telegram-бота или веб-приложение под ключ',        skills:['Python','FastAPI','React','PostgreSQL'] },
+  { id:7,  photo:'assets/Студенты/девушки/image 358.png', name:'Дарья Яковлева',       uni:'ЮГУ',   year:2, spec:'Контент',        rate:4.6, deals:4,  city:'Ханты-Мансийск', title:'Напишу тексты для сайта, лендинга или соцсетей',             skills:['Копирайтинг','SEO','Email-рассылки','Сторителлинг'] },
+  { id:8,  photo:'assets/Студенты/девушки/image 359.png', name:'Алина Русова',         uni:'ЮГУ',   year:3, spec:'SMM',            rate:4.8, deals:9,  city:'Ханты-Мансийск', title:'Веду аккаунты и выстраиваю контент-план под бизнес',          skills:['Instagram','ВКонтакте','Telegram','Reels'] },
+  { id:9,  photo:'assets/Студенты/девушки/image 360.png', name:'Елена Борисова',       uni:'ТюмГУ', year:4, spec:'Ивенты',         subTag:'Координация', rate:4.9, deals:15, city:'Тюмень', title:'Организую и проведу мероприятие любого формата', skills:['Организация','Координация','Логистика','Промо'] },
+  { id:10, photo:'assets/Студенты/парни/image 345.png',   name:'Тимур Исаев',          uni:'ЮГУ',   year:1, spec:'IT-разработка',  rate:4.7, deals:3,  city:'Ханты-Мансийск', title:'Настрою рабочие процессы и автоматизирую рутину в Notion',    skills:['Python','Notion','Google Sheets','Автоматизация'] },
+  { id:11, photo:'assets/Студенты/девушки/image 361.png', name:'Олеся Чернова',        uni:'УрФУ',  year:2, spec:'Дизайн',         rate:4.9, deals:8,  city:'Екатеринбург',   title:'Создам упаковку, презентацию или баннер для бренда',         skills:['Figma','Photoshop','Canva','Типографика'] },
+  { id:12, photo:'assets/Студенты/парни/image 346.png',   name:'Кирилл Захаров',       uni:'ТюмГУ', year:4, spec:'IT-разработка',  rate:5.0, deals:27, city:'Тюмень',         title:'Разработаю MVP мобильного приложения или CRM-интеграцию',    skills:['Flutter','Node.js','MongoDB','Docker'] },
+  { id:13, photo:'assets/Студенты/девушки/image 362.png', name:'Соня Мельник',         uni:'ЮГУ',   year:3, spec:'Контент',        rate:4.8, deals:6,  city:'Ханты-Мансийск', title:'Сделаю сценарий, сторис или текст для любой площадки',       skills:['Сценарии','Reels','Копирайтинг','Монтаж'] },
+  { id:14, photo:'assets/Студенты/парни/image 347.png',   name:'Влад Орехов',          uni:'УрФУ',  year:3, spec:'SMM',            rate:4.6, deals:5,  city:'Екатеринбург',   title:'Запущу таргетированную рекламу и проведу аналитику',         skills:['Таргет','VK Реклама','Аналитика','A/B-тесты'] },
+  { id:15, photo:'assets/Студенты/девушки/image 363.png', name:'Ксения Фомина',        uni:'ТюмГУ', year:2, spec:'SMM',            rate:4.9, deals:20, city:'Тюмень',         title:'Продвигаю бренды в ВКонтакте и Telegram с нуля',             skills:['ВКонтакте','Telegram','Контент-план','Таргет'] },
+  { id:16, photo:'assets/Студенты/парни/image 348.png',   name:'Роман Тимофеев',       uni:'ЮГУ',   year:4, spec:'Видео',          rate:4.8, deals:14, city:'Ханты-Мансийск', title:'Снимаю и монтирую корпоративное видео и рекламу',            skills:['Premiere Pro','DaVinci Resolve','Аэросъёмка','Анимация'] },
+
+  /* === Ивент-направление: расширенный пул === */
+  { id:17, photo:'assets/Студенты/1 (13).png', name:'София Каримова',  uni:'ЮГУ',   year:3, spec:'Ивенты', subTag:'Навигация',     rate:5.0, deals:22, city:'Ханты-Мансийск', title:'Навигация гостей на форумах: укажу путь, отвечу на вопросы', skills:['Навигация','Английский B2','Стрессоустойчивость','Гостеприимство'] },
+  { id:18, photo:'assets/Студенты/парни/image 349.png', name:'Даниил Ерохин',   uni:'ЮГУ',   year:4, spec:'Ивенты', subTag:'Сопровождение', rate:4.9, deals:31, city:'Ханты-Мансийск', title:'Сопровождение делегаций и VIP-гостей на мероприятиях',         skills:['Сопровождение','Деловой этикет','Английский B2','Координация'] },
+  { id:19, photo:'assets/Студенты/1 (15).png', name:'Алиса Воронина',  uni:'ТюмГУ', year:3, spec:'Ивенты', subTag:'Сопровождение', rate:5.0, deals:18, city:'Тюмень',         title:'Встреча гостей в аэропорту и трансфер до площадки',             skills:['Встреча в аэропорту','Логистика','Английский B2','Авто'] },
+  { id:20, photo:'assets/Студенты/парни/image 350.png', name:'Артур Минибаев',  uni:'ЮГУ',   year:4, spec:'Ивенты', subTag:'Сопровождение', rate:4.9, deals:27, city:'Ханты-Мансийск', title:'Атташе: личное сопровождение делегации весь визит',             skills:['Атташе','Английский C1','Протокол','Дипломатия'] },
+  { id:21, photo:'assets/Студенты/1 (17).png', name:'Виктория Лазарева', uni:'УрФУ', year:3, spec:'Ивенты', subTag:'Фото-видео',    rate:4.8, deals:24, city:'Екатеринбург',  title:'Фото-видео мероприятий: репортажная съёмка и быстрый монтаж',  skills:['Репортаж','Фото','Mobile-video','Lightroom'] },
+  { id:22, photo:'assets/Студенты/1 (18).png', name:'Мирослава Гончар', uni:'ЮГУ',  year:2, spec:'Ивенты', subTag:'Хостес',        rate:4.9, deals:14, city:'Ханты-Мансийск', title:'Хостес: дресс-код, улыбка, безупречный приём гостей',            skills:['Хостес','Дресс-код','Этикет','Английский B1'] },
+  { id:23, photo:'assets/Студенты/парни/image 351.png', name:'Егор Шапошников', uni:'ТюмГУ', year:4, spec:'Ивенты', subTag:'Координация',   rate:4.8, deals:19, city:'Тюмень',         title:'Координатор зоны регистрации: бейджи, очередь, CRM',           skills:['Регистрация','CRM','Тайм-менеджмент','Командная работа'] },
+  { id:24, photo:'assets/Студенты/1 (21).png', name:'Камилла Юсупова', uni:'ЮГУ',   year:3, spec:'Ивенты', subTag:'Перевод',       rate:5.0, deals:21, city:'Ханты-Мансийск', title:'Переводчик-сопровождение: английский, немецкий, китайский',     skills:['Английский C1','Немецкий B2','Китайский HSK4','Перевод'] },
+  { id:25, photo:'assets/Студенты/парни/image 352.png', name:'Никита Поляков',  uni:'УрФУ',  year:4, spec:'Ивенты', subTag:'Координация',   rate:4.7, deals:16, city:'Екатеринбург',   title:'Тимлид волонтёров: распределю смены и закрою все точки',         skills:['Управление командой','Брифинги','Excel','Тайм-менеджмент'] },
+  { id:26, photo:'assets/Студенты/i (3).webp', name:'Алёна Беляева',   uni:'ЮГУ',   year:2, spec:'Ивенты', subTag:'Промо',         rate:4.9, deals:11, city:'Ханты-Мансийск', title:'Промоутер с опытом: раздаточные материалы, активации на стенде', skills:['Промо','Активации','Сценарии','Энергия'] },
+  { id:27, photo:'assets/Студенты/парни/image 353.png', name:'Тимофей Лучкин',  uni:'ТюмГУ', year:3, spec:'Ивенты', subTag:'Координация',   rate:4.8, deals:13, city:'Тюмень',         title:'Кейтеринг-координатор: расстановка, тайминг, общение с шефом',   skills:['Кейтеринг','Тайминг','Сервировка','Внимание к деталям'] },
+  { id:28, photo:'assets/Студенты/student-education-concept-young-woman-with-books-notes-pen-standing-white-background_1258-217780.avif', name:'Юлия Терещенко',  uni:'ЮГУ',   year:4, spec:'Ивенты', subTag:'Backstage', rate:5.0, deals:25, city:'Ханты-Мансийск', title:'Ассистент спикеров: бэкстейдж, петлички, презентации', skills:['Backstage','Тех. сопровождение','Petlichka','Командная работа'] },
+  { id:29, photo:'assets/Студенты/1 (14).png', name:'Эмиль Хайруллин', uni:'УрФУ',  year:3, spec:'Ивенты', subTag:'Фото-видео',    rate:4.8, deals:17, city:'Екатеринбург',   title:'Прямые трансляции и SMM ивента в реальном времени',              skills:['Live-стримы','Reels','OBS','SMM'] },
+  { id:30, photo:'assets/student-photo.png',     name:'Ангелина Сухова', uni:'ТюмГУ', year:3, spec:'Ивенты', subTag:'Навигация',     rate:4.9, deals:20, city:'Тюмень',         title:'Координатор гардероба и навигации по этажам',                    skills:['Координация зон','Навигация','Гардероб','Внимательность'] },
+
+  /* === Доп. студенты разных направлений === */
+  { id:31, photo:'assets/Студенты/1 (16).png', name:'Илья Кравцов',     uni:'УрФУ',  year:4, spec:'Дизайн',        rate:4.9, deals:21, city:'Екатеринбург',   title:'Моушн-дизайн: лого-анимация, объяснительные ролики',           skills:['After Effects','Моушн','Lottie','Cinema 4D'] },
+  { id:32, photo:'assets/avatar.png',          name:'Виктория Журавлёва', uni:'ТюмГУ', year:3, spec:'IT-разработка', rate:4.8, deals:18, city:'Тюмень',        title:'Сайт на WordPress под ключ: установка, дизайн, наполнение',    skills:['WordPress','Elementor','PHP','Хостинг'] },
+  { id:33, photo:'assets/Студенты/1 (19).png', name:'Михаил Степанов',  uni:'ЮГУ',   year:4, spec:'Контент',        rate:4.7, deals:9,  city:'Ханты-Мансийск', title:'Подкасты под ключ: запись, монтаж, обложка, выгрузка',         skills:['Adobe Audition','Reaper','Сценарии','Дикторская речь'] },
+  { id:34, photo:'assets/Студенты/девушки/image 354.png', name:'Дарина Гайнуллина', uni:'ТюмГУ', year:3, spec:'SMM',            rate:4.9, deals:17, city:'Тюмень',        title:'LinkedIn для B2B-эксперта: позиционирование и контент',       skills:['LinkedIn','B2B','Позиционирование','Копирайтинг'] },
+  { id:35, photo:'assets/Студенты/1 (22).png', name:'Святослав Бабенко', uni:'УрФУ',  year:4, spec:'Видео',          rate:5.0, deals:23, city:'Екатеринбург',  title:'Аэросъёмка на дрон: объекты недвижимости и природа Урала',     skills:['DJI Mavic','Аэросъёмка','LUT','Lightroom'] },
+  { id:36, photo:'assets/Студенты/девушки/image 355.png', name:'Ева Левченко',      uni:'УрФУ',  year:3, spec:'Дизайн',         rate:4.8, deals:14, city:'Екатеринбург',  title:'3D-визуализация интерьеров: гостиные, кухни, офисы',           skills:['3ds Max','Corona','Photoshop','Чертежи'] },
+  { id:37, photo:'assets/Студенты/i.webp',     name:'Артём Бойко',       uni:'ЮГУ',   year:4, spec:'IT-разработка',  rate:4.9, deals:30, city:'Ханты-Мансийск', title:'QA-тестирование: ручное и автоматизация, чек-листы и отчёты', skills:['Selenium','Postman','TestRail','SQL'] },
+  { id:38, photo:'assets/Студенты/девушки/image 356.png', name:'Полина Зимина',     uni:'УрФУ',  year:2, spec:'Контент',        rate:4.8, deals:7,  city:'Екатеринбург',  title:'Сценарии для коротких роликов и stand-up номеров',             skills:['Сценарии','Стенд-ап','Юмор','Сторителлинг'] },
+  { id:39, photo:'assets/Студенты/девушки/image 357.png', name:'Лидия Ким',         uni:'ЮГУ',   year:4, spec:'Ивенты', subTag:'Перевод', rate:5.0, deals:13, city:'Ханты-Мансийск', title:'Сурдоперевод и доступность мероприятий для глухих гостей',     skills:['РЖЯ','Сурдоперевод','Инклюзия','Этика общения'] },
+  { id:40, photo:'assets/Студенты/i (1).webp', name:'Олег Туманов',      uni:'ТюмГУ', year:4, spec:'Ивенты', subTag:'Backstage', rate:4.8, deals:22, city:'Тюмень',     title:'Звук и техника на ивентах: микрофоны, микшеры, sound-check',   skills:['Звукорежиссура','Микширование','Behringer','Sennheiser'] },
+
+  /* === Ведущие и аниматоры === */
+  { id:41, photo:'assets/Студенты/smiling-young-male-student-eyeglasses-holding-book-isolated-white-background_663194-777.avif', name:'Глеб Шумилов', uni:'ЮГУ', year:4, spec:'Ивенты', subTag:'Ведущий', rate:4.9, deals:14, city:'Ханты-Мансийск', title:'Ведущий деловых мероприятий и церемоний награждения', skills:['Деловой ведущий','Импровизация','Сценарии','Дикторская речь'] },
+  { id:42, photo:'assets/Студенты/девушки/image 358.png', name:'Алиса Семёнова',    uni:'ТюмГУ', year:3, spec:'Ивенты', subTag:'Ведущий',  rate:4.8, deals:11, city:'Тюмень',         title:'Ведущая свадеб и юбилеев: тёплая подача и живой контакт с залом', skills:['Свадьбы','Юбилеи','Конкурсы','Микрофон'] },
+  { id:43, photo:'assets/Студенты/парни/image 343.png', name:'Марк Литвинов',     uni:'УрФУ',  year:4, spec:'Ивенты', subTag:'Ведущий',  rate:4.7, deals:9,  city:'Екатеринбург',   title:'Ведущий конференций и форумов на русском и английском',         skills:['Конференции','Английский C1','Тайминг','Деловой стиль'] },
+  { id:44, photo:'assets/Студенты/девушки/image 359.png', name:'Юлиана Бекетова',   uni:'ЮГУ',   year:3, spec:'Ивенты', subTag:'Аниматор', rate:4.9, deals:16, city:'Ханты-Мансийск', title:'Аниматор детских праздников: герои, конкурсы, шоу мыльных пузырей', skills:['Детские праздники','Костюмы','Шоу мыльных пузырей','Аквагрим'] },
+  { id:45, photo:'assets/Студенты/парни/image 344.png', name:'Артемий Зорин',     uni:'ТюмГУ', year:2, spec:'Ивенты', subTag:'Аниматор', rate:4.8, deals:10, city:'Тюмень',         title:'Аниматор-супергерой: дни рождения, школы, корпоративы',         skills:['Супергерои','Сценарии','Игры','Анимация'] },
+  { id:46, photo:'assets/Студенты/девушки/image 360.png', name:'Виолетта Снегирёва', uni:'УрФУ', year:3, spec:'Ивенты', subTag:'Аниматор', rate:4.7, deals:7,  city:'Екатеринбург',   title:'Анимация на семейных праздниках и фестивалях',                  skills:['Семейные праздники','Реквизит','Кукольный театр','Импровизация'] },
+];
+
+var INIT_COUNT = 12;
+var visibleCount = INIT_COUNT;
+var activeCat   = 'Все';
+var activeSub   = '';
+var activeSort  = 'rating';
+var activeYear  = '';
+var activeUni   = '';
+var searchQuery = '';
+
+/* Pluralise */
+function pluralSt(n) {
+  var m = n % 100, r = n % 10;
+  if (m >= 11 && m <= 19) return 'студентов';
+  if (r === 1) return 'студент';
+  if (r >= 2 && r <= 4) return 'студента';
+  return 'студентов';
+}
+function pluralTasks(n) {
+  var m = n % 100, r = n % 10;
+  if (m >= 11 && m <= 19) return 'задач';
+  if (r === 1) return 'задача';
+  if (r >= 2 && r <= 4) return 'задачи';
+  return 'задач';
+}
+
+function filtered() {
+  return STUDENTS.filter(function(s) {
+    var matchCat  = activeCat === 'Все' || s.spec === activeCat;
+    var matchSub  = activeCat !== 'Ивенты' || !activeSub || s.subTag === activeSub;
+    if (!matchSub) return false;
+    var matchYear = !activeYear || String(s.year) === activeYear;
+    var matchUni  = !activeUni || s.uni === activeUni;
+    if (!matchUni) return false;
+    var q = searchQuery;
+    var matchQ = !q ||
+      s.name.toLowerCase().indexOf(q) !== -1 ||
+      s.spec.toLowerCase().indexOf(q) !== -1 ||
+      s.skills.join(' ').toLowerCase().indexOf(q) !== -1 ||
+      s.uni.toLowerCase().indexOf(q) !== -1;
+    return matchCat && matchYear && matchQ;
+  }).sort(function(a, b) {
+    if (activeCat === 'Все') {
+      var aEv = a.spec === 'Ивенты' ? 0 : 1;
+      var bEv = b.spec === 'Ивенты' ? 0 : 1;
+      if (aEv !== bEv) return aEv - bEv;
+    }
+    if (activeSort === 'rating') return b.rate - a.rate || b.deals - a.deals;
+    if (activeSort === 'deals')  return b.deals - a.deals;
+    return a.name.localeCompare(b.name, 'ru');
+  });
+}
+
+/* SVG icons */
+var STAR_SVG = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M18.3203 8.93578L14.7969 12.0108L15.8524 16.5889C15.9082 16.8282 15.8923 17.0787 15.8065 17.309C15.7208 17.5394 15.5691 17.7393 15.3703 17.8839C15.1716 18.0284 14.9346 18.1112 14.6891 18.1218C14.4436 18.1324 14.2004 18.0704 13.9899 17.9436L9.99689 15.5217L6.01252 17.9436C5.80202 18.0704 5.55881 18.1324 5.31328 18.1218C5.06775 18.1112 4.83079 18.0284 4.63204 17.8839C4.4333 17.7393 4.28157 17.5394 4.19584 17.309C4.1101 17.0787 4.09416 16.8282 4.15002 16.5889L5.20392 12.0155L1.6797 8.93578C1.49331 8.77502 1.35852 8.5628 1.29225 8.32574C1.22598 8.08868 1.23117 7.83733 1.30718 7.60321C1.38319 7.36909 1.52663 7.16262 1.71952 7.0097C1.9124 6.85678 2.14614 6.76421 2.39142 6.74359L7.03674 6.34125L8.85002 2.01625C8.94471 1.78931 9.10443 1.59546 9.30907 1.45911C9.51371 1.32276 9.75411 1.25 10 1.25C10.2459 1.25 10.4863 1.32276 10.691 1.45911C10.8956 1.59546 11.0553 1.78931 11.15 2.01625L12.9688 6.34125L17.6125 6.74359C17.8578 6.76421 18.0915 6.85678 18.2844 7.0097C18.4773 7.16262 18.6207 7.36909 18.6968 7.60321C18.7728 7.83733 18.778 8.08868 18.7117 8.32574C18.6454 8.5628 18.5106 8.77502 18.3242 8.93578H18.3203Z" fill="#1153B5"/></svg>';
+var CHAT_SVG = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10.3125 1.875C8.24119 1.87727 6.25538 2.70111 4.79074 4.16574C3.32611 5.63038 2.50227 7.61619 2.5 9.6875V16.2758C2.50041 16.6003 2.62953 16.9115 2.85902 17.141C3.08852 17.3705 3.39966 17.4996 3.72422 17.5H10.3125C12.3845 17.5 14.3716 16.6769 15.8368 15.2118C17.3019 13.7466 18.125 11.7595 18.125 9.6875C18.125 7.6155 17.3019 5.62836 15.8368 4.16323C14.3716 2.6981 12.3845 1.875 10.3125 1.875ZM6.875 10.9375C6.68958 10.9375 6.50832 10.8825 6.35415 10.7795C6.19998 10.6765 6.07982 10.5301 6.00886 10.3588C5.93791 10.1875 5.91934 9.99896 5.95551 9.8171C5.99169 9.63525 6.08098 9.4682 6.21209 9.33709C6.3432 9.20598 6.51025 9.11669 6.6921 9.08051C6.87396 9.04434 7.06246 9.06291 7.23377 9.13386C7.40507 9.20482 7.55149 9.32498 7.6545 9.47915C7.75752 9.63332 7.8125 9.81458 7.8125 10C7.8125 10.2486 7.71373 10.4871 7.53791 10.6629C7.3621 10.8387 7.12364 10.9375 6.875 10.9375ZM10.3125 10.9375C10.1271 10.9375 9.94582 10.8825 9.79165 10.7795C9.63748 10.6765 9.51732 10.5301 9.44636 10.3588C9.37541 10.1875 9.35684 9.99896 9.39301 9.8171C9.42919 9.63525 9.51848 9.4682 9.64959 9.33709C9.7807 9.20598 9.94775 9.11669 10.1296 9.08051C10.3115 9.04434 10.5 9.06291 10.6713 9.13386C10.8426 9.20482 10.989 9.32498 11.092 9.47915C11.195 9.63332 11.25 9.81458 11.25 10C11.25 10.2486 11.1512 10.4871 10.9754 10.6629C10.7996 10.8387 10.5611 10.9375 10.3125 10.9375ZM13.75 10.9375C13.5646 10.9375 13.3833 10.8825 13.2292 10.7795C13.075 10.6765 12.9548 10.5301 12.8839 10.3588C12.8129 10.1875 12.7943 9.99896 12.8305 9.8171C12.8667 9.63525 12.956 9.4682 13.0871 9.33709C13.2182 9.20598 13.3852 9.11669 13.5671 9.08051C13.749 9.04434 13.9375 9.06291 14.1088 9.13386C14.2801 9.20482 14.4265 9.32498 14.5295 9.47915C14.6325 9.63332 14.6875 9.81458 14.6875 10C14.6875 10.2486 14.5887 10.4871 14.4129 10.6629C14.2371 10.8387 13.9986 10.9375 13.75 10.9375Z" fill="#1153B5"/></svg>';
+
+function renderCard(s) {
+  var skillList = s.skills.slice(0, 3);
+  if (s.subTag) skillList = [s.subTag].concat(skillList.slice(0, 2));
+  var tags = skillList.map(function(sk) {
+    return '<span class="sc2-tag">' + sk + '</span>';
+  }).join('');
+  return (
+    '<article class="sc2" tabindex="0" role="link" data-href="student.html?id=' + s.id + '">' +
+      '<div class="sc2-upper">' +
+        '<div class="sc2-avatar"><img src="' + (s.photo || 'assets/avatar.png') + '" alt="' + s.name + '" loading="lazy"/></div>' +
+        '<div class="sc2-info">' +
+          '<div class="sc2-name-block">' +
+            '<h3 class="sc2-name">' + s.name + '</h3>' +
+            '<div class="sc2-meta">' +
+              '<span class="sc2-rating">' + STAR_SVG + s.rate + '</span>' +
+              '<span class="sc2-reviews">' + CHAT_SVG + s.deals + '&nbsp;' + pluralTasks(s.deals) + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="sc2-info-bar">' +
+            '<span>' + s.city + '</span>' +
+            '<span class="sc2-sep">·</span>' +
+            '<span>' + s.uni + '</span>' +
+            '<span class="sc2-sep">·</span>' +
+            '<span>' + s.spec + ', ' + s.year + ' курс</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="sc2-lower">' +
+        '<p class="sc2-title">' + s.title + '</p>' +
+        '<div class="sc2-tags">' + tags + '</div>' +
+      '</div>' +
+    '</article>'
+  );
+}
+
+function render() {
+  var list  = filtered();
+  var total = list.length;
+  var shown = Math.min(visibleCount, total);
+  var page  = list.slice(0, shown);
+  var rest  = total - shown;
+
+  /* count */
+  document.getElementById('sp-count').innerHTML =
+    'Найдено <b>' + total + '</b> ' + pluralSt(total);
+
+  /* grid */
+  var grid = document.getElementById('sp-grid');
+  if (!page.length) {
+    grid.innerHTML =
+      '<div class="sp-empty"><strong>Никого не найдено</strong><span>Попробуйте изменить фильтры или запрос</span></div>';
+  } else {
+    grid.innerHTML = page.map(renderCard).join('');
+  }
+
+  /* load more */
+  var moreWrap  = document.getElementById('sp-more-wrap');
+  var moreLabel = document.getElementById('sp-more-label');
+  if (rest > 0) {
+    moreWrap.style.display = '';
+    moreLabel.textContent  = 'Показать ещё ' + rest;
+  } else {
+    moreWrap.style.display = 'none';
+  }
+}
+
+/* Card click */
+document.addEventListener('click', function(e) {
+  var card = e.target.closest('.sc2');
+  if (!card) return;
+  if (e.target.closest('a,button')) return;
+  var href = card.dataset.href;
+  if (href) window.location.href = href;
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  var el = document.activeElement;
+  if (!el || !el.classList.contains('sc2')) return;
+  e.preventDefault();
+  var href = el.dataset.href;
+  if (href) window.location.href = href;
+});
+
+/* Category chips */
+document.getElementById('sp-chips').addEventListener('click', function(e) {
+  var btn = e.target.closest('.sp-chip');
+  if (!btn) return;
+  document.querySelectorAll('#sp-chips .sp-chip').forEach(function(c){ c.classList.remove('active'); });
+  btn.classList.add('active');
+  activeCat = btn.dataset.cat;
+  activeSub = '';
+  var sub = document.getElementById('sp-subchips');
+  if (activeCat === 'Ивенты') {
+    sub.style.display = 'flex';
+  } else {
+    sub.style.display = 'none';
+  }
+  sub.querySelectorAll('.sp-subchip').forEach(function(c){ c.classList.remove('active'); });
+  var firstSub = sub.querySelector('.sp-subchip[data-sub=""]');
+  if (firstSub) firstSub.classList.add('active');
+  visibleCount = INIT_COUNT;
+  render();
+});
+
+/* Sub-direction chips (Ивенты) */
+document.getElementById('sp-subchips').addEventListener('click', function(e) {
+  var btn = e.target.closest('.sp-subchip');
+  if (!btn) return;
+  this.querySelectorAll('.sp-subchip').forEach(function(c){ c.classList.remove('active'); });
+  btn.classList.add('active');
+  activeSub = btn.dataset.sub || '';
+  visibleCount = INIT_COUNT;
+  render();
+});
+
+/* Sort */
+document.getElementById('sp-sort').addEventListener('change', function() {
+  activeSort = this.value;
+  render();
+});
+
+/* Year filter */
+document.getElementById('sp-year').addEventListener('change', function() {
+  activeYear = this.value;
+  visibleCount = INIT_COUNT;
+  render();
+});
+
+/* University / college filter */
+document.getElementById('sp-uni').addEventListener('change', function() {
+  activeUni = this.value;
+  visibleCount = INIT_COUNT;
+  render();
+});
+
+/* Search */
+document.getElementById('sp-search').addEventListener('input', function() {
+  searchQuery = this.value.trim().toLowerCase();
+  visibleCount = INIT_COUNT;
+  render();
+});
+
+/* Load more */
+document.getElementById('sp-more-btn').addEventListener('click', function() {
+  visibleCount += filtered().length; /* show all remaining */
+  render();
+});
+
+render();
+</script>
+<script src="registration.js"></script>
+</body>
+</html>

@@ -1,0 +1,942 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Документы — СтудРадар</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&family=Manrope:wght@400;500;600;700&family=Tektur:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ===== Documents page extras ===== */
+    .cabinet-back {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 500;
+      color: rgba(2,3,39,0.55); text-decoration: none;
+      margin-bottom: 24px; transition: color .18s;
+    }
+    .cabinet-back:hover { color: #020327; }
+    .cabinet-back svg { flex-shrink: 0; }
+
+    /* ===== Card section title ===== */
+    .doc-section-title {
+      font-family: 'Tektur', sans-serif; font-size: 22px; font-weight: 600;
+      color: #020327; margin: 0 0 8px;
+    }
+    .doc-section-desc {
+      font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 400;
+      color: rgba(2,3,39,0.65); line-height: 1.55; margin: 0 0 20px;
+    }
+
+    /* ===== Upload area ===== */
+    .doc-upload-row {
+      display: block;
+    }
+    .doc-upload-area {
+      width: 100%; min-height: 100px; box-sizing: border-box;
+      display: flex; align-items: center; gap: 14px;
+      background: hsla(238, 90%, 8%, 0.04);
+      border: 1.5px dashed rgba(2,3,39,0.20);
+      border-radius: 16px; padding: 18px 20px;
+      cursor: pointer; transition: border-color .18s, background .18s;
+    }
+    .doc-upload-area:hover, .doc-upload-area.is-drag { border-color: #1153B5; background: hsla(216,83%,39%,0.05); }
+    .doc-upload-area.has-file { border-style: solid; border-color: rgba(2,3,39,0.15); cursor: default; }
+    .doc-upload-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: hsla(238,90%,8%,0.06);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .doc-upload-text { font-family: 'Manrope', sans-serif; font-size: 14px; color: rgba(2,3,39,0.55); line-height: 1.4; }
+    .doc-upload-text strong { display: block; font-size: 15px; font-weight: 600; color: #020327; margin-bottom: 2px; }
+    .doc-upload-remove {
+      margin-left: auto; background: none; border: none; cursor: pointer;
+      color: rgba(2,3,39,0.35); padding: 6px; border-radius: 8px;
+      display: flex; align-items: center; transition: color .18s, background .18s;
+    }
+    .doc-upload-remove:hover { color: #DD5444; background: rgba(221,84,68,0.08); }
+    .doc-upload-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 600;
+      padding: 3px 10px; border-radius: 100px; margin-top: 4px;
+    }
+    .doc-upload-badge--waiting { background: rgba(255,181,0,0.10); color: #956800; }
+    .doc-upload-badge--pending { background: hsla(216,83%,39%,0.10); color: #1153B5; }
+    .doc-upload-badge--ok { background: rgba(34,197,94,0.12); color: #15803d; }
+
+    .doc-upload-btn {
+      flex-shrink: 0; height: 48px; padding: 0 22px;
+      background: #1153B5; color: #fff;
+      border: none; border-radius: 12px; cursor: pointer;
+      font-family: 'Tektur', sans-serif; font-size: 14px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.03em;
+      transition: background .18s; white-space: nowrap;
+    }
+    .doc-upload-btn:hover { background: #0d439a; }
+    .doc-upload-btn:disabled { background: hsla(216,83%,39%,0.15); color: hsla(216,83%,39%,0.55); cursor: default; }
+
+    /* ===== Self-employment section ===== */
+    .doc-learn-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 600;
+      color: #1153B5; text-decoration: none; margin-bottom: 20px;
+    }
+    .doc-learn-link:hover { text-decoration: underline; }
+    .doc-status-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+    .doc-btn-primary {
+      height: 48px; padding: 0 24px;
+      background: #1153B5; color: #fff;
+      border: none; border-radius: 12px; cursor: pointer;
+      font-family: 'Tektur', sans-serif; font-size: 14px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.03em;
+      transition: background .18s;
+    }
+    .doc-btn-primary:hover { background: #0d439a; }
+    .doc-btn-secondary {
+      height: 48px; padding: 0 24px;
+      background: hsla(238,90%,8%,0.06); color: #020327;
+      border: 1.5px solid rgba(2,3,39,0.15); border-radius: 12px; cursor: pointer;
+      font-family: 'Tektur', sans-serif; font-size: 14px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.03em;
+      transition: background .18s, border-color .18s;
+    }
+    .doc-btn-secondary:hover { background: hsla(238,90%,8%,0.10); border-color: rgba(2,3,39,0.25); }
+
+    /* Confirmed state */
+    .doc-status-confirmed {
+      display: none; align-items: center; gap: 10px;
+      font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 600;
+      color: #15803d;
+    }
+    .doc-status-confirmed.is-shown { display: flex; }
+    .doc-status-confirmed svg { flex-shrink: 0; }
+
+    /* ===== Data list ===== */
+    .doc-data-list { display: flex; flex-direction: column; gap: 0; }
+    .doc-data-row {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      padding: 18px 0; border-bottom: 1px solid rgba(2,3,39,0.08);
+      gap: 16px;
+    }
+    .doc-data-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .doc-data-left { display: flex; flex-direction: column; gap: 4px; min-width: 160px; }
+    .doc-data-label {
+      font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 500;
+      color: rgba(2,3,39,0.45); text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .doc-data-value {
+      font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 600; color: #020327;
+    }
+    .doc-data-desc {
+      font-family: 'Manrope', sans-serif; font-size: 14px; font-weight: 400;
+      color: rgba(2,3,39,0.55); line-height: 1.5; max-width: 440px;
+    }
+    .doc-data-edit {
+      flex-shrink: 0; background: none; border: 1.5px solid rgba(2,3,39,0.12);
+      border-radius: 10px; padding: 6px 14px; cursor: pointer;
+      font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 600;
+      color: rgba(2,3,39,0.55); display: flex; align-items: center; gap: 6px;
+      transition: color .18s, border-color .18s, background .18s;
+    }
+    .doc-data-edit:hover { color: #1153B5; border-color: #1153B5; background: hsla(216,83%,39%,0.05); }
+
+    /* ===== Modal (reused from profile) ===== */
+    .doc-modal {
+      position: fixed; inset: 0; z-index: 900;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity .22s;
+    }
+    .doc-modal.is-open { opacity: 1; pointer-events: auto; }
+    .doc-modal-backdrop {
+      position: absolute; inset: 0;
+      background: rgba(2,3,39,0.55); backdrop-filter: blur(2px);
+    }
+    .doc-modal-window {
+      position: relative; z-index: 1;
+      background: #fff; border-radius: 24px;
+      padding: 32px 36px 28px; width: min(480px, calc(100vw - 32px));
+      box-shadow: 0 24px 60px rgba(0,0,0,0.18);
+      transform: translateY(10px); transition: transform .25s;
+    }
+    .doc-modal.is-open .doc-modal-window { transform: translateY(0); }
+    .doc-modal-head {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
+    }
+    .doc-modal-title {
+      font-family: 'Tektur', sans-serif; font-size: 28px; font-weight: 700;
+      color: #020327; margin: 0; line-height: 1.1;
+    }
+    .doc-modal-close {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: #F2F2F2; border: 0; cursor: pointer;
+      display: grid; place-items: center; padding: 0;
+      color: #020327; transition: background .2s, transform .2s;
+    }
+    .doc-modal-close:hover { background: #E3E4E7; transform: rotate(90deg); }
+    #modalSelfTitle { text-transform: uppercase; letter-spacing: -0.01em; }
+    .doc-modal-label {
+      display: block; font-family: 'Manrope', sans-serif; font-size: 13px;
+      font-weight: 600; color: rgba(2,3,39,0.55); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .doc-modal-input {
+      width: 100%; box-sizing: border-box;
+      background: hsla(238,90%,8%,0.05); border: 1.5px solid transparent;
+      border-radius: 12px; padding: 14px 16px;
+      font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 500; color: #020327;
+      outline: none; transition: border-color .18s; margin-bottom: 20px;
+    }
+    .doc-modal-input:focus { border-color: #1153B5; }
+    .doc-modal-save {
+      width: 100%; height: 52px;
+      background: #1153B5; color: #fff; border: none; border-radius: 14px;
+      font-family: 'Tektur', sans-serif; font-size: 16px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.04em; cursor: pointer;
+      transition: background .18s;
+    }
+    .doc-modal-save:hover { background: #0d439a; }
+
+    /* Информационный попап о самозанятости */
+    .doc-info-modal-content { line-height: 1.6; }
+    .doc-info-modal-content h3 {
+      font-family: 'Tektur', sans-serif; font-size: 17px; font-weight: 600;
+      color: #020327; margin: 20px 0 8px;
+    }
+    .doc-info-modal-content h3:first-child { margin-top: 0; }
+    .doc-info-modal-content p {
+      font-family: 'Manrope', sans-serif; font-size: 16px;
+      color: #020327; margin: 0 0 12px;
+    }
+    .doc-info-modal-content ul {
+      margin: 0 0 12px; padding-left: 18px;
+    }
+    .doc-info-modal-content li {
+      font-family: 'Manrope', sans-serif; font-size: 16px;
+      color: #020327; margin-bottom: 6px;
+    }
+    .doc-info-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      height: 48px; padding: 0 20px; margin-top: 12px;
+      background: #1153B5; color: #fff; border-radius: 12px;
+      text-decoration: none;
+      font-family: 'Tektur', sans-serif; font-size: 14px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.03em;
+      transition: background .18s;
+    }
+    .doc-info-link:hover { background: #0d439a; }
+
+    /* ===== INN float-label input ===== */
+    .doc-inn-block { max-width: 420px; margin-top: 20px; }
+    .doc-float-field {
+      position: relative; background: hsla(238,90%,8%,0.06);
+      border: 1.5px solid transparent; border-radius: 12px; height: 66px;
+      margin-bottom: 12px; transition: border-color .18s;
+    }
+    .doc-float-field:focus-within { border-color: #020327; }
+    .doc-float-field.has-error { border-color: #DD5444; }
+    .doc-float-label {
+      position: absolute; top: 50%; transform: translateY(-50%); left: 16px;
+      font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 500;
+      color: rgba(2,3,39,0.40); pointer-events: none; user-select: none;
+      transition: top .15s, font-size .15s, transform .15s;
+    }
+    .doc-float-field.is-filled .doc-float-label,
+    .doc-float-field:focus-within .doc-float-label {
+      top: 14px; transform: none; font-size: 12px;
+    }
+    .doc-float-input {
+      position: absolute; inset: 0; padding: 26px 16px 8px; box-sizing: border-box;
+      border: none; outline: none; background: transparent; border-radius: 12px;
+      font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 600; color: #020327; width: 100%;
+    }
+    .doc-field-hint { font-family: 'Manrope', sans-serif; font-size: 13px; color: rgba(2,3,39,0.45); margin-bottom: 14px; }
+    .doc-field-error { font-family: 'Manrope', sans-serif; font-size: 13px; color: #DD5444; margin-bottom: 14px; display: none; }
+    .doc-field-error.is-shown { display: block; }
+    .doc-inn-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .doc-btn-primary:disabled { background: hsla(216,83%,39%,0.15); color: hsla(216,83%,39%,0.55); cursor: default; }
+  </style>
+</head>
+<body class="cabinet-body">
+
+<!-- ===== HEADER ===== -->
+<header class="feed-header">
+  <a href="for-students.html" class="feed-logo">
+    <span class="feed-logo-mark"><img src="assets/logo.svg" alt=""/></span>
+    <span class="feed-logo-text">СтудРадар</span>
+  </a>
+
+  <nav class="feed-nav" aria-label="Меню">
+    <a href="catalog.html" class="feed-chip">
+      <svg class="feed-chip-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M15.625 2.5H12.7922C12.441 2.10681 12.0108 1.79223 11.5296 1.57684C11.0484 1.36145 10.5272 1.25011 10 1.25011C9.47282 1.25011 8.95158 1.36145 8.47041 1.57684C7.98924 1.79223 7.55899 2.10681 7.20781 2.5H4.375C4.04348 2.5 3.72554 2.6317 3.49112 2.86612C3.2567 3.10054 3.125 3.41848 3.125 3.75V16.875C3.125 17.2065 3.2567 17.5245 3.49112 17.7589C3.72554 17.9933 4.04348 18.125 4.375 18.125H15.625C15.9565 18.125 16.2745 17.9933 16.5089 17.7589C16.7433 17.5245 16.875 17.2065 16.875 16.875V3.75C16.875 3.41848 16.7433 3.10054 16.5089 2.86612C16.2745 2.6317 15.9565 2.5 15.625 2.5Z"/></svg>
+      <span>Лента задач</span>
+    </a>
+    <a href="profile.html" class="feed-chip">
+      <svg class="feed-chip-icon" width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,24a16,16,0,0,0-7.16,1.69l-88,44a16,16,0,0,0,0,28.62l88,44a16,16,0,0,0,14.32,0l88-44a16,16,0,0,0,0-28.62l-88-44A16,16,0,0,0,128,24Z"/><path d="M219.16,152.84,128,198.42,36.84,152.84a8,8,0,1,0-7.16,14.31l92,46a8,8,0,0,0,7.16,0l92-46a8,8,0,1,0-7.16-14.31Z"/><path d="M219.16,190.84,128,236.42,36.84,190.84a8,8,0,1,0-7.16,14.31l92,46a8,8,0,0,0,7.16,0l92-46a8,8,0,1,0-7.16-14.31Z"/></svg>
+      <span>Мой кабинет</span>
+    </a>
+  </nav>
+
+  <div class="feed-user-wrap">
+    <button type="button" class="feed-user" aria-haspopup="menu" aria-expanded="false" id="userBtn">
+      <span class="feed-user-avatar"></span>
+      <span class="feed-user-name"></span>
+      <svg class="feed-user-caret" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="feed-user-menu" role="menu" id="userMenu" hidden>
+      <a href="profile.html" role="menuitem">Профиль</a>
+      <a href="documents.html" role="menuitem" class="is-active">Документы</a>
+      <a href="settings.html" role="menuitem">Настройки</a>
+      <button type="button" class="feed-user-menu-logout" data-logout>Выйти</button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== CABINET ===== -->
+<main class="cabinet">
+  <aside class="cabinet-nav" aria-label="Разделы кабинета">
+    <a href="profile.html" class="cabinet-nav-item">Профиль</a>
+    <a href="my-tasks.html#work" class="cabinet-nav-item">В работе<span class="cabinet-nav-count">3</span></a>
+    <a href="my-tasks.html#responses" class="cabinet-nav-item">Отклики и предложения</a>
+    <a href="my-tasks.html#done" class="cabinet-nav-item">Завершенные задачи</a>
+    <a href="documents.html" class="cabinet-nav-item is-active">Документы</a>
+    <a href="student-finance.html" class="cabinet-nav-item">Финансы</a>
+    <a href="settings.html" class="cabinet-nav-item">Настройки</a>
+  </aside>
+
+  <div class="cabinet-main">
+
+    <!-- ===== Card 1: Справка об обучении ===== -->
+    <section class="cabinet-card">
+      <h2 class="cabinet-card-title">Справка об обучении</h2>
+      <p class="doc-section-desc">Загрузите справку об обучении, чтобы заказчики видели, что вы действительно студент. Документ виден только модераторам платформы и не публикуется в профиле.</p>
+
+      <div class="doc-upload-row">
+        <label class="doc-upload-area" id="docUploadArea" for="docFile">
+          <div class="doc-upload-icon" id="docUploadIcon">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M11 4v14M4 11h14" stroke="rgba(2,3,39,0.4)" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <div class="doc-upload-text" id="docUploadText">
+            <strong>Перетащите файл или нажмите здесь</strong>
+            PDF, JPG, PNG — до 10 МБ
+          </div>
+          <button type="button" class="doc-upload-remove" id="docRemoveBtn" hidden aria-label="Удалить файл">
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+          <input type="file" id="docFile" accept="image/*,.pdf" hidden/>
+        </label>
+      </div>
+
+      <div id="docStatusBadge" style="margin-top: 12px; display: none; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <span class="doc-upload-badge doc-upload-badge--waiting" id="docBadgeWaiting" style="display:none;">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/><path d="M10 6v4l2.5 2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          Ожидает отправки
+        </span>
+        <span class="doc-upload-badge doc-upload-badge--pending" id="docBadgePending" style="display:none;">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/><path d="M10 6v4l2.5 2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          На проверке
+        </span>
+        <span class="doc-upload-badge doc-upload-badge--ok" id="docBadgeConfirmed" style="display:none;">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Подтверждён
+        </span>
+        <button type="button" class="doc-btn-primary" id="docSendBtn" style="display:none; height:42px; padding:0 20px; font-size:13px;">Отправить на проверку</button>
+      </div>
+    </section>
+
+    <!-- ===== Card 2: Статус самозанятого ===== -->
+    <section class="cabinet-card">
+      <h2 class="cabinet-card-title">Статус самозанятого</h2>
+      <p class="doc-section-desc">В настоящий момент СтудРадар работает только с самозанятыми. Статус самозанятого даст вам массу преимуществ, а оформление займет не более 15 минут.</p>
+
+      <a href="#" class="doc-learn-link" id="learnMoreLink">
+        Подробнее о самозанятости
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 8h8M9 5l3 3-3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+      <div class="doc-status-btns" id="selfStatusBtns">
+        <button type="button" class="doc-btn-primary" id="registerSelfBtn">Оформить статус</button>
+        <button type="button" class="doc-btn-secondary" id="alreadySelfBtn">Уже самозанятый</button>
+      </div>
+
+      <div class="doc-inn-block" id="docInnBlock" style="display:none;">
+        <div class="doc-float-field" id="docInnWrap">
+          <label class="doc-float-label" for="docInnInput">ИНН (12 цифр)</label>
+          <input class="doc-float-input" id="docInnInput" type="text" inputmode="numeric" maxlength="12" autocomplete="off"/>
+        </div>
+        <div class="doc-field-hint" id="docInnHint">Введите ИНН и мы проверим ваш статус по нему</div>
+        <div class="doc-field-error" id="docInnError">ИНН должен состоять из 12 цифр</div>
+        <div class="doc-inn-actions">
+          <button type="button" class="doc-btn-primary" id="docInnConfirm" disabled>Подтвердить статус</button>
+          <button type="button" class="doc-btn-secondary" id="docInnCancel">Отмена</button>
+        </div>
+      </div>
+
+      <div class="doc-status-confirmed" id="selfConfirmed">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="rgba(34,197,94,0.15)"/><path d="M7 11l3 3 5-6" stroke="#15803d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Статус самозанятого подтверждён<span id="selfInnDisplay" style="display:block;font-weight:400;color:rgba(2,3,39,0.55);font-size:13px;margin-top:2px;"></span></span>
+        <button type="button" id="resetSelfBtn" style="margin-left: 12px; background: none; border: none; cursor: pointer; font-family:'Manrope',sans-serif; font-size:13px; color:rgba(2,3,39,0.4); text-decoration: underline; padding: 0;">Изменить</button>
+      </div>
+    </section>
+
+    <!-- ===== Card 3: Ваши данные ===== -->
+    <section class="cabinet-card">
+      <h2 class="cabinet-card-title">Ваши данные</h2>
+      <div class="doc-data-list">
+
+        <!-- Телефон -->
+        <div class="doc-data-row">
+          <div class="doc-data-left">
+            <span class="doc-data-label">Телефон</span>
+            <span class="doc-data-value" id="displayPhone">+7 912 559 ** **</span>
+          </div>
+          <button type="button" class="doc-data-edit" data-edit="phone" aria-label="Редактировать телефон">
+            <svg width="14" height="14" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M227.32,73.37,182.63,28.69a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.32,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.69,147.32,64l24-24L216,84.69Z"/></svg>
+            Изменить
+          </button>
+        </div>
+
+        <!-- Электронная почта -->
+        <div class="doc-data-row">
+          <div class="doc-data-left">
+            <span class="doc-data-label">Электронная почта</span>
+            <span class="doc-data-value" id="displayEmail" style="display:none"></span>
+            <span class="doc-data-desc" id="emailDesc">Сообщим, когда появится подходящий заказ, клиент пришлёт сообщение или оставит отзыв. Ещё будем рассказывать про бонусы, акции и новости сервиса</span>
+          </div>
+          <button type="button" class="doc-data-edit" data-edit="email" aria-label="Добавить почту">
+            <svg width="14" height="14" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg>
+            Добавить
+          </button>
+        </div>
+
+        <!-- Дата рождения -->
+        <div class="doc-data-row">
+          <div class="doc-data-left">
+            <span class="doc-data-label">Дата рождения</span>
+            <span class="doc-data-value" id="displayBirth" style="display:none"></span>
+            <span class="doc-data-desc" id="birthDesc">Заказчики не увидят вашу дату рождения</span>
+          </div>
+          <button type="button" class="doc-data-edit" data-edit="birth" aria-label="Указать дату рождения" id="editBirthBtn">
+            <svg width="14" height="14" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg>
+            Указать
+          </button>
+        </div>
+
+      </div>
+    </section>
+  </div>
+</main>
+
+<!-- ===== MODAL: Телефон ===== -->
+<div class="doc-modal" id="modalPhone" role="dialog" aria-modal="true" aria-labelledby="modalPhoneTitle">
+  <div class="doc-modal-backdrop" data-modal-close="phone"></div>
+  <div class="doc-modal-window">
+    <div class="doc-modal-head">
+      <h2 class="doc-modal-title" id="modalPhoneTitle">Телефон</h2>
+      <button type="button" class="doc-modal-close" data-modal-close="phone" aria-label="Закрыть">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <label class="doc-modal-label" for="inputPhone">Номер телефона</label>
+    <input type="tel" class="doc-modal-input" id="inputPhone" placeholder="+7 (___) ___-__-__" inputmode="tel"/>
+    <button type="button" class="doc-modal-save" id="savePhone">Сохранить</button>
+  </div>
+</div>
+
+<!-- ===== MODAL: Email ===== -->
+<div class="doc-modal" id="modalEmail" role="dialog" aria-modal="true" aria-labelledby="modalEmailTitle">
+  <div class="doc-modal-backdrop" data-modal-close="email"></div>
+  <div class="doc-modal-window">
+    <div class="doc-modal-head">
+      <h2 class="doc-modal-title" id="modalEmailTitle">Электронная почта</h2>
+      <button type="button" class="doc-modal-close" data-modal-close="email" aria-label="Закрыть">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <label class="doc-modal-label" for="inputEmail">Email-адрес</label>
+    <input type="email" class="doc-modal-input" id="inputEmail" placeholder="you@example.com"/>
+    <button type="button" class="doc-modal-save" id="saveEmail">Сохранить</button>
+  </div>
+</div>
+
+<!-- ===== MODAL: Дата рождения ===== -->
+<div class="doc-modal" id="modalBirth" role="dialog" aria-modal="true" aria-labelledby="modalBirthTitle">
+  <div class="doc-modal-backdrop" data-modal-close="birth"></div>
+  <div class="doc-modal-window">
+    <div class="doc-modal-head">
+      <h2 class="doc-modal-title" id="modalBirthTitle">Дата рождения</h2>
+      <button type="button" class="doc-modal-close" data-modal-close="birth" aria-label="Закрыть">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <label class="doc-modal-label" for="inputBirth">Дата рождения</label>
+    <input type="date" class="doc-modal-input" id="inputBirth"/>
+    <button type="button" class="doc-modal-save" id="saveBirth">Сохранить</button>
+  </div>
+</div>
+
+<!-- ===== MODAL: Подробнее о самозанятости ===== -->
+<div class="doc-modal" id="modalSelf" role="dialog" aria-modal="true" aria-labelledby="modalSelfTitle">
+  <div class="doc-modal-backdrop" data-modal-close="self"></div>
+  <div class="doc-modal-window" style="max-height: 80vh; overflow-y: auto;">
+    <div class="doc-modal-head">
+      <h2 class="doc-modal-title" id="modalSelfTitle">Статус самозанятого</h2>
+      <button type="button" class="doc-modal-close" data-modal-close="self" aria-label="Закрыть">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="doc-info-modal-content">
+      <h3>Что такое самозанятость?</h3>
+      <p>Самозанятость — это специальный налоговый режим, который позволяет легально работать и получать оплату без регистрации ИП. Налог составляет 4% при работе с физлицами и 6% с организациями.</p>
+      <h3>Преимущества</h3>
+      <ul>
+        <li>Официальные выплаты от заказчиков — всё по закону</li>
+        <li>Чек для заказчика — они могут списать расходы</li>
+        <li>Нет обязательных страховых взносов</li>
+        <li>Простая регистрация — буквально 10 минут в приложении</li>
+      </ul>
+      <h3>Как оформить?</h3>
+      <p>Скачайте приложение «Мой налог» от ФНС России и зарегистрируйтесь через Госуслуги или паспорт. Всё займёт не более 15 минут.</p>
+      <a href="https://npd.nalog.ru/" target="_blank" rel="noopener" class="doc-info-link">
+        Перейти на сайт ФНС
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 8h8M9 5l3 3-3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Cert delete warning popup ===== -->
+<div id="certDeletePopup" style="display:none;position:fixed;inset:0;z-index:9999;align-items:center;justify-content:center;">
+  <div style="position:absolute;inset:0;background:rgba(2,3,39,0.45);" id="certDeleteBackdrop"></div>
+  <div style="position:relative;background:#fff;border-radius:28px;padding:32px 28px 24px;max-width:400px;width:calc(100% - 40px);box-shadow:0 20px 60px rgba(2,3,39,0.22);font-family:'Manrope',sans-serif;">
+    <div style="width:48px;height:48px;border-radius:14px;background:hsla(8,75%,57%,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:18px;">
+      <svg width="24" height="24" viewBox="0 0 256 256" fill="#DD5444"><path d="M236.8,188.09,149.35,36.22a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM120,104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm8,88a12,12,0,1,1,12-12A12,12,0,0,1,128,192Z"/></svg>
+    </div>
+    <div style="font-family:'Tektur',sans-serif;font-size:20px;font-weight:700;color:#020327;text-transform:uppercase;margin-bottom:10px;">Удалить справку?</div>
+    <p style="font-size:15px;color:rgba(2,3,39,0.65);line-height:1.55;margin:0 0 24px;">Удаляйте справку только если вы сменили университет или факультет. После удаления статус студента нужно будет подтверждать заново.</p>
+    <div style="display:flex;gap:10px;">
+      <button id="certDeleteCancel" type="button" style="flex:1;height:48px;border-radius:14px;border:1.5px solid rgba(2,3,39,0.12);background:#fff;font-family:'Manrope',sans-serif;font-size:15px;font-weight:600;color:#020327;cursor:pointer;">Отмена</button>
+      <button id="certDeleteConfirm" type="button" style="flex:1;height:48px;border-radius:14px;border:none;background:#DD5444;font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;color:#fff;cursor:pointer;">Удалить</button>
+    </div>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  // ===== Modal helpers =====
+  function openModal(id) {
+    var m = document.getElementById('modal' + id.charAt(0).toUpperCase() + id.slice(1));
+    if (!m) return;
+    m.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(id) {
+    var m = document.getElementById('modal' + id.charAt(0).toUpperCase() + id.slice(1));
+    if (!m) return;
+    m.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  // Close on backdrop / X click
+  document.querySelectorAll('[data-modal-close]').forEach(function (el) {
+    el.addEventListener('click', function () {
+      closeModal(el.getAttribute('data-modal-close'));
+    });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      ['phone','email','birth','self'].forEach(closeModal);
+    }
+  });
+
+  // ===== Edit buttons → open modals =====
+  document.querySelectorAll('[data-edit]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      openModal(btn.getAttribute('data-edit'));
+    });
+  });
+
+  // ===== Save: телефон =====
+  var inputPhone = document.getElementById('inputPhone');
+  document.getElementById('savePhone').addEventListener('click', function () {
+    var val = (inputPhone.value || '').trim();
+    if (!val) return;
+    document.getElementById('displayPhone').textContent = val;
+    closeModal('phone');
+    saveDocData();
+  });
+
+  // ===== Save: email =====
+  var inputEmail = document.getElementById('inputEmail');
+  document.getElementById('saveEmail').addEventListener('click', function () {
+    var val = (inputEmail.value || '').trim();
+    if (!val || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+      inputEmail.style.borderColor = '#DD5444';
+      return;
+    }
+    inputEmail.style.borderColor = '';
+    var display = document.getElementById('displayEmail');
+    var desc = document.getElementById('emailDesc');
+    display.textContent = val;
+    display.style.display = '';
+    desc.style.display = 'none';
+    // Change edit button to "Изменить"
+    var editBtn = document.querySelector('[data-edit="email"]');
+    if (editBtn) {
+      editBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 256 256" fill="currentColor"><path d="M227.32,73.37,182.63,28.69a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.32,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.69,147.32,64l24-24L216,84.69Z"/></svg> Изменить';
+    }
+    closeModal('email');
+    saveDocData();
+  });
+  // Reset border on input
+  if (inputEmail) inputEmail.addEventListener('input', function () { inputEmail.style.borderColor = ''; });
+
+  // ===== Save: дата рождения =====
+  var inputBirth = document.getElementById('inputBirth');
+  document.getElementById('saveBirth').addEventListener('click', function () {
+    var val = (inputBirth.value || '').trim();
+    if (!val) return;
+    // Format: DD.MM.YYYY
+    var parts = val.split('-');
+    var formatted = parts.length === 3 ? parts[2] + '.' + parts[1] + '.' + parts[0] : val;
+    var display = document.getElementById('displayBirth');
+    var desc = document.getElementById('birthDesc');
+    display.textContent = formatted;
+    display.style.display = '';
+    desc.style.display = 'none';
+    var editBtn = document.getElementById('editBirthBtn');
+    if (editBtn) {
+      editBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 256 256" fill="currentColor"><path d="M227.32,73.37,182.63,28.69a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.32,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.69,147.32,64l24-24L216,84.69Z"/></svg> Изменить';
+    }
+    closeModal('birth');
+    saveDocData();
+  });
+
+  // ===== Подробнее о самозанятости =====
+  document.getElementById('learnMoreLink').addEventListener('click', function (e) {
+    e.preventDefault();
+    openModal('self');
+  });
+
+  // ===== Самозанятый: оформить / уже =====
+  var selfBtns = document.getElementById('selfStatusBtns');
+  var selfConfirmed = document.getElementById('selfConfirmed');
+
+  document.getElementById('registerSelfBtn').addEventListener('click', function () {
+    openModal('self');
+  });
+
+  var docInnBlock = document.getElementById('docInnBlock');
+  var docInnInput = document.getElementById('docInnInput');
+  var docInnWrap  = document.getElementById('docInnWrap');
+  var docInnError = document.getElementById('docInnError');
+  var docInnHint  = document.getElementById('docInnHint');
+  var docInnConfirm = document.getElementById('docInnConfirm');
+  var selfInnDisplay = document.getElementById('selfInnDisplay');
+
+  function showInnBlock() {
+    selfBtns.style.display = 'none';
+    document.querySelector('.doc-learn-link').style.display = 'none';
+    docInnBlock.style.display = '';
+    docInnInput.value = '';
+    docInnWrap.classList.remove('is-filled', 'has-error');
+    docInnError.classList.remove('is-shown');
+    docInnConfirm.disabled = true;
+    docInnInput.focus();
+  }
+
+  document.getElementById('alreadySelfBtn').addEventListener('click', showInnBlock);
+
+  docInnInput.addEventListener('input', function () {
+    var val = docInnInput.value.replace(/\D/g, '');
+    docInnInput.value = val;
+    docInnWrap.classList.toggle('is-filled', val.length > 0);
+    docInnWrap.classList.remove('has-error');
+    docInnError.classList.remove('is-shown');
+    docInnConfirm.disabled = val.length !== 12;
+  });
+
+  document.getElementById('docInnCancel').addEventListener('click', function () {
+    docInnBlock.style.display = 'none';
+    selfBtns.style.display = '';
+    document.querySelector('.doc-learn-link').style.display = '';
+  });
+
+  docInnConfirm.addEventListener('click', function () {
+    var val = docInnInput.value.replace(/\D/g, '');
+    if (val.length !== 12) {
+      docInnWrap.classList.add('has-error');
+      docInnError.classList.add('is-shown');
+      return;
+    }
+    var masked = val.slice(0, 6) + '******';
+    docInnBlock.style.display = 'none';
+    selfConfirmed.classList.add('is-shown');
+    if (selfInnDisplay) selfInnDisplay.textContent = 'ИНН: ' + masked;
+    saveDocData();
+  });
+
+  document.getElementById('resetSelfBtn').addEventListener('click', function () {
+    selfBtns.style.display = '';
+    document.querySelector('.doc-learn-link').style.display = '';
+    selfConfirmed.classList.remove('is-shown');
+    if (selfInnDisplay) selfInnDisplay.textContent = '';
+    saveDocData();
+  });
+
+  // ===== File upload =====
+  var docFile = document.getElementById('docFile');
+  var docArea = document.getElementById('docUploadArea');
+  var docIcon = document.getElementById('docUploadIcon');
+  var docText = document.getElementById('docUploadText');
+  var docRemove = document.getElementById('docRemoveBtn');
+  var docBadge = document.getElementById('docStatusBadge');
+  var docBadgeWaiting = document.getElementById('docBadgeWaiting');
+  var docBadgePending = document.getElementById('docBadgePending');
+  var docSendBtn = document.getElementById('docSendBtn');
+
+  docFile.addEventListener('change', function () {
+    var file = docFile.files && docFile.files[0];
+    if (file) applyFile(file);
+  });
+
+  // Drag & drop
+  ['dragenter','dragover'].forEach(function (ev) {
+    docArea.addEventListener(ev, function (e) {
+      e.preventDefault(); e.stopPropagation();
+      docArea.classList.add('is-drag');
+    });
+  });
+  ['dragleave'].forEach(function (ev) {
+    docArea.addEventListener(ev, function (e) {
+      e.preventDefault(); e.stopPropagation();
+      docArea.classList.remove('is-drag');
+    });
+  });
+  docArea.addEventListener('drop', function (e) {
+    e.preventDefault(); e.stopPropagation();
+    docArea.classList.remove('is-drag');
+    var file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (file) applyFile(file);
+  });
+
+  function applyFile(file) {
+    if (file.size > 10 * 1024 * 1024) {
+      alert('Файл слишком большой — максимум 10 МБ');
+      return;
+    }
+    docIcon.innerHTML = '<svg width="22" height="22" viewBox="0 0 256 256" fill="none"><rect width="256" height="256" rx="40" fill="hsla(216,83%,39%,0.12)"/><path d="M200 152v40a16 16 0 01-16 16H72a16 16 0 01-16-16v-40" stroke="#1153B5" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path d="M128 32v112M96 76l32-44 32 44" stroke="#1153B5" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    docText.innerHTML = '<strong>' + escHtml(file.name) + '</strong>' + formatSize(file.size);
+    docArea.classList.add('has-file');
+    docRemove.hidden = false;
+    // upload button removed
+    docBadge.style.display = 'flex';
+    docBadgeWaiting.style.display = 'none';
+    docBadgePending.style.display = 'none';
+    docSendBtn.style.display = '';
+    saveDocData();
+  }
+
+  var docBadgeConfirmed = document.getElementById('docBadgeConfirmed');
+
+  if (docSendBtn) {
+    docSendBtn.addEventListener('click', function () {
+      docBadgeWaiting.style.display = 'none';
+      docBadgePending.style.display = '';
+      docSendBtn.style.display = 'none';
+      docRemove.hidden = true;
+      var strong = docText.querySelector('strong');
+      var fileName = strong ? strong.textContent : '';
+      if (fileName) docText.innerHTML = '<strong>' + escHtml(fileName) + '</strong>Отправлено на проверку';
+      saveDocData();
+
+      // Auto-confirm after 1 second
+      setTimeout(function () {
+        docBadgePending.style.display = 'none';
+        docBadgeConfirmed.style.display = '';
+        if (fileName) docText.innerHTML = '<strong>' + escHtml(fileName) + '</strong>Справка подтверждена';
+        docRemove.hidden = false;
+        try {
+          var s = JSON.parse(localStorage.getItem('studradar_session') || '{}');
+          s.certConfirmed = true;
+          localStorage.setItem('studradar_session', JSON.stringify(s));
+        } catch (e) {}
+        try {
+          var existing = {};
+          try { existing = JSON.parse(localStorage.getItem('studradar_profile_v1') || '{}'); } catch (e2) {}
+          existing.profile = {
+            name: 'Мария Иванова',
+            photo: (existing.profile && existing.profile.photo) ? existing.profile.photo : '',
+            city: 'Ханты-Мансийск',
+            university: 'ЮГУ',
+            direction: 'Лингвистика, 2 курс'
+          };
+          localStorage.setItem('studradar_profile_v1', JSON.stringify(existing));
+        } catch (e) {}
+        saveDocData();
+      }, 1000);
+    });
+  }
+
+  var certDeletePopup = document.getElementById('certDeletePopup');
+  var certDeleteCancel = document.getElementById('certDeleteCancel');
+  var certDeleteConfirm = document.getElementById('certDeleteConfirm');
+
+  function showCertDeleteWarning() {
+    certDeletePopup.style.display = 'flex';
+  }
+  function hideCertDeleteWarning() {
+    certDeletePopup.style.display = 'none';
+  }
+  if (certDeleteCancel) certDeleteCancel.addEventListener('click', hideCertDeleteWarning);
+  document.getElementById('certDeleteBackdrop').addEventListener('click', hideCertDeleteWarning);
+  if (certDeleteConfirm) certDeleteConfirm.addEventListener('click', function() {
+    hideCertDeleteWarning();
+    resetUpload();
+    // Also revoke cert status
+    try {
+      var s = JSON.parse(localStorage.getItem('studradar_session') || '{}');
+      s.certConfirmed = false;
+      localStorage.setItem('studradar_session', JSON.stringify(s));
+    } catch(e) {}
+    // Clear cert-derived profile name so header shows phone
+    try {
+      var existing = JSON.parse(localStorage.getItem('studradar_profile_v1') || '{}');
+      if (existing.profile) existing.profile.name = '';
+      localStorage.setItem('studradar_profile_v1', JSON.stringify(existing));
+    } catch(e) {}
+    if (window.StudRadar) StudRadar.syncHeaderPill();
+  });
+
+  docRemove.addEventListener('click', function (e) {
+    e.preventDefault(); e.stopPropagation();
+    var certConfirmed = docBadgeConfirmed && docBadgeConfirmed.style.display !== 'none';
+    if (certConfirmed) {
+      showCertDeleteWarning();
+      return;
+    }
+    resetUpload();
+  });
+
+  function resetUpload() {
+    docFile.value = '';
+    docIcon.innerHTML = '<svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 4v14M4 11h14" stroke="rgba(2,3,39,0.4)" stroke-width="2" stroke-linecap="round"/></svg>';
+    docText.innerHTML = '<strong>Перетащите файл или нажмите здесь</strong>PDF, JPG, PNG — до 10 МБ';
+    docArea.classList.remove('has-file');
+    docRemove.hidden = true;
+    docBadge.style.display = 'none';
+    docBadgeWaiting.style.display = 'none';
+    docBadgePending.style.display = 'none';
+    if (docBadgeConfirmed) docBadgeConfirmed.style.display = 'none';
+    docSendBtn.style.display = 'none';
+    // upload button removed
+    saveDocData();
+  }
+
+  function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  function formatSize(bytes) {
+    if (bytes < 1024) return bytes + ' Б';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(0) + ' КБ';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' МБ';
+  }
+
+  // ===== Persistence =====
+  var DOC_KEY = 'studradar_docs_v1';
+  function saveDocData() {
+    try {
+      var d = {
+        phone: document.getElementById('displayPhone').textContent,
+        email: document.getElementById('displayEmail').textContent,
+        birth: document.getElementById('displayBirth').textContent,
+        selfConfirmed: selfConfirmed.classList.contains('is-shown'),
+        selfInn: selfInnDisplay ? selfInnDisplay.textContent : '',
+        hasFile: docArea.classList.contains('has-file'),
+        fileName: docText.querySelector('strong') ? docText.querySelector('strong').textContent : '',
+        fileSent: docBadgePending.style.display !== 'none',
+        certConfirmed: docBadgeConfirmed ? docBadgeConfirmed.style.display !== 'none' : false
+      };
+      localStorage.setItem(DOC_KEY, JSON.stringify(d));
+      // Обновить «!» на пункте «Документы» в кабинетной навигации
+      if (window.StudRadar && window.StudRadar.applyDocsWarning) {
+        window.StudRadar.applyDocsWarning();
+      }
+    } catch (e) {}
+  }
+  function loadDocData() {
+    var raw; try { raw = localStorage.getItem(DOC_KEY); } catch (e) { return; }
+    if (!raw) return;
+    var d; try { d = JSON.parse(raw); } catch (e) { return; }
+
+    if (d.phone) document.getElementById('displayPhone').textContent = d.phone;
+
+    if (d.email) {
+      var display = document.getElementById('displayEmail');
+      var desc = document.getElementById('emailDesc');
+      display.textContent = d.email; display.style.display = '';
+      desc.style.display = 'none';
+      var editBtn = document.querySelector('[data-edit="email"]');
+      if (editBtn) editBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 256 256" fill="currentColor"><path d="M227.32,73.37,182.63,28.69a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.32,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.69,147.32,64l24-24L216,84.69Z"/></svg> Изменить';
+    }
+
+    if (d.birth) {
+      var db = document.getElementById('displayBirth');
+      var dd = document.getElementById('birthDesc');
+      db.textContent = d.birth; db.style.display = '';
+      dd.style.display = 'none';
+      var eb = document.getElementById('editBirthBtn');
+      if (eb) eb.innerHTML = '<svg width="14" height="14" viewBox="0 0 256 256" fill="currentColor"><path d="M227.32,73.37,182.63,28.69a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.32,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.69,147.32,64l24-24L216,84.69Z"/></svg> Изменить';
+    }
+
+    if (d.selfConfirmed) {
+      selfBtns.style.display = 'none';
+      document.querySelector('.doc-learn-link').style.display = 'none';
+      selfConfirmed.classList.add('is-shown');
+      if (selfInnDisplay && d.selfInn) selfInnDisplay.textContent = d.selfInn;
+    }
+
+    if (d.hasFile && d.fileName) {
+      docIcon.innerHTML = '<svg width="22" height="22" viewBox="0 0 256 256" fill="none"><rect width="256" height="256" rx="40" fill="hsla(216,83%,39%,0.12)"/><path d="M200 152v40a16 16 0 01-16 16H72a16 16 0 01-16-16v-40" stroke="#1153B5" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path d="M128 32v112M96 76l32-44 32 44" stroke="#1153B5" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      docArea.classList.add('has-file');
+      docRemove.hidden = true;
+      // upload button removed
+      docBadge.style.display = 'flex';
+      docBadgeWaiting.style.display = 'none';
+      docSendBtn.style.display = 'none';
+      if (d.certConfirmed) {
+        docText.innerHTML = '<strong>' + escHtml(d.fileName) + '</strong>Справка подтверждена';
+        docBadgePending.style.display = 'none';
+        docBadgeConfirmed.style.display = '';
+        docRemove.hidden = false;
+        try {
+          var s2 = JSON.parse(localStorage.getItem('studradar_session') || '{}');
+          s2.certConfirmed = true;
+          localStorage.setItem('studradar_session', JSON.stringify(s2));
+        } catch (e) {}
+      } else if (d.fileSent) {
+        docText.innerHTML = '<strong>' + escHtml(d.fileName) + '</strong>Отправлено на проверку';
+        docBadgePending.style.display = '';
+        docBadgeConfirmed.style.display = 'none';
+      } else {
+        docText.innerHTML = '<strong>' + escHtml(d.fileName) + '</strong>Готово к отправке';
+        docBadge.style.display = 'flex';
+        docBadgeWaiting.style.display = 'none';
+        docBadgePending.style.display = 'none';
+        docRemove.hidden = false;
+        docSendBtn.style.display = '';
+      }
+    }
+  }
+  loadDocData();
+  saveDocData(); // persist default phone so header pill can read it
+
+  // Pre-fill modal inputs from current values
+  document.getElementById('inputPhone').value = document.getElementById('displayPhone').textContent || '';
+
+})();
+</script>
+</body>
+</html>

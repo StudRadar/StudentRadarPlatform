@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Финансы — СтудРадар</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Tektur:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root {
+      --ec-blue: #1153B5;
+      --ec-blue-08: hsla(216, 83%, 39%, 0.08);
+      --ec-ink: #020327;
+      --ec-ink-72: hsla(238, 90%, 8%, 0.72);
+      --ec-fill-04: hsla(238, 90%, 8%, 0.04);
+      --ec-fill-06: hsla(238, 90%, 8%, 0.06);
+    }
+    body { background: #F2F2F2; font-family: 'Manrope', sans-serif; }
+
+    .ec-wrap { max-width: 1206px; margin: 0 auto; padding: 24px 40px 80px; display: flex; align-items: flex-start; gap: 24px; }
+    .ec-col-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 18px; }
+    .ec-aside { width: 290px; flex-shrink: 0; display: flex; flex-direction: column; gap: 0; }
+    .ec-nav-item {
+      display: flex; align-items: center; width: 290px; box-sizing: border-box;
+      padding: 16px 24px; border-radius: 10px; gap: 10px;
+      font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 500;
+      color: var(--ec-ink); background: transparent; border: 0; cursor: pointer;
+      text-align: left; text-decoration: none; transition: background .15s, color .15s;
+    }
+    .ec-nav-item:hover { background: var(--ec-fill-04); }
+    .ec-nav-item.is-active { background: var(--ec-blue-08); color: var(--ec-blue); }
+
+    .ec-card { background: #fff; border-radius: 28px; padding: 32px 36px; }
+    .ec-card-title { font-family: 'Tektur', sans-serif; font-weight: 700; font-size: 24px; text-transform: uppercase; color: var(--ec-ink); margin: 0 0 8px; }
+    .fin-desc { font-size: 15px; color: var(--ec-ink-72); line-height: 1.55; margin: 0 0 22px; }
+
+    /* Hero «Доступно к выводу» — тёмная плашка с акцентной суммой */
+    .fin-hero {
+      position: relative;
+      display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+      background: linear-gradient(120deg, #0E2A6B 0%, #0A1F4A 60%, #081A3F 100%);
+      color: #fff;
+      border-radius: 22px;
+      padding: 30px 40px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .fin-hero-radar {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 720px; height: 720px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.18;
+    }
+    .fin-hero-tx { flex: 1; min-width: 0; position: relative; z-index: 1; }
+    .fin-hero .lbl {
+      font-family: 'Tektur', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      color: #fff;
+      opacity: 0.72;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+    .fin-hero .num {
+      font-family: 'Tektur', sans-serif; font-weight: 700; font-size: 56px;
+      color: #fff; letter-spacing: -0.02em; line-height: 1; margin-bottom: 14px;
+    }
+    .fin-hero .hint { font-size: 14px; color: #fff; opacity: 0.72; line-height: 1.4; max-width: 420px; }
+    .fin-hero-actions {
+      position: relative; z-index: 1;
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    }
+    .fin-hero .fin-btn--hero { position: relative; z-index: 1; }
+    .fin-btn.fin-btn--hero {
+      height: 48px; padding: 0 28px; background: #DD5444; color: #fff;
+      font-size: 15px; border-radius: 14px;
+    }
+    .fin-btn.fin-btn--hero:hover { background: #c2452f; }
+    .fin-btn--hero-ghost {
+      height: 48px; padding: 0 24px; background: transparent;
+      color: #fff; border: 1.5px solid rgba(255,255,255,0.4);
+      border-radius: 14px;
+      font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 14px;
+      cursor: pointer; transition: background .15s, border-color .15s;
+    }
+    .fin-btn--hero-ghost:hover { background: rgba(255,255,255,0.10); border-color: rgba(255,255,255,0.65); }
+
+    .fin-stats { display: flex; gap: 16px; flex-wrap: wrap; }
+    .fin-stat { flex: 1; min-width: 220px; background: var(--ec-fill-04); border-radius: 18px; padding: 20px 22px; }
+    .fin-stat .lbl { font-size: 14px; color: var(--ec-ink-72); margin-bottom: 8px; }
+    .fin-stat .num { font-family: 'Tektur', sans-serif; font-weight: 700; font-size: 28px; color: var(--ec-ink); letter-spacing: -0.02em; }
+
+    .fin-cta { display: flex; align-items: center; gap: 16px; margin-top: 22px; background: var(--ec-fill-04); border-radius: 16px; padding: 18px 22px; }
+    .fin-cta .ic { width: 46px; height: 46px; border-radius: 12px; background: rgba(17,83,181,0.10); color: var(--ec-blue); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .fin-cta .ic svg { width: 24px; height: 24px; }
+    .fin-cta .tx { flex: 1; min-width: 0; }
+    .fin-cta .tx .t { font-weight: 700; font-size: 15px; color: var(--ec-ink); }
+    .fin-cta .tx .s { font-size: 14px; color: var(--ec-ink-72); }
+    .fin-btn { height: 44px; padding: 0 24px; border-radius: 12px; border: 0; background: var(--ec-blue); color: #fff; font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 14px; cursor: pointer; transition: background .15s; }
+    .fin-btn:hover { background: var(--ec-ink); }
+
+    .fin-hist { margin-top: 8px; }
+    .fin-hist-row { display: flex; align-items: center; gap: 16px; padding: 18px 0; border-bottom: 1px solid rgba(2,3,39,0.06); }
+    .fin-hist-row:last-child { border-bottom: 0; }
+    .fin-hist-ic { width: 44px; height: 44px; border-radius: 12px; background: var(--ec-fill-04); color: var(--ec-ink-72); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .fin-hist-tx { flex: 1; min-width: 0; }
+    .fin-hist-tx .t { font-weight: 600; font-size: 15px; color: var(--ec-ink); }
+    .fin-hist-tx .s { font-size: 13px; color: var(--ec-ink-72); }
+    .fin-hist-sum { font-family: 'Tektur', sans-serif; font-weight: 700; font-size: 17px; color: #2E7544; white-space: nowrap; }
+    .fin-hist-sum.pending { color: var(--ec-ink-72); }
+
+    .ec-toast {
+      position: fixed; left: 50%; bottom: 32px; transform: translateX(-50%) translateY(20px);
+      background: var(--ec-ink); color: #fff; padding: 14px 22px; border-radius: 12px;
+      font-size: 15px; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 100;
+    }
+    .ec-toast.is-visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 980px) {
+      .ec-wrap { flex-direction: column; padding: 20px 16px 60px; }
+      .ec-aside { width: 100%; flex-direction: row; overflow-x: auto; gap: 8px; }
+      .ec-nav-item { width: auto; white-space: nowrap; }
+      .ec-col-main { width: 100%; }
+      .ec-card { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body class="cabinet-body" data-screen-label="Финансы студента">
+<script>(function(){
+  try {
+    var s = localStorage.getItem('studradar_session');
+    var h = s && JSON.parse(s).role;
+    if (!h) { window.location.replace('catalog.html'); return; }
+    if (h === 'employer') { window.location.replace('employer-finance.html'); return; }
+  } catch(e){}
+})();</script>
+
+<!-- ===== HEADER ===== -->
+<header class="feed-header">
+  <a href="for-students.html" class="feed-logo">
+    <span class="feed-logo-mark"><img src="assets/logo.svg" alt=""/></span>
+    <span class="feed-logo-text">СтудРадар</span>
+  </a>
+
+  <nav class="feed-nav" aria-label="Меню">
+    <a href="catalog.html" class="feed-chip">
+      <svg class="feed-chip-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M15.625 2.5H12.7922C12.441 2.10681 12.0108 1.79223 11.5296 1.57684C11.0484 1.36145 10.5272 1.25011 10 1.25011C9.47282 1.25011 8.95158 1.36145 8.47041 1.57684C7.98924 1.79223 7.55899 2.10681 7.20781 2.5H4.375C4.04348 2.5 3.72554 2.6317 3.49112 2.86612C3.2567 3.10054 3.125 3.41848 3.125 3.75V16.875C3.125 17.2065 3.2567 17.5245 3.49112 17.7589C3.72554 17.9933 4.04348 18.125 4.375 18.125H15.625C15.9565 18.125 16.2745 17.9933 16.5089 17.7589C16.7433 17.5245 16.875 17.2065 16.875 16.875V3.75C16.875 3.41848 16.7433 3.10054 16.5089 2.86612C16.2745 2.6317 15.9565 2.5 15.625 2.5Z"/></svg>
+      <span>Лента задач</span>
+    </a>
+    <a href="profile.html" class="feed-chip">
+      <svg class="feed-chip-icon" width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,24a16,16,0,0,0-7.16,1.69l-88,44a16,16,0,0,0,0,28.62l88,44a16,16,0,0,0,14.32,0l88-44a16,16,0,0,0,0-28.62l-88-44A16,16,0,0,0,128,24Z"/><path d="M219.16,152.84,128,198.42,36.84,152.84a8,8,0,1,0-7.16,14.31l92,46a8,8,0,0,0,7.16,0l92-46a8,8,0,1,0-7.16-14.31Z"/><path d="M219.16,190.84,128,236.42,36.84,190.84a8,8,0,1,0-7.16,14.31l92,46a8,8,0,0,0,7.16,0l92-46a8,8,0,1,0-7.16-14.31Z"/></svg>
+      <span>Мой кабинет</span>
+    </a>
+  </nav>
+
+  <div class="feed-user-wrap">
+    <button type="button" class="feed-user" aria-haspopup="menu" aria-expanded="false" id="userBtn">
+      <span class="feed-user-avatar"></span>
+      <span class="feed-user-name"></span>
+      <svg class="feed-user-caret" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="feed-user-menu" role="menu" id="userMenu" hidden>
+      <a href="profile.html" role="menuitem">Профиль</a>
+      <a href="documents.html" role="menuitem">Документы</a>
+      <a href="settings.html" role="menuitem">Настройки</a>
+      <button type="button" class="feed-user-menu-logout" data-logout>Выйти</button>
+    </div>
+  </div>
+</header>
+<script src="shared.js"></script>
+
+<!-- ===== CABINET ===== -->
+<div class="ec-wrap">
+
+  <aside class="ec-aside" aria-label="Разделы кабинета">
+    <a class="ec-nav-item" href="profile.html">Профиль</a>
+    <a class="ec-nav-item" href="my-tasks.html#work">В работе<span class="ec-nav-count">3</span></a>
+    <a class="ec-nav-item" href="my-tasks.html#responses">Отклики и предложения</a>
+    <a class="ec-nav-item" href="my-tasks.html#done">Завершенные задачи</a>
+    <a class="ec-nav-item" href="documents.html">Документы</a>
+    <a class="ec-nav-item is-active" href="student-finance.html">Финансы</a>
+    <a class="ec-nav-item" href="settings.html">Настройки</a>
+  </aside>
+
+  <main class="ec-col-main">
+    <section class="ec-card">
+      <h2 class="ec-card-title">Финансы</h2>
+      <p class="fin-desc">Заработок по выполненным задачам. Средства поступают на баланс после того, как заказчик принял работу по безопасной сделке.</p>
+
+      <div class="fin-hero">
+        <svg class="fin-hero-radar" viewBox="0 0 666 698" fill="none" aria-hidden="true">
+          <circle cx="332.879" cy="348.679" r="59.0661" stroke="#fff" stroke-opacity="0.55"/>
+          <circle cx="332.878" cy="348.68" r="136.793" stroke="#fff" stroke-opacity="0.45"/>
+          <circle cx="332.876" cy="348.679" r="226.142" stroke="#fff" stroke-opacity="0.35"/>
+          <circle cx="332.876" cy="348.679" r="322.028" stroke="#fff" stroke-opacity="0.25"/>
+          <path d="M332.879 0L332.879 697.359" stroke="#fff" stroke-opacity="0.3"/>
+          <path d="M665.766 348.851L0.000806808 348.851" stroke="#fff" stroke-opacity="0.3"/>
+        </svg>
+        <div class="fin-hero-tx">
+          <div class="lbl">// ДОСТУПНО К&nbsp;ВЫВОДУ</div>
+          <div class="num">5 920&nbsp;₽</div>
+          <div class="hint">За месяц получено: 6 300&nbsp;₽ · налог ≈ 380&nbsp;₽</div>
+        </div>
+        <button type="button" class="fin-btn fin-btn--hero" id="withdrawBtn">Вывести</button>
+      </div>
+
+      <div class="fin-stats">
+        <div class="fin-stat">
+          <div class="lbl">Ожидает приёмки по&nbsp;безопасной сделке</div>
+          <div class="num">4 500 ₽</div>
+        </div>
+        <div class="fin-stat">
+          <div class="lbl">Заработано за&nbsp;всё время</div>
+          <div class="num">35 600 ₽</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ec-card">
+      <h2 class="ec-card-title">История</h2>
+      <div class="fin-hist">
+        <div class="fin-hist-row">
+          <span class="fin-hist-ic"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 10l3 3 7-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <div class="fin-hist-tx">
+            <div class="t">Регистрация участников конференции «ЭдьюТех»</div>
+            <div class="s">Заказчик: ЮгорскийГУ · 5 мая 2026</div>
+          </div>
+          <span class="fin-hist-sum">+2 500 ₽</span>
+        </div>
+        <div class="fin-hist-row">
+          <span class="fin-hist-ic"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 10l3 3 7-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <div class="fin-hist-tx">
+            <div class="t">Создание контент-плана на май</div>
+            <div class="s">Заказчик: МаркетПлюс · 30 апреля 2026</div>
+          </div>
+          <span class="fin-hist-sum">+3 800 ₽</span>
+        </div>
+        <div class="fin-hist-row">
+          <span class="fin-hist-ic"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="4" y="7" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M7 7V5a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="1.6"/></svg></span>
+          <div class="fin-hist-tx">
+            <div class="t">Сопровождение гостей форума «IT-Форум»</div>
+            <div class="s">Заказчик: КВЦ «Югра-Экспо» · в работе</div>
+          </div>
+          <span class="fin-hist-sum pending">4 500 ₽ в ожидании</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+</div>
+
+<div class="ec-toast" id="ecToast"></div>
+
+<script>
+(function(){
+  var btn = document.getElementById('withdrawBtn');
+  var toast = document.getElementById('ecToast');
+  if (btn) btn.addEventListener('click', function(){
+    toast.textContent = 'Вывод средств — скоро будет доступно';
+    toast.classList.add('is-visible');
+    setTimeout(function(){ toast.classList.remove('is-visible'); }, 2600);
+  });
+})();
+</script>
+
+</body>
+</html>

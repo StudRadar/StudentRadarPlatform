@@ -1,0 +1,869 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Профиль компании — СтудРадар</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Tektur:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root {
+      --ec-blue: #1153B5;
+      --ec-blue-08: hsla(216, 83%, 39%, 0.08);
+      --ec-accent: #DD5444;
+      --ec-ink: #020327;
+      --ec-ink-72: hsla(238, 90%, 8%, 0.72);
+      --ec-ink-40: hsla(238, 90%, 8%, 0.40);
+      --ec-fill-04: hsla(238, 90%, 8%, 0.04);
+      --ec-fill-06: hsla(238, 90%, 8%, 0.06);
+    }
+    body { background: #F2F2F2; font-family: 'Manrope', sans-serif; }
+
+    /* ===== Header ===== */
+    .ec-hd { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; background: #F2F2F2; }
+    .ec-hd-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+    .ec-hd-logo img { width: 40px; height: 40px; flex-shrink: 0; }
+    .ec-hd-logo span { font-family: 'Tektur', sans-serif; font-weight: 600; font-size: 19px; color: #000; white-space: nowrap; }
+    .ec-hd-menu { display: flex; align-items: center; gap: 10px; }
+    .ec-chip {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 24px; border-radius: 80px;
+      background: var(--ec-fill-04); color: var(--ec-ink);
+      font-size: 16px; text-decoration: none; border: 0; cursor: pointer; transition: background .15s;
+    }
+    .ec-chip:hover { background: var(--ec-fill-06); }
+    .ec-chip svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .ec-chip .ic-accent { color: var(--ec-accent); }
+    .ec-hd-user { position: relative; }
+    .ec-user {
+      display: flex; align-items: center; gap: 16px;
+      padding: 4px 28px 4px 4px; border-radius: 100px;
+      background: #E9E9EB; border: 1px solid hsla(0, 0%, 0%, 0.30); cursor: pointer;
+    }
+    .ec-user-ava {
+      width: 46px; height: 46px; border-radius: 50%; overflow: hidden; flex-shrink: 0;
+      background: #C9D4EA; display: flex; align-items: center; justify-content: center; color: #1153B5;
+    }
+    .ec-user-ava svg { width: 60%; height: 60%; }
+    .ec-user-name { font-size: 16px; color: var(--ec-ink); white-space: nowrap; }
+    .ec-user > svg { width: 20px; height: 20px; color: var(--ec-ink-72); }
+
+    /* ===== Layout ===== */
+    .ec-wrap { max-width: 1206px; margin: 0 auto; padding: 24px 40px 80px; display: flex; align-items: flex-start; gap: 24px; }
+    .ec-col-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 18px; }
+    .ec-aside { width: 290px; flex-shrink: 0; display: flex; flex-direction: column; gap: 0; }
+    .ec-nav-item {
+      display: flex; align-items: center; width: 290px; box-sizing: border-box;
+      padding: 16px 24px; border-radius: 10px; gap: 10px;
+      font-size: 16px; font-weight: 500; color: var(--ec-ink);
+      background: transparent; border: 0; cursor: pointer;
+      text-align: left; text-decoration: none; transition: background .15s, color .15s;
+    }
+    .ec-nav-item:hover { background: var(--ec-fill-04); }
+    .ec-nav-item.is-active { background: var(--ec-blue-08); color: var(--ec-blue); }
+
+    /* ===== Card section ===== */
+    .ec-card { background: #fff; border-radius: 32px; padding: 28px 30px; }
+    .ec-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+    .ec-card-title {
+      font-family: 'Tektur', sans-serif; font-weight: 700; font-size: 22px;
+      text-transform: uppercase; color: var(--ec-ink); margin: 0;
+    }
+    .ec-card-desc { font-size: 14px; color: var(--ec-ink-72); line-height: 1.55; margin: 8px 0 0; }
+    .ec-edit {
+      flex-shrink: 0; background: var(--ec-fill-04); border: 0; border-radius: 10px;
+      width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--ec-ink-72); transition: background .15s, color .15s;
+    }
+    .ec-edit:hover { background: var(--ec-accent); color: #fff; }
+    .ec-edit svg { width: 16px; height: 16px; }
+
+    /* ===== Company hero card ===== */
+    .cp-hero { display: flex; gap: 28px; position: relative; }
+    .cp-logo {
+      width: 132px; height: 132px; border-radius: 24px; flex-shrink: 0;
+      background: #C9D4EA; color: #1153B5; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Tektur', sans-serif; font-weight: 700; font-size: 40px;
+    }
+    .cp-logo img { width: 100%; height: 100%; object-fit: cover; }
+    .cp-logo-edit {
+      position: absolute; left: 108px; top: 108px;
+      width: 34px; height: 34px; border-radius: 50%; background: #fff;
+      border: 1.5px solid rgba(2,3,39,0.12); cursor: pointer;
+      display: flex; align-items: center; justify-content: center; color: var(--ec-ink-72);
+      box-shadow: 0 2px 8px rgba(2,3,39,0.14); transition: background .15s, color .15s;
+    }
+    .cp-logo-edit:hover { background: var(--ec-blue); color: #fff; border-color: var(--ec-blue); }
+    .cp-logo-edit svg { width: 14px; height: 14px; }
+    .cp-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+    .cp-badge {
+      position: relative; align-self: flex-start;
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 6px 14px; border-radius: 100px;
+      font-size: 13px; font-weight: 600; cursor: help;
+    }
+    .cp-badge svg { width: 16px; height: 16px; }
+    .cp-badge--none  { background: rgba(2,3,39,0.06); color: var(--ec-ink-72); }
+    .cp-badge--inn   { background: rgba(17,83,181,0.10); color: var(--ec-blue); }
+    .cp-badge--legal { background: rgba(34,197,94,0.13); color: #15803d; }
+    .cp-badge-tip {
+      position: absolute; top: calc(100% + 8px); left: 0; z-index: 20;
+      width: 280px; background: var(--ec-ink); color: #fff;
+      font-size: 13px; font-weight: 400; line-height: 1.5;
+      padding: 12px 14px; border-radius: 12px;
+      opacity: 0; pointer-events: none; transform: translateY(-4px);
+      transition: opacity .16s, transform .16s; box-shadow: 0 12px 32px rgba(2,3,39,0.25);
+    }
+    .cp-badge:hover .cp-badge-tip, .cp-badge:focus-visible .cp-badge-tip { opacity: 1; transform: translateY(0); }
+    .cp-name { font-family: 'Tektur', sans-serif; font-weight: 700; font-size: 28px; color: var(--ec-ink); margin: 0; line-height: 1.1; }
+    .cp-rating { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; color: var(--ec-ink-72); background: none; border: 0; padding: 0; cursor: pointer; font-family: 'Manrope', sans-serif; }
+    .cp-rating .st { color: #F5A623; font-weight: 700; }
+    .cp-rating b { color: var(--ec-ink); font-weight: 700; }
+    .cp-rating:hover { text-decoration: underline; }
+    .cp-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .cp-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 100px;
+      background: var(--ec-fill-04); color: var(--ec-ink-72);
+      font-size: 14px; font-weight: 500;
+    }
+    .cp-tag-add { cursor: pointer; border: 1px dashed rgba(2,3,39,0.20); background: transparent; color: var(--ec-ink-72); }
+    .cp-tag-add:hover { border-color: var(--ec-accent); color: var(--ec-accent); }
+    .cp-meta { font-size: 14px; color: var(--ec-ink-40); }
+    .cp-actions { position: absolute; top: 0; right: 0; display: flex; gap: 8px; }
+    .cp-act-btn {
+      width: 40px; height: 40px; border-radius: 12px; background: var(--ec-fill-04);
+      border: 0; cursor: pointer; color: var(--ec-ink-72);
+      display: flex; align-items: center; justify-content: center; transition: background .15s, color .15s;
+    }
+    .cp-act-btn:hover { background: var(--ec-blue); color: #fff; }
+    .cp-act-btn svg { width: 18px; height: 18px; }
+
+    /* ===== About ===== */
+    .cp-about-text { font-size: 16px; line-height: 1.6; color: var(--ec-ink); margin: 16px 0 0; white-space: pre-wrap; }
+    .cp-about-empty { font-size: 15px; color: var(--ec-ink-40); margin: 16px 0 0; font-style: italic; }
+
+    /* ===== Collapsible ===== */
+    .cp-collapse-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      cursor: pointer; user-select: none;
+    }
+    .cp-collapse-head .chev { transition: transform .2s; color: var(--ec-ink-72); flex-shrink: 0; }
+    .cp-collapse.is-open .chev { transform: rotate(180deg); }
+    .cp-collapse-body { display: none; margin-top: 22px; }
+    .cp-collapse.is-open .cp-collapse-body { display: block; }
+
+    /* ===== Forms ===== */
+    .cp-field { display: flex; flex-direction: column; gap: 7px; margin-bottom: 18px; }
+    .cp-field:last-child { margin-bottom: 0; }
+    .cp-label { font-size: 13px; font-weight: 600; color: var(--ec-ink-72); text-transform: uppercase; letter-spacing: 0.05em; }
+    .cp-input {
+      width: 100%; box-sizing: border-box;
+      background: var(--ec-fill-04); border: 1.5px solid transparent; border-radius: 12px;
+      padding: 13px 16px; font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 500;
+      color: var(--ec-ink); outline: none; transition: border-color .15s, background .15s;
+    }
+    .cp-input:focus { border-color: var(--ec-accent); background: #fff; }
+    .cp-input[readonly] { background: rgba(34,197,94,0.07); color: var(--ec-ink-72); border-color: transparent; }
+    .cp-input.is-error { border-color: var(--ec-accent); }
+    .cp-hint { font-size: 12px; color: var(--ec-ink-40); }
+    .cp-hint.ok { color: #15803d; }
+    .cp-hint.err { color: var(--ec-accent); }
+    .cp-row { display: flex; gap: 14px; }
+    .cp-row > .cp-field { flex: 1; }
+    .cp-radios { display: flex; gap: 10px; flex-wrap: wrap; }
+    .cp-radio {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 18px; border-radius: 12px; cursor: pointer;
+      background: var(--ec-fill-04); font-size: 15px; font-weight: 500; color: var(--ec-ink-72);
+      border: 1.5px solid transparent; transition: border-color .15s, color .15s, background .15s;
+    }
+    .cp-radio input { accent-color: var(--ec-blue); }
+    .cp-radio.is-sel { border-color: var(--ec-blue); color: var(--ec-blue); background: var(--ec-blue-08); }
+    .cp-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      height: 46px; padding: 0 22px; border-radius: 12px; border: 0; cursor: pointer;
+      font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 14px;
+      background: var(--ec-blue); color: #fff; transition: background .15s;
+    }
+    .cp-btn:hover { background: #0d439a; }
+    .cp-btn--ghost { background: var(--ec-fill-04); color: var(--ec-ink); }
+    .cp-btn--ghost:hover { background: var(--ec-fill-06); }
+    .cp-btn--accent { background: var(--ec-accent); }
+    .cp-btn--accent:hover { background: var(--ec-ink); }
+    .cp-inline-confirm { display: flex; gap: 10px; align-items: flex-end; }
+    .cp-inline-confirm .cp-field { flex: 1; margin-bottom: 0; }
+    .cp-confirm-btn {
+      height: 47px; padding: 0 18px; border-radius: 12px; border: 0; cursor: pointer;
+      background: var(--ec-fill-04); color: var(--ec-ink); font-weight: 600; font-size: 14px;
+      white-space: nowrap; transition: background .15s, color .15s;
+    }
+    .cp-confirm-btn:hover { background: var(--ec-blue); color: #fff; }
+    .cp-confirm-btn.is-done { background: rgba(34,197,94,0.13); color: #15803d; cursor: default; }
+    .cp-note {
+      margin-top: 20px; padding: 14px 16px; border-radius: 12px;
+      background: var(--ec-fill-04); font-size: 13px; line-height: 1.55; color: var(--ec-ink-72);
+    }
+    .cp-alt {
+      margin-top: 18px; padding: 16px 18px; border-radius: 14px;
+      background: rgba(17,83,181,0.05); border: 1px solid rgba(17,83,181,0.15);
+    }
+    .cp-alt-title { font-size: 14px; font-weight: 700; color: var(--ec-ink); margin: 0 0 4px; }
+    .cp-alt-text { font-size: 13px; color: var(--ec-ink-72); line-height: 1.5; margin: 0 0 12px; }
+
+    .cp-toggle-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 14px 0; border-bottom: 1px solid var(--ec-fill-06);
+    }
+    .cp-toggle-row:last-child { border-bottom: 0; }
+    .cp-toggle-row .tx { font-size: 15px; color: var(--ec-ink); }
+    .cp-switch { position: relative; width: 46px; height: 26px; flex-shrink: 0; }
+    .cp-switch input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .cp-switch .track {
+      position: absolute; inset: 0; border-radius: 999px;
+      background: rgba(2,3,39,0.15); transition: background .15s;
+    }
+    .cp-switch .track::before {
+      content: ''; position: absolute; left: 3px; top: 3px;
+      width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform .15s;
+    }
+    .cp-switch input:checked + .track { background: var(--ec-blue); }
+    .cp-switch input:checked + .track::before { transform: translateX(20px); }
+
+    .cp-team-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px; border-radius: 100px; background: rgba(17,83,181,0.10);
+      color: var(--ec-blue); font-size: 12px; font-weight: 700;
+    }
+
+    /* ===== Modal ===== */
+    .cp-modal { position: fixed; inset: 0; z-index: 900; display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity .2s; padding: 24px; }
+    .cp-modal.is-open { opacity: 1; pointer-events: auto; }
+    .cp-modal-bg { position: absolute; inset: 0; background: rgba(2,3,39,0.55); }
+    .cp-modal-win {
+      position: relative; background: #fff; border-radius: 24px; padding: 30px 32px;
+      width: min(560px, calc(100vw - 32px)); max-height: 86vh; overflow-y: auto;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.2); transform: translateY(10px); transition: transform .22s;
+    }
+    .cp-modal.is-open .cp-modal-win { transform: translateY(0); }
+    .cp-modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+    .cp-modal-title { font-family: 'Tektur', sans-serif; font-size: 22px; font-weight: 700; text-transform: uppercase; color: var(--ec-ink); margin: 0; }
+    .cp-modal-close {
+      width: 36px; height: 36px; border-radius: 50%; background: #F2F2F2; border: 0; cursor: pointer;
+      display: grid; place-items: center; color: var(--ec-ink); transition: background .2s, transform .2s;
+    }
+    .cp-modal-close:hover { background: #E3E4E7; transform: rotate(90deg); }
+    .cp-textarea {
+      width: 100%; box-sizing: border-box; min-height: 200px; resize: vertical;
+      background: var(--ec-fill-04); border: 1.5px solid transparent; border-radius: 14px;
+      padding: 16px; font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+      color: var(--ec-ink); outline: none;
+    }
+    .cp-textarea:focus { border-color: var(--ec-accent); background: #fff; }
+    .cp-counter { font-size: 13px; color: var(--ec-ink-40); text-align: right; margin: 8px 0 18px; }
+    .cp-counter.over { color: var(--ec-accent); }
+
+    /* ===== Preview modal public card ===== */
+    .cp-pub { display: flex; gap: 22px; }
+    .cp-pub-logo {
+      width: 96px; height: 96px; border-radius: 20px; flex-shrink: 0;
+      background: #C9D4EA; color: #1153B5; display: flex; align-items: center; justify-content: center;
+      font-family: 'Tektur', sans-serif; font-weight: 700; font-size: 30px; overflow: hidden;
+    }
+    .cp-pub-logo img { width: 100%; height: 100%; object-fit: cover; }
+    .cp-pub h3 { font-family: 'Tektur', sans-serif; font-size: 22px; font-weight: 700; color: var(--ec-ink); margin: 6px 0 8px; }
+    .cp-pub-meta { font-size: 14px; color: var(--ec-ink-40); margin-bottom: 10px; }
+    .cp-pub-about { font-size: 15px; line-height: 1.55; color: var(--ec-ink-72); margin-top: 16px; white-space: pre-wrap; }
+
+    .cp-toast {
+      position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(20px);
+      background: var(--ec-ink); color: #fff; padding: 14px 22px; border-radius: 14px;
+      font-size: 15px; font-weight: 600; box-shadow: 0 16px 40px rgba(2,3,39,0.28);
+      opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 950;
+    }
+    .cp-toast.is-shown { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 980px) {
+      .ec-hd { padding: 16px 20px; }
+      .ec-hd-menu .ec-chip span { display: none; }
+      .ec-wrap { flex-direction: column; padding: 20px 16px 60px; }
+      .ec-aside { width: 100%; flex-direction: row; overflow-x: auto; gap: 8px; }
+      .ec-nav-item { width: auto; white-space: nowrap; }
+      .ec-col-main { width: 100%; }
+      .cp-hero { flex-direction: column; }
+      .cp-actions { position: static; margin-bottom: 8px; }
+      .cp-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body class="orange-theme" data-screen-label="Профиль компании">
+<script>(function(){
+  try {
+    var s = localStorage.getItem('studradar_session');
+    var h = s && JSON.parse(s).role;
+    if (!h) { window.location.replace('employer.html'); return; }
+    if (h === 'student') { window.location.replace('catalog.html'); return; }
+  } catch(e){}
+})();</script>
+
+<!-- ===== HEADER ===== -->
+<header class="ec-hd">
+  <a href="employer-dashboard.html" class="ec-hd-logo">
+    <img src="assets/logo.svg" alt=""/>
+    <span>СтудРадар</span>
+  </a>
+  <nav class="ec-hd-menu" aria-label="Меню">
+    <a href="students.html" class="ec-chip">
+      <svg class="ic-accent" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M64.12,147.8a4,4,0,0,1-4,4.2H16a8,8,0,0,1-7.8-6.17,8.35,8.35,0,0,1,1.62-6.93A67.79,67.79,0,0,1,37,117.51a40,40,0,1,1,66.46-35.8,3.94,3.94,0,0,1-2.27,4.18A64.08,64.08,0,0,0,64,144C64,145.27,64,146.54,64.12,147.8Zm182-8.91A67.76,67.76,0,0,0,219,117.51a40,40,0,1,0-66.46-35.8,3.94,3.94,0,0,0,2.27,4.18A64.08,64.08,0,0,1,192,144c0,1.27,0,2.54-.12,3.8a4,4,0,0,0,4,4.2H240a8,8,0,0,0,7.8-6.17A8.33,8.33,0,0,0,246.17,138.89Zm-89,43.18a48,48,0,1,0-58.37,0A72.13,72.13,0,0,0,65.07,212,8,8,0,0,0,72,224H184a8,8,0,0,0,6.93-12A72.15,72.15,0,0,0,157.16,182.07Z"/></svg>
+      <span>Студенты</span>
+    </a>
+    <a href="employer-dashboard.html" class="ec-chip">
+      <svg class="ic-accent" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,24a16,16,0,0,0-7.16,1.69l-88,44a16,16,0,0,0,0,28.62l88,44a16,16,0,0,0,14.32,0l88-44a16,16,0,0,0,0-28.62l-88-44A16,16,0,0,0,128,24Z"/><path d="M219.16,152.84,128,198.42,36.84,152.84a8,8,0,1,0-7.16,14.31l92,46a8,8,0,0,0,7.16,0l92-46a8,8,0,1,0-7.16-14.31Z"/><path d="M219.16,190.84,128,236.42,36.84,190.84a8,8,0,1,0-7.16,14.31l92,46a8,8,0,0,0,7.16,0l92-46a8,8,0,1,0-7.16-14.31Z"/></svg>
+      <span>Мой кабинет</span>
+    </a>  </nav>
+  <div class="ec-hd-user">
+    <div class="ec-notif" id="ecNotif">
+      <button type="button" class="ec-notif-btn" id="notifBtn" aria-label="Уведомления" aria-haspopup="menu" aria-expanded="false">
+        <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216Z"/></svg>
+        <span class="ec-notif-dot">3</span>
+      </button>
+      <div class="ec-notif-menu" id="notifMenu" role="menu" hidden>
+        <div class="ec-notif-head">Уведомления</div>
+        <a class="ec-notif-item unread" href="employer-dashboard.html#responses" role="menuitem">
+          <span class="ec-notif-ic"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M232.07,186.76a80,80,0,0,0-62.5-114.17A80,80,0,1,0,23.93,138.76l-7.27,24.71a16,16,0,0,0,19.87,19.87l24.71-7.27a80.39,80.39,0,0,0,25.18,7.35,80,80,0,0,0,108.94,40.45l24.71,7.27a16,16,0,0,0,19.87-19.86Z"/></svg></span>
+          <span class="ec-notif-tx"><span class="t">Новый отклик</span><span class="s">«Лендинг для образовательного курса» — 3 кандидата</span></span>
+        </a>
+        <a class="ec-notif-item unread" href="employer-chat.html?id=1" role="menuitem">
+          <span class="ec-notif-ic"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Z"/></svg></span>
+          <span class="ec-notif-tx"><span class="t">Сообщение от Ксении Р.</span><span class="s">по задаче «Сопровождение гостей форума «Югра-Экспо»»</span></span>
+        </a>
+        <a class="ec-notif-item" href="employer-finance.html" role="menuitem">
+          <span class="ec-notif-ic"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M216,64H56a8,8,0,0,1,0-16H192a8,8,0,0,0,0-16H56A24,24,0,0,0,32,56V184a24,24,0,0,0,24,24H216a16,16,0,0,0,16-16V80A16,16,0,0,0,216,64Zm-36,80a12,12,0,1,1,12-12A12,12,0,0,1,180,144Z"/></svg></span>
+          <span class="ec-notif-tx"><span class="t">Средства заморожены по эскроу</span><span class="s">5 175 ₽ по задаче «Югра-Экспо»</span></span>
+        </a>
+        <a class="ec-notif-all" href="chats.html">Все уведомления</a>
+      </div>
+    </div>
+    <button type="button" class="ec-user" id="userBtn" aria-haspopup="menu" aria-expanded="false">
+      <span class="ec-user-ava" aria-hidden="true">
+        <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128,24a104,104,0,1,0,104,104A104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"/></svg>
+      </span>
+      <span class="ec-user-name" id="ecUserName">Ивент-агентство Югра 360</span>
+      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="feed-user-menu" role="menu" id="userMenu" hidden>
+      <a href="employer-profile.html" role="menuitem" class="is-active">Профиль</a>
+      <a href="settings.html" role="menuitem">Настройки</a>
+      <button type="button" class="feed-user-menu-logout" data-logout>Выйти</button>
+    </div>
+  </div>
+</header>
+<script src="shared.js"></script>
+
+<!-- ===== CABINET ===== -->
+<div class="ec-wrap">
+
+  <aside class="ec-aside" aria-label="Разделы кабинета">
+    <a class="ec-nav-item" href="employer-dashboard.html#work">В работе</a>
+    <a class="ec-nav-item" href="employer-dashboard.html#responses">Сбор откликов</a>
+    <a class="ec-nav-item" href="employer-dashboard.html#done">Завершенные задачи</a>
+    <a class="ec-nav-item" href="employer-documents.html">Документы</a>
+    <a class="ec-nav-item" href="employer-finance.html">Финансы</a>
+    <a class="ec-nav-item is-active" href="employer-profile.html">Профиль</a>
+  </aside>
+
+  <main class="ec-col-main">
+
+    <!-- 1. Company hero -->
+    <section class="ec-card">
+      <div class="cp-hero">
+        <div style="position:relative;flex-shrink:0;">
+          <div class="cp-logo" id="cpLogo"><span id="cpLogoInitials">Ю3</span></div>
+          <button type="button" class="cp-logo-edit" id="cpLogoEdit" aria-label="Загрузить логотип" title="Загрузить логотип 256×256">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M227.32,73.37,182.63,28.69a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.32,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120Z"/></svg>
+          </button>
+        </div>
+
+        <div class="cp-info">
+          <div class="cp-badge cp-badge--inn" id="cpBadge" tabindex="0">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M225.86,102.82c-3.77-3.94-7.67-8-9.14-11.57-1.36-3.27-1.44-8.69-1.52-13.94-.15-9.76-.31-20.82-8-28.51S178.44,40.46,168.68,40.31c-5.25-.08-10.67-.16-13.94-1.52-3.56-1.47-7.63-5.37-11.57-9.14C136.24,22.81,128.28,15,120,15s-16.24,7.81-23.18,14.65c-3.94,3.77-8,7.67-11.57,9.14C82,40.15,76.56,40.23,71.31,40.31c-9.76.15-20.82.31-28.51,8s-7.85,18.75-8,28.51c-.08,5.25-.16,10.67-1.52,13.94-1.47,3.56-5.37,7.63-9.14,11.57C17.31,109.76,9.5,117.72,9.5,126s7.81,16.24,14.65,23.18c3.77,3.94,7.67,8,9.14,11.57,1.36,3.27,1.44,8.69,1.52,13.94.15,9.76.31,20.82,8,28.51s18.75,7.85,28.51,8c5.25.08,10.67.16,13.94,1.52,3.56,1.47,7.63,5.37,11.57,9.14C103.76,228.69,111.72,236.5,120,236.5s16.24-7.81,23.18-14.65c3.94-3.77,8-7.67,11.57-9.14,3.27-1.36,8.69-1.44,13.94-1.52,9.76-.15,20.82-.31,28.51-8s7.85-18.75,8-28.51c.08-5.25.16-10.67,1.52-13.94,1.47-3.56,5.37-7.63,9.14-11.57C231.69,142.24,239.5,134.28,239.5,126S231.69,109.76,225.86,102.82Zm-53.32,3.51-50,72a8,8,0,0,1-12.49.93l-32-32a8,8,0,0,1,11.32-11.32l25.43,25.43,44.59-64.18a8,8,0,1,1,13.16,9.14Z" transform="translate(8,2)"/></svg>
+            <span id="cpBadgeText">ИНН подтверждён</span>
+            <div class="cp-badge-tip" id="cpBadgeTip">ИНН проверен автоматически через ФНС. Студенты видят бейдж «ИНН подтверждён» — это значит, что компания существует в реестре. Для статуса «Юр. лицо проверено» пройдите ручную модерацию перед первой выплатой.</div>
+          </div>
+          <h1 class="cp-name" id="cpName">Ивент-агентство Югра 360</h1>
+          <button type="button" class="cp-rating" id="cpRating">
+            <span class="st">★ 4.8</span>
+            <span>·</span>
+            <span><b>23 отзыва</b> от студентов</span>
+          </button>
+          <div class="cp-tags" id="cpTags">
+            <span class="cp-tag">Ивенты</span>
+            <span class="cp-tag">SMM</span>
+            <span class="cp-tag">Регистрация гостей</span>
+            <button type="button" class="cp-tag cp-tag-add" id="cpTagAdd">+ тег</button>
+          </div>
+          <div class="cp-meta" id="cpCompMeta">Ханты-Мансийск · Организация мероприятий · 11–50 сотрудников</div>
+        </div>
+
+        <div class="cp-actions">
+          <button type="button" class="cp-act-btn" id="cpShare" title="Поделиться публичной ссылкой">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M176,160a39.89,39.89,0,0,0-28.62,12.09l-46.1-29.63a39.8,39.8,0,0,0,0-28.92l46.1-29.63a40,40,0,1,0-8.66-13.45l-46.1,29.63a40,40,0,1,0,0,55.82l46.1,29.63A40,40,0,1,0,176,160Z"/></svg>
+          </button>
+          <button type="button" class="cp-act-btn" id="cpPreview" title="Предпросмотр — как меня видит студент">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M247.31,124.76c-.35-.79-8.82-19.58-27.65-38.41C194.57,61.26,162.88,48,128,48S61.43,61.26,36.34,86.35C17.51,105.18,9,124,8.69,124.76a8,8,0,0,0,0,6.5c.35.79,8.82,19.57,27.65,38.4C61.43,194.74,93.12,208,128,208s66.57-13.26,91.66-38.34c18.83-18.83,27.3-37.61,27.65-38.4A8,8,0,0,0,247.31,124.76ZM128,168a40,40,0,1,1,40-40A40,40,0,0,1,128,168Z"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. О компании -->
+    <section class="ec-card">
+      <div class="ec-card-head">
+        <div>
+          <h2 class="ec-card-title">О&nbsp;компании</h2>
+          <p class="ec-card-desc">Публичный текст. Студенты видят его до отклика — опишите деятельность, типичные задачи и ожидания от исполнителей.</p>
+        </div>
+        <button type="button" class="ec-edit" id="cpAboutEdit" aria-label="Редактировать">
+          <svg viewBox="0 0 256 256" fill="currentColor"><path d="M227.32,73.37,182.63,28.69a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.32,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120Z"/></svg>
+        </button>
+      </div>
+      <p class="cp-about-text" id="cpAboutText">Организуем деловые и культурные мероприятия в Югре: форумы, конференции, фестивали. Чаще всего привлекаем студентов на регистрацию гостей, сопровождение делегаций и работу в фотозонах.
+
+Важно: на части задач есть форма (поло + бейдж), работа может начинаться рано утром. Если задача связана с транспортом — выезд на площадку на нашем микроавтобусе, нужны ответственные ребята. Все детали пишем в задаче, но если что-то непонятно — спрашивайте до отклика.</p>
+      <p class="cp-about-empty" id="cpAboutEmpty" style="display:none;">Заказчик пока не заполнил описание</p>
+    </section>
+
+    <!-- 3. Реквизиты -->
+    <section class="ec-card cp-collapse" id="cpReq">
+      <div class="cp-collapse-head" id="cpReqHead">
+        <div>
+          <h2 class="ec-card-title">Реквизиты</h2>
+          <p class="ec-card-desc">Приватный раздел. Заполните до первой выплаты исполнителю — для размещения задачи это не требуется.</p>
+        </div>
+        <svg class="chev" width="22" height="22" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="cp-collapse-body">
+        <div class="cp-field">
+          <span class="cp-label">Тип организации</span>
+          <div class="cp-radios" id="cpOrgType">
+            <label class="cp-radio is-sel"><input type="radio" name="orgtype" value="legal" checked> Юр. лицо</label>
+            <label class="cp-radio"><input type="radio" name="orgtype" value="ip"> ИП</label>
+            <label class="cp-radio"><input type="radio" name="orgtype" value="self"> Самозанятый</label>
+          </div>
+        </div>
+
+        <div class="cp-field">
+          <span class="cp-label">ИНН</span>
+          <div class="cp-inline-confirm">
+            <div class="cp-field">
+              <input class="cp-input" id="cpInn" inputmode="numeric" maxlength="12" placeholder="10 или 12 цифр" value="8601012340"/>
+            </div>
+            <button type="button" class="cp-btn" id="cpFnsBtn">Подтянуть данные из ФНС</button>
+          </div>
+          <span class="cp-hint" id="cpInnHint">Проверка контрольной суммы ИНН</span>
+        </div>
+
+        <div class="cp-field">
+          <span class="cp-label">Полное наименование</span>
+          <input class="cp-input" id="cpFullName" placeholder="Заполнится из ЕГРЮЛ/ЕГРИП" />
+        </div>
+        <div class="cp-row">
+          <div class="cp-field">
+            <span class="cp-label">ОГРН / ОГРНИП</span>
+            <input class="cp-input" id="cpOgrn" placeholder="Из ЕГРЮЛ/ЕГРИП" />
+          </div>
+          <div class="cp-field" id="cpKppField">
+            <span class="cp-label">КПП</span>
+            <input class="cp-input" id="cpKpp" placeholder="Только для юр. лица" />
+          </div>
+        </div>
+        <div class="cp-field" id="cpDirectorField">
+          <span class="cp-label">Руководитель</span>
+          <input class="cp-input" id="cpDirector" placeholder="ФИО (из ЕГРЮЛ)" />
+        </div>
+        <div class="cp-row">
+          <div class="cp-field">
+            <span class="cp-label">Расчётный счёт</span>
+            <input class="cp-input" id="cpAcc" inputmode="numeric" placeholder="20 цифр" />
+          </div>
+          <div class="cp-field">
+            <span class="cp-label">БИК банка</span>
+            <input class="cp-input" id="cpBik" inputmode="numeric" placeholder="9 цифр" />
+          </div>
+        </div>
+        <div class="cp-field">
+          <span class="cp-label">Корреспондентский счёт</span>
+          <input class="cp-input" id="cpCorr" inputmode="numeric" placeholder="20 цифр" />
+        </div>
+        <div class="cp-field">
+          <span class="cp-label">Юридический адрес</span>
+          <input class="cp-input" id="cpLegalAddr" placeholder="Заполнится из ЕГРЮЛ, можно отредактировать" />
+        </div>
+        <div class="cp-field">
+          <label class="cp-toggle-row" style="padding:0;border:0;cursor:pointer;">
+            <span class="tx" style="font-size:14px;color:var(--ec-ink-72);">Фактический адрес совпадает с юридическим</span>
+            <span class="cp-switch"><input type="checkbox" id="cpSameAddr" checked><span class="track"></span></span>
+          </label>
+        </div>
+        <div class="cp-field" id="cpFactAddrField" style="display:none;">
+          <span class="cp-label">Фактический адрес</span>
+          <input class="cp-input" id="cpFactAddr" placeholder="Фактический адрес" />
+        </div>
+
+        <div class="cp-alt">
+          <p class="cp-alt-title">Нет ИНН? Подтвердите через соцсети</p>
+          <p class="cp-alt-text">Для микробизнеса без ИНН — укажите ссылку на действующее сообщество «ВКонтакте». После ручной модерации получите статус «Базовая проверка» (без зелёного бейджа).</p>
+          <div class="cp-inline-confirm">
+            <div class="cp-field">
+              <input class="cp-input" id="cpVk" placeholder="https://vk.com/your_community" />
+            </div>
+            <button type="button" class="cp-btn cp-btn--ghost" id="cpVkBtn">Отправить на проверку</button>
+          </div>
+        </div>
+
+        <div class="cp-note">Данные используются для формирования закрывающих документов и проверки в соответствии с ФЗ-289 от 31.07.2025. Студентам не показываются.</div>
+
+        <div style="margin-top:22px;"><button type="button" class="cp-btn cp-btn--accent" id="cpReqSave">Сохранить реквизиты</button></div>
+      </div>
+    </section>
+
+    <!-- 4. Контактное лицо -->
+    <section class="ec-card">
+      <div class="ec-card-head">
+        <div>
+          <h2 class="ec-card-title">Контактное лицо</h2>
+          <p class="ec-card-desc">Кто из сотрудников работает на платформе. Приватный раздел — студентам не показывается.</p>
+        </div>
+      </div>
+      <div style="margin-top:22px;">
+        <div class="cp-row">
+          <div class="cp-field">
+            <span class="cp-label">ФИО</span>
+            <input class="cp-input" id="cpCpName" value="Владислав Г." />
+          </div>
+          <div class="cp-field">
+            <span class="cp-label">Должность</span>
+            <input class="cp-input" id="cpCpRole" value="Менеджер проектов" />
+          </div>
+        </div>
+
+        <div class="cp-field">
+          <span class="cp-label">E-mail</span>
+          <div class="cp-inline-confirm">
+            <div class="cp-field"><input class="cp-input" id="cpCpEmail" type="email" value="vlad@ugra360.ru" /></div>
+            <button type="button" class="cp-confirm-btn" data-confirm="email">Подтвердить кодом</button>
+          </div>
+        </div>
+
+        <div class="cp-field">
+          <span class="cp-label">Телефон</span>
+          <div class="cp-inline-confirm">
+            <div class="cp-field"><input class="cp-input" id="cpCpPhone" value="+7 912 559 43 21" /></div>
+            <button type="button" class="cp-confirm-btn" data-confirm="phone">Подтвердить по SMS</button>
+          </div>
+        </div>
+
+        <div class="cp-field">
+          <span class="cp-label">Telegram / WhatsApp <span style="text-transform:none;font-weight:500;color:var(--ec-ink-40);">— опционально, для уведомлений вне платформы</span></span>
+          <input class="cp-input" id="cpCpMessenger" placeholder="@username или номер" />
+        </div>
+
+        <div style="margin-top:8px;">
+          <label class="cp-toggle-row">
+            <span class="tx">Получать SMS-уведомления о новых откликах</span>
+            <span class="cp-switch"><input type="checkbox" id="cpNotifSms" checked><span class="track"></span></span>
+          </label>
+          <label class="cp-toggle-row">
+            <span class="tx">Получать e-mail-дайджест задач раз в неделю</span>
+            <span class="cp-switch"><input type="checkbox" id="cpNotifDigest"><span class="track"></span></span>
+          </label>
+        </div>
+
+        <div class="cp-collapse" id="cpTeam" style="margin-top:18px;">
+          <div class="cp-collapse-head" id="cpTeamHead" style="padding:14px 0 0;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span style="font-size:16px;font-weight:700;color:var(--ec-ink);">Команда</span>
+              <span class="cp-team-badge">появится в v1.1</span>
+            </div>
+            <svg class="chev" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="cp-collapse-body">
+            <p style="font-size:14px;color:var(--ec-ink-72);line-height:1.55;margin:0 0 14px;">Можно будет пригласить ещё одного сотрудника в этот аккаунт с разграничением прав:</p>
+            <ul style="margin:0 0 16px;padding-left:20px;font-size:14px;color:var(--ec-ink-72);line-height:1.7;">
+              <li><b style="color:var(--ec-ink);">Менеджер</b> — публикует задачи и общается со студентами</li>
+              <li><b style="color:var(--ec-ink);">Бухгалтер</b> — видит только финансы и документы</li>
+            </ul>
+            <button type="button" class="cp-btn cp-btn--ghost" disabled style="opacity:.6;cursor:not-allowed;">Пригласить сотрудника · скоро</button>
+          </div>
+        </div>
+
+        <div style="margin-top:22px;"><button type="button" class="cp-btn cp-btn--accent" id="cpContactSave">Сохранить контактное лицо</button></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ===== MODAL: О компании ===== -->
+<div class="cp-modal" id="aboutModal" role="dialog" aria-modal="true">
+  <div class="cp-modal-bg" data-close></div>
+  <div class="cp-modal-win">
+    <div class="cp-modal-head">
+      <h2 class="cp-modal-title">О компании</h2>
+      <button type="button" class="cp-modal-close" data-close aria-label="Закрыть">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <textarea class="cp-textarea" id="aboutInput" maxlength="1500" placeholder="Опишите деятельность компании, типичные задачи и ожидания от исполнителей"></textarea>
+    <div class="cp-counter" id="aboutCounter">0 / 1500</div>
+    <button type="button" class="cp-btn cp-btn--accent" id="aboutSave" style="width:100%;height:52px;">Сохранить</button>
+  </div>
+</div>
+
+<!-- ===== MODAL: Предпросмотр ===== -->
+<div class="cp-modal" id="prevModal" role="dialog" aria-modal="true">
+  <div class="cp-modal-bg" data-close></div>
+  <div class="cp-modal-win">
+    <div class="cp-modal-head">
+      <h2 class="cp-modal-title">Как вас видит студент</h2>
+      <button type="button" class="cp-modal-close" data-close aria-label="Закрыть">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="cp-pub">
+      <div class="cp-pub-logo" id="pvLogo">Ю3</div>
+      <div style="min-width:0;">
+        <span class="cp-badge cp-badge--inn" id="pvBadge" style="cursor:default;"><span id="pvBadgeText">ИНН подтверждён</span></span>
+        <h3 id="pvName">Ивент-агентство Югра 360</h3>
+        <div style="font-size:15px;color:var(--ec-ink-72);"><span class="st" style="color:#F5A623;font-weight:700;">★ 4.8</span> · <b style="color:var(--ec-ink);">23 отзыва</b> от студентов</div>
+        <div class="cp-pub-meta" id="pvMeta" style="margin-top:8px;">Ханты-Мансийск · Организация мероприятий · 11–50 сотрудников</div>
+        <div class="cp-tags" id="pvTags" style="margin-top:10px;"></div>
+      </div>
+    </div>
+    <div class="cp-pub-about" id="pvAbout"></div>
+  </div>
+</div>
+
+<div class="cp-toast" id="cpToast">Сохранено</div>
+
+<script>
+(function () {
+  'use strict';
+  var STORE = 'studradar_employer_profile_v1';
+  function load() { try { return JSON.parse(localStorage.getItem(STORE) || '{}'); } catch (e) { return {}; } }
+  function save(d) { try { localStorage.setItem(STORE, JSON.stringify(d)); } catch (e) {} }
+  var state = load();
+
+  var toast = document.getElementById('cpToast'), tt;
+  function showToast(m) { toast.textContent = m; toast.classList.add('is-shown'); clearTimeout(tt); tt = setTimeout(function () { toast.classList.remove('is-shown'); }, 2200); }
+
+  function val(id) { var e = document.getElementById(id); return e ? e.value.trim() : ''; }
+  function setVal(id, v) { var e = document.getElementById(id); if (e && v != null) e.value = v; }
+
+  // ── Restore persisted simple fields ──
+  ['cpInn','cpFullName','cpOgrn','cpKpp','cpDirector','cpAcc','cpBik','cpCorr','cpLegalAddr','cpFactAddr','cpVk','cpCpName','cpCpRole','cpCpEmail','cpCpPhone','cpCpMessenger']
+    .forEach(function (id) { if (state[id]) setVal(id, state[id]); });
+  if (state.about) applyAbout(state.about);
+
+  // ── Logo initials from name ──
+  function initials(name) {
+    var p = (name || '').trim().split(/\s+/).filter(Boolean);
+    if (!p.length) return '?';
+    var s = p[0][0] + (p[1] ? p[1][0] : (p[0][1] || ''));
+    return s.toUpperCase();
+  }
+  document.getElementById('cpLogoInitials').textContent = initials(document.getElementById('cpName').textContent);
+
+  document.getElementById('cpLogoEdit').addEventListener('click', function () {
+    showToast('Загрузка логотипа 256×256 — выбор файла');
+  });
+
+  // ── Verification badge tooltip is CSS hover; click toggles for touch ──
+  var badge = document.getElementById('cpBadge');
+  badge.addEventListener('click', function () {
+    var tip = document.getElementById('cpBadgeTip');
+    tip.style.opacity = tip.style.opacity === '1' ? '' : '1';
+    tip.style.transform = tip.style.opacity === '1' ? 'translateY(0)' : '';
+  });
+
+  // ── Rating scrolls to reviews (no reviews block yet → toast) ──
+  document.getElementById('cpRating').addEventListener('click', function () {
+    showToast('Блок «Отзывы» — 23 отзыва от студентов');
+  });
+
+  // ── Tags add ──
+  document.getElementById('cpTagAdd').addEventListener('click', function () {
+    var t = prompt('Новый тег категории задач');
+    if (!t) return;
+    var span = document.createElement('span');
+    span.className = 'cp-tag';
+    span.textContent = t.trim();
+    this.parentNode.insertBefore(span, this);
+  });
+
+  // ── About modal ──
+  var aboutModal = document.getElementById('aboutModal');
+  var aboutInput = document.getElementById('aboutInput');
+  var aboutCounter = document.getElementById('aboutCounter');
+  function currentAbout() {
+    var t = document.getElementById('cpAboutText');
+    return t.style.display === 'none' ? '' : t.textContent;
+  }
+  function applyAbout(text) {
+    var t = document.getElementById('cpAboutText'), e = document.getElementById('cpAboutEmpty');
+    if (text && text.trim()) { t.textContent = text; t.style.display = ''; e.style.display = 'none'; }
+    else { t.style.display = 'none'; e.style.display = ''; }
+  }
+  function updCounter() {
+    var n = aboutInput.value.length;
+    aboutCounter.textContent = n + ' / 1500';
+    aboutCounter.classList.toggle('over', n >= 1500);
+  }
+  document.getElementById('cpAboutEdit').addEventListener('click', function () {
+    aboutInput.value = currentAbout();
+    updCounter();
+    aboutModal.classList.add('is-open');
+  });
+  aboutInput.addEventListener('input', updCounter);
+  document.getElementById('aboutSave').addEventListener('click', function () {
+    applyAbout(aboutInput.value);
+    state.about = aboutInput.value;
+    save(state);
+    aboutModal.classList.remove('is-open');
+    showToast('Описание сохранено');
+  });
+
+  // ── Preview modal ──
+  document.getElementById('cpPreview').addEventListener('click', function () {
+    document.getElementById('pvLogo').textContent = document.getElementById('cpLogoInitials').textContent;
+    document.getElementById('pvName').textContent = document.getElementById('cpName').textContent;
+    document.getElementById('pvMeta').textContent = document.getElementById('cpCompMeta').textContent;
+    document.getElementById('pvBadgeText').textContent = document.getElementById('cpBadgeText').textContent;
+    var pvBadge = document.getElementById('pvBadge');
+    pvBadge.className = 'cp-badge ' + document.getElementById('cpBadge').className.split(' ').filter(function(c){return c.indexOf('cp-badge--')===0;})[0];
+    var tags = document.getElementById('pvTags'); tags.innerHTML = '';
+    document.querySelectorAll('#cpTags .cp-tag:not(.cp-tag-add)').forEach(function (t) {
+      var s = document.createElement('span'); s.className = 'cp-tag'; s.textContent = t.textContent; tags.appendChild(s);
+    });
+    var about = currentAbout();
+    document.getElementById('pvAbout').textContent = about || 'Заказчик пока не заполнил описание';
+    document.getElementById('prevModal').classList.add('is-open');
+  });
+
+  // ── Share ──
+  document.getElementById('cpShare').addEventListener('click', function () {
+    var url = location.origin + '/employer-public.html?c=ugra360';
+    if (navigator.clipboard) navigator.clipboard.writeText(url).then(function(){ showToast('Публичная ссылка скопирована'); }, function(){ showToast('Ссылка: ' + url); });
+    else showToast('Ссылка: ' + url);
+  });
+
+  // ── Modal close ──
+  document.querySelectorAll('[data-close]').forEach(function (el) {
+    el.addEventListener('click', function () { el.closest('.cp-modal').classList.remove('is-open'); });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') document.querySelectorAll('.cp-modal.is-open').forEach(function (m) { m.classList.remove('is-open'); });
+  });
+
+  // ── Collapsibles ──
+  function bindCollapse(wrapId, headId) {
+    var wrap = document.getElementById(wrapId), head = document.getElementById(headId);
+    head.addEventListener('click', function () { wrap.classList.toggle('is-open'); });
+  }
+  bindCollapse('cpReq', 'cpReqHead');
+  bindCollapse('cpTeam', 'cpTeamHead');
+
+  // ── Org type radios ──
+  var kppField = document.getElementById('cpKppField');
+  var dirField = document.getElementById('cpDirectorField');
+  document.querySelectorAll('#cpOrgType .cp-radio').forEach(function (lab) {
+    lab.querySelector('input').addEventListener('change', function () {
+      document.querySelectorAll('#cpOrgType .cp-radio').forEach(function (l) { l.classList.remove('is-sel'); });
+      lab.classList.add('is-sel');
+      var v = this.value;
+      kppField.style.display = v === 'legal' ? '' : 'none';
+      dirField.style.display = v === 'legal' ? '' : 'none';
+    });
+  });
+
+  // ── Same address toggle ──
+  document.getElementById('cpSameAddr').addEventListener('change', function () {
+    document.getElementById('cpFactAddrField').style.display = this.checked ? 'none' : '';
+  });
+
+  // ── INN checksum validation ──
+  function validInn(inn) {
+    if (!/^\d{10}$|^\d{12}$/.test(inn)) return false;
+    var d = inn.split('').map(Number);
+    function cs(arr, coefs) { var s = 0; for (var i = 0; i < coefs.length; i++) s += arr[i] * coefs[i]; return (s % 11) % 10; }
+    if (inn.length === 10) return cs(d, [2,4,10,3,5,9,4,6,8]) === d[9];
+    var n11 = cs(d, [7,2,4,10,3,5,9,4,6,8]);
+    var n12 = cs(d, [3,7,2,4,10,3,5,9,4,6,8]);
+    return n11 === d[10] && n12 === d[11];
+  }
+  var innEl = document.getElementById('cpInn'), innHint = document.getElementById('cpInnHint');
+  function checkInn() {
+    var v = innEl.value.trim();
+    if (!v) { innHint.textContent = 'Проверка контрольной суммы ИНН'; innHint.className = 'cp-hint'; innEl.classList.remove('is-error'); return false; }
+    if (validInn(v)) { innHint.textContent = '✓ ИНН корректен'; innHint.className = 'cp-hint ok'; innEl.classList.remove('is-error'); return true; }
+    innHint.textContent = 'Неверная контрольная сумма ИНН'; innHint.className = 'cp-hint err'; innEl.classList.add('is-error'); return false;
+  }
+  innEl.addEventListener('input', function () { innEl.value = innEl.value.replace(/\D/g, '').slice(0, 12); checkInn(); });
+  checkInn();
+
+  // ── Pull from ФНС (mock autofill) ──
+  document.getElementById('cpFnsBtn').addEventListener('click', function () {
+    if (!checkInn()) { showToast('Сначала введите корректный ИНН'); return; }
+    var legal = document.querySelector('#cpOrgType input:checked').value === 'legal';
+    var data = {
+      cpFullName: legal ? 'ООО «Югра 360»' : 'ИП Гордеев Владислав Сергеевич',
+      cpOgrn: legal ? '1158600000123' : '318861700012345',
+      cpKpp: legal ? '860101001' : '',
+      cpDirector: legal ? 'Гордеев Владислав Сергеевич' : '',
+      cpLegalAddr: '628012, ХМАО-Югра, г. Ханты-Мансийск, ул. Студенческая, 19'
+    };
+    Object.keys(data).forEach(function (id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.value = data[id];
+      if (data[id]) { el.setAttribute('readonly', 'readonly'); el.title = 'Из ЕГРЮЛ/ЕГРИП'; }
+    });
+    showToast('Данные подтянуты из ФНС — поля из ЕГРЮЛ/ЕГРИП');
+  });
+
+  // ── VK alt verification ──
+  document.getElementById('cpVkBtn').addEventListener('click', function () {
+    var v = val('cpVk');
+    if (!/vk\.com\//.test(v)) { showToast('Укажите ссылку на сообщество ВКонтакте'); return; }
+    showToast('Отправлено на ручную модерацию — статус «Базовая проверка»');
+  });
+
+  // ── Email/phone confirm (mock) ──
+  document.querySelectorAll('[data-confirm]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      if (b.classList.contains('is-done')) return;
+      var kind = b.getAttribute('data-confirm');
+      var code = prompt(kind === 'email' ? 'Введите код из письма (демо: 1234)' : 'Введите код из SMS (демо: 1234)');
+      if (code === '1234') { b.textContent = '✓ Подтверждено'; b.classList.add('is-done'); showToast(kind === 'email' ? 'E-mail подтверждён' : 'Телефон подтверждён'); }
+      else if (code != null) showToast('Неверный код');
+    });
+  });
+
+  // ── Save buttons ──
+  document.getElementById('cpReqSave').addEventListener('click', function () {
+    if (val('cpInn') && !validInn(val('cpInn'))) { showToast('Проверьте ИНН — неверная контрольная сумма'); return; }
+    ['cpInn','cpFullName','cpOgrn','cpKpp','cpDirector','cpAcc','cpBik','cpCorr','cpLegalAddr','cpFactAddr','cpVk'].forEach(function (id) { state[id] = val(id); });
+    save(state); showToast('Реквизиты сохранены');
+  });
+  document.getElementById('cpContactSave').addEventListener('click', function () {
+    ['cpCpName','cpCpRole','cpCpEmail','cpCpPhone','cpCpMessenger'].forEach(function (id) { state[id] = val(id); });
+    save(state); showToast('Контактное лицо сохранено');
+  });
+})();
+</script>
+</body>
+</html>

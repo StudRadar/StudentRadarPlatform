@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Настройки — СтудРадар</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&family=Manrope:wght@400;500;600;700&family=Tektur:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ===== Settings section title ===== */
+    .set-section-title {
+      font-family: 'Tektur', sans-serif; font-size: 26px; font-weight: 700;
+      color: #020327; margin: 0 0 20px; line-height: 110%;
+    }
+
+    /* ===== Toggle row ===== */
+    .set-toggle-row {
+      display: flex; align-items: center; gap: 20px; padding: 12px 0;
+    }
+    .set-toggle-switch {
+      position: relative; display: inline-block;
+      width: 52px; height: 32px; flex-shrink: 0; cursor: pointer;
+    }
+    .set-toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .set-toggle-track {
+      position: absolute; inset: 0; border-radius: 16px;
+      background: rgba(2,3,39,0.16); transition: background .2s;
+    }
+    .set-toggle-track::before {
+      content: ''; position: absolute; width: 24px; height: 24px;
+      border-radius: 50%; background: #fff; left: 4px; top: 4px;
+      transition: transform .2s; box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+    }
+    .set-toggle-switch input:checked + .set-toggle-track { background: #1153B5; }
+    .set-toggle-switch input:checked + .set-toggle-track::before { transform: translateX(20px); }
+    .set-toggle-texts { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .set-toggle-label {
+      font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 600;
+      color: rgba(2,3,39,0.40); transition: color .2s;
+    }
+    .set-toggle-label.is-on { color: #1153B5; }
+    .set-toggle-hint {
+      font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 500;
+      color: rgba(2,3,39,0.40);
+    }
+
+    /* ===== "Ваши данные" (replicated from documents.html) ===== */
+    .doc-section-title {
+      font-family: 'Tektur', sans-serif; font-size: 22px; font-weight: 600;
+      color: #020327; margin: 0 0 8px;
+      text-transform: uppercase; letter-spacing: -0.01em;
+    }
+    .doc-data-list { display: flex; flex-direction: column; gap: 0; }
+    .doc-data-row {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      padding: 18px 0; border-bottom: 1px solid rgba(2,3,39,0.08); gap: 16px;
+    }
+    .doc-data-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .doc-data-left { display: flex; flex-direction: column; gap: 4px; min-width: 160px; }
+    .doc-data-label {
+      font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 500;
+      color: rgba(2,3,39,0.45); text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .doc-data-value {
+      font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 600; color: #020327;
+    }
+    .doc-data-desc {
+      font-family: 'Manrope', sans-serif; font-size: 14px; font-weight: 400;
+      color: rgba(2,3,39,0.55); line-height: 1.5; max-width: 440px;
+    }
+    .doc-data-edit {
+      flex-shrink: 0; background: none; border: 1.5px solid rgba(2,3,39,0.12);
+      border-radius: 10px; padding: 6px 14px; cursor: pointer;
+      font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 600;
+      color: rgba(2,3,39,0.55); display: flex; align-items: center; gap: 6px;
+      transition: color .18s, border-color .18s, background .18s;
+    }
+    .doc-data-edit:hover { color: #1153B5; border-color: #1153B5; background: hsla(216,83%,39%,0.05); }
+
+    /* ===== Modal ===== */
+    .doc-modal {
+      position: fixed; inset: 0; z-index: 900;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity .22s;
+    }
+    .doc-modal.is-open { opacity: 1; pointer-events: auto; }
+    .doc-modal-backdrop {
+      position: absolute; inset: 0;
+      background: rgba(2,3,39,0.55); backdrop-filter: blur(2px);
+    }
+    .doc-modal-window {
+      position: relative; z-index: 1; background: #fff; border-radius: 24px;
+      padding: 32px 36px 28px; width: min(480px, calc(100vw - 32px));
+      box-shadow: 0 24px 60px rgba(0,0,0,0.18);
+      transform: translateY(10px); transition: transform .25s;
+    }
+    .doc-modal.is-open .doc-modal-window { transform: translateY(0); }
+    .doc-modal-head {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
+    }
+    .doc-modal-title {
+      font-family: 'Tektur', sans-serif; font-size: 20px; font-weight: 600; color: #020327; margin: 0;
+    }
+    .doc-modal-close {
+      background: none; border: none; cursor: pointer; color: rgba(2,3,39,0.35);
+      padding: 6px; border-radius: 8px; display: flex; align-items: center; transition: color .18s;
+    }
+    .doc-modal-close:hover { color: #020327; }
+    .doc-modal-label {
+      display: block; font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 600;
+      color: rgba(2,3,39,0.55); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .doc-modal-input {
+      width: 100%; box-sizing: border-box; background: hsla(238,90%,8%,0.05);
+      border: 1.5px solid transparent; border-radius: 12px; padding: 14px 16px;
+      font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 500; color: #020327;
+      outline: none; transition: border-color .18s; margin-bottom: 20px;
+    }
+    .doc-modal-input:focus { border-color: #1153B5; }
+    .doc-modal-save {
+      width: 100%; height: 52px; background: #1153B5; color: #fff; border: none;
+      border-radius: 14px; font-family: 'Tektur', sans-serif; font-size: 16px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.04em; cursor: pointer; transition: background .18s;
+    }
+    .doc-modal-save:hover { background: #0d439a; }
+  </style>
+</head>
+<body class="cabinet-body">
+
+<!-- ===== HEADER ===== -->
+<header class="feed-header">
+  <a href="for-students.html" class="feed-logo">
+    <span class="feed-logo-mark"><img src="assets/logo.svg" alt=""/></span>
+    <span class="feed-logo-text">СтудРадар</span>
+  </a>
+
+  <nav class="feed-nav" aria-label="Меню">
+    <a href="catalog.html" class="feed-chip">
+      <svg class="feed-chip-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M15.625 2.5H12.7922C12.441 2.10681 12.0108 1.79223 11.5296 1.57684C11.0484 1.36145 10.5272 1.25011 10 1.25011C9.47282 1.25011 8.95158 1.36145 8.47041 1.57684C7.98924 1.79223 7.55899 2.10681 7.20781 2.5H4.375C4.04348 2.5 3.72554 2.6317 3.49112 2.86612C3.2567 3.10054 3.125 3.41848 3.125 3.75V16.875C3.125 17.2065 3.2567 17.5245 3.49112 17.7589C3.72554 17.9933 4.04348 18.125 4.375 18.125H15.625C15.9565 18.125 16.2745 17.9933 16.5089 17.7589C16.7433 17.5245 16.875 17.2065 16.875 16.875V3.75C16.875 3.41848 16.7433 3.10054 16.5089 2.86612C16.2745 2.6317 15.9565 2.5 15.625 2.5Z"/></svg>
+      <span>Лента задач</span>
+    </a>
+    <a href="profile.html" class="feed-chip">
+      <svg class="feed-chip-icon" width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,24a16,16,0,0,0-7.16,1.69l-88,44a16,16,0,0,0,0,28.62l88,44a16,16,0,0,0,14.32,0l88-44a16,16,0,0,0,0-28.62l-88-44A16,16,0,0,0,128,24Z"/><path d="M219.16,152.84,128,198.42,36.84,152.84a8,8,0,1,0-7.16,14.31l92,46a8,8,0,0,0,7.16,0l92-46a8,8,0,1,0-7.16-14.31Z"/><path d="M219.16,190.84,128,236.42,36.84,190.84a8,8,0,1,0-7.16,14.31l92,46a8,8,0,0,0,7.16,0l92-46a8,8,0,1,0-7.16-14.31Z"/></svg>
+      <span>Мой кабинет</span>
+    </a>
+  </nav>
+
+  <div class="feed-user-wrap">
+    <button type="button" class="feed-user" aria-haspopup="menu" aria-expanded="false" id="userBtn">
+      <span class="feed-user-avatar"></span>
+      <span class="feed-user-name"></span>
+      <svg class="feed-user-caret" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="feed-user-menu" role="menu" id="userMenu" hidden>
+      <a href="profile.html" role="menuitem">Профиль</a>
+      <a href="documents.html" role="menuitem">Документы</a>
+      <a href="settings.html" role="menuitem" class="is-active">Настройки</a>
+      <button type="button" class="feed-user-menu-logout" data-logout>Выйти</button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== CABINET ===== -->
+<main class="cabinet">
+  <aside class="cabinet-nav" aria-label="Разделы кабинета">
+    <a href="profile.html" class="cabinet-nav-item">Профиль</a>
+    <a href="my-tasks.html#work" class="cabinet-nav-item">В работе<span class="cabinet-nav-count">3</span></a>
+    <a href="my-tasks.html#responses" class="cabinet-nav-item">Отклики и предложения</a>
+    <a href="my-tasks.html#done" class="cabinet-nav-item">Завершенные задачи</a>
+    <a href="documents.html" class="cabinet-nav-item">Документы</a>
+    <a href="student-finance.html" class="cabinet-nav-item">Финансы</a>
+    <a href="settings.html" class="cabinet-nav-item is-active">Настройки</a>
+  </aside>
+
+  <div class="cabinet-main">
+
+    <!-- ===== Ваши данные ===== -->
+    <section class="cabinet-card">
+      <h2 class="cabinet-card-title" style="margin-bottom:20px">Ваши данные</h2>
+      <div class="doc-data-list">
+
+        <!-- Телефон -->
+        <div class="doc-data-row">
+          <div class="doc-data-left">
+            <span class="doc-data-label">Телефон</span>
+            <span class="doc-data-value" id="displayPhone">+7 912 559 ** **</span>
+          </div>
+          <button type="button" class="doc-data-edit" data-edit="phone" aria-label="Редактировать телефон">
+            <svg width="14" height="14" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M227.32,73.37,182.63,28.69a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.32,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.69,147.32,64l24-24L216,84.69Z"/></svg>
+            Изменить
+          </button>
+        </div>
+
+        <!-- Электронная почта -->
+        <div class="doc-data-row">
+          <div class="doc-data-left">
+            <span class="doc-data-label">Электронная почта</span>
+            <span class="doc-data-value" id="displayEmail" style="display:none"></span>
+            <span class="doc-data-desc" id="emailDesc">Сообщим, когда появится подходящий заказ, клиент пришлёт сообщение или оставит отзыв. Ещё будем рассказывать про бонусы, акции и новости сервиса</span>
+          </div>
+          <button type="button" class="doc-data-edit" data-edit="email" aria-label="Добавить почту">
+            <svg width="14" height="14" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg>
+            Добавить
+          </button>
+        </div>
+
+        <!-- Дата рождения -->
+        <div class="doc-data-row">
+          <div class="doc-data-left">
+            <span class="doc-data-label">Дата рождения</span>
+            <span class="doc-data-value" id="displayBirth" style="display:none"></span>
+            <span class="doc-data-desc" id="birthDesc">Заказчики не увидят вашу дату рождения</span>
+          </div>
+          <button type="button" class="doc-data-edit" data-edit="birth" aria-label="Указать дату рождения" id="editBirthBtn">
+            <svg width="14" height="14" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg>
+            Указать
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- ===== MODAL: Телефон ===== -->
+<div class="doc-modal" id="modalPhone" role="dialog" aria-modal="true" aria-labelledby="modalPhoneTitle">
+  <div class="doc-modal-backdrop" data-modal-close="phone"></div>
+  <div class="doc-modal-window">
+    <div class="doc-modal-head">
+      <h2 class="doc-modal-title" id="modalPhoneTitle">Телефон</h2>
+      <button type="button" class="doc-modal-close" data-modal-close="phone" aria-label="Закрыть">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <label class="doc-modal-label" for="inputPhone">Номер телефона</label>
+    <input type="tel" class="doc-modal-input" id="inputPhone" placeholder="+7 (___) ___-__-__" inputmode="tel"/>
+    <button type="button" class="doc-modal-save" id="savePhone">Сохранить</button>
+  </div>
+</div>
+
+<!-- ===== MODAL: Email ===== -->
+<div class="doc-modal" id="modalEmail" role="dialog" aria-modal="true" aria-labelledby="modalEmailTitle">
+  <div class="doc-modal-backdrop" data-modal-close="email"></div>
+  <div class="doc-modal-window">
+    <div class="doc-modal-head">
+      <h2 class="doc-modal-title" id="modalEmailTitle">Электронная почта</h2>
+      <button type="button" class="doc-modal-close" data-modal-close="email" aria-label="Закрыть">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <label class="doc-modal-label" for="inputEmail">Email-адрес</label>
+    <input type="email" class="doc-modal-input" id="inputEmail" placeholder="you@example.com"/>
+    <button type="button" class="doc-modal-save" id="saveEmail">Сохранить</button>
+  </div>
+</div>
+
+<!-- ===== MODAL: Дата рождения ===== -->
+<div class="doc-modal" id="modalBirth" role="dialog" aria-modal="true" aria-labelledby="modalBirthTitle">
+  <div class="doc-modal-backdrop" data-modal-close="birth"></div>
+  <div class="doc-modal-window">
+    <div class="doc-modal-head">
+      <h2 class="doc-modal-title" id="modalBirthTitle">Дата рождения</h2>
+      <button type="button" class="doc-modal-close" data-modal-close="birth" aria-label="Закрыть">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <label class="doc-modal-label" for="inputBirth">Дата рождения</label>
+    <input type="date" class="doc-modal-input" id="inputBirth"/>
+    <button type="button" class="doc-modal-save" id="saveBirth">Сохранить</button>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var SETTINGS_KEY = 'studradar_settings_v1';
+  var DOC_KEY = 'studradar_docs_v1';
+
+  // ===== Toggle =====
+  var toggleEl = document.getElementById('openToWorkToggle');
+  var toggleLabel = document.getElementById('toggleLabel');
+
+  function updateToggleLabel() {
+    if (toggleEl.checked) {
+      toggleLabel.classList.add('is-on');
+    } else {
+      toggleLabel.classList.remove('is-on');
+    }
+  }
+
+  toggleEl.addEventListener('change', function () {
+    updateToggleLabel();
+    try {
+      var s = {};
+      try { s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}'); } catch (e2) {}
+      s.openToWork = toggleEl.checked;
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify(s));
+    } catch (e) {}
+  });
+
+  function loadSettings() {
+    try {
+      var s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+      toggleEl.checked = s.openToWork !== false;
+      updateToggleLabel();
+    } catch (e) {
+      toggleEl.checked = true;
+      updateToggleLabel();
+    }
+  }
+  loadSettings();
+
+  // ===== Modal helpers =====
+  function openModal(id) {
+    var m = document.getElementById('modal' + id.charAt(0).toUpperCase() + id.slice(1));
+    if (!m) return;
+    m.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(id) {
+    var m = document.getElementById('modal' + id.charAt(0).toUpperCase() + id.slice(1));
+    if (!m) return;
+    m.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('[data-modal-close]').forEach(function (el) {
+    el.addEventListener('click', function () {
+      closeModal(el.getAttribute('data-modal-close'));
+    });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') ['phone', 'email', 'birth'].forEach(closeModal);
+  });
+  document.querySelectorAll('[data-edit]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      openModal(btn.getAttribute('data-edit'));
+    });
+  });
+
+  // ===== Persist user data (shares studradar_docs_v1 with documents.html) =====
+  function saveUserData() {
+    try {
+      var prev = {};
+      try { prev = JSON.parse(localStorage.getItem(DOC_KEY) || '{}'); } catch (e2) {}
+      var d = Object.assign({}, prev, {
+        phone: document.getElementById('displayPhone').textContent,
+        email: document.getElementById('displayEmail').textContent,
+        birth: document.getElementById('displayBirth').textContent
+      });
+      localStorage.setItem(DOC_KEY, JSON.stringify(d));
+    } catch (e) {}
+  }
+
+  // ===== Save: телефон =====
+  var inputPhone = document.getElementById('inputPhone');
+  document.getElementById('savePhone').addEventListener('click', function () {
+    var val = (inputPhone.value || '').trim();
+    if (!val) return;
+    document.getElementById('displayPhone').textContent = val;
+    closeModal('phone');
+    saveUserData();
+  });
+
+  // ===== Save: email =====
+  var inputEmail = document.getElementById('inputEmail');
+  document.getElementById('saveEmail').addEventListener('click', function () {
+    var val = (inputEmail.value || '').trim();
+    if (!val || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+      inputEmail.style.borderColor = '#DD5444';
+      return;
+    }
+    inputEmail.style.borderColor = '';
+    var display = document.getElementById('displayEmail');
+    var desc = document.getElementById('emailDesc');
+    display.textContent = val;
+    display.style.display = '';
+    desc.style.display = 'none';
+    var editBtn = document.querySelector('[data-edit="email"]');
+    if (editBtn) {
+      editBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 256 256" fill="currentColor"><path d="M227.32,73.37,182.63,28.69a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.32,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.69,147.32,64l24-24L216,84.69Z"/></svg> Изменить';
+    }
+    closeModal('email');
+    saveUserData();
+  });
+  if (inputEmail) inputEmail.addEventListener('input', function () { inputEmail.style.borderColor = ''; });
+
+  // ===== Save: дата рождения =====
+  var inputBirth = document.getElementById('inputBirth');
+  document.getElementById('saveBirth').addEventListener('click', function () {
+    var val = (inputBirth.value || '').trim();
+    if (!val) return;
+    var parts = val.split('-');
+    var formatted = parts.length === 3 ? parts[2] + '.' + parts[1] + '.' + parts[0] : val;
+    var display = document.getElementById('displayBirth');
+    var desc = document.getElementById('birthDesc');
+    display.textContent = formatted;
+    display.style.display = '';
+    desc.style.display = 'none';
+    var eb = document.getElementById('editBirthBtn');
+    if (eb) {
+      eb.innerHTML = '<svg width="14" height="14" viewBox="0 0 256 256" fill="currentColor"><path d="M227.32,73.37,182.63,28.69a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.32,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.69,147.32,64l24-24L216,84.69Z"/></svg> Изменить';
+    }
+    closeModal('birth');
+    saveUserData();
+  });
+
+  // ===== Load =====
+  function loadUserData() {
+    var raw; try { raw = localStorage.getItem(DOC_KEY); } catch (e) { return; }
+    if (!raw) return;
+    var d; try { d = JSON.parse(raw); } catch (e) { return; }
+
+    if (d.phone) document.getElementById('displayPhone').textContent = d.phone;
+
+    if (d.email) {
+      var display = document.getElementById('displayEmail');
+      var desc = document.getElementById('emailDesc');
+      display.textContent = d.email;
+      display.style.display = '';
+      desc.style.display = 'none';
+      var editBtn = document.querySelector('[data-edit="email"]');
+      if (editBtn) {
+        editBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 256 256" fill="currentColor"><path d="M227.32,73.37,182.63,28.69a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.32,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.69,147.32,64l24-24L216,84.69Z"/></svg> Изменить';
+      }
+    }
+
+    if (d.birth) {
+      var db = document.getElementById('displayBirth');
+      var dd = document.getElementById('birthDesc');
+      db.textContent = d.birth;
+      db.style.display = '';
+      dd.style.display = 'none';
+      var eb = document.getElementById('editBirthBtn');
+      if (eb) {
+        eb.innerHTML = '<svg width="14" height="14" viewBox="0 0 256 256" fill="currentColor"><path d="M227.32,73.37,182.63,28.69a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.32,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.69,147.32,64l24-24L216,84.69Z"/></svg> Изменить';
+      }
+    }
+  }
+  loadUserData();
+
+  // Pre-fill modal inputs from current displayed values
+  document.getElementById('inputPhone').value = document.getElementById('displayPhone').textContent || '';
+
+})();
+</script>
+</body>
+</html>

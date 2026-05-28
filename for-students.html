@@ -1,0 +1,1006 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>СтудРадар — работа без отрыва от учебы</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="city-picker.js" defer></script>
+</head>
+<body data-screen-label="01 Студенты">
+<script>(function(){try{var s=localStorage.getItem('studradar_session');if(s&&JSON.parse(s).role)window.location.replace('catalog.html');}catch(e){}})();</script>
+
+<!-- ===== GUEST HEADER ===== -->
+<header class="header" data-header="guest">
+  <a href="index.html" class="logo">
+    <span class="logo-mark"><img src="assets/logo.svg" alt=""/></span>СТУДРАДАР
+  </a>
+
+  <nav class="toggle" aria-label="Я ищу">
+    <span class="toggle-pill"></span>
+    <a href="for-students.html" class="active">Студентам</a>
+    <a href="employer.html">Заказчику</a>
+  </nav>
+
+  <nav class="menu">
+    <a href="catalog.html">Задачи</a>
+    <a href="#how">О платформе</a>
+    <a href="blog.html">Блог</a>
+  </nav>
+
+  <a href="#location" class="location" title="Сменить город">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.6a6.7 6.7 0 0 0-6.7 6.7c0 5 6.7 10.1 6.7 10.1s6.7-5.1 6.7-10.1A6.7 6.7 0 0 0 10 1.6Zm0 9.1a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8Z"/></svg>
+    Ханты-Мансийск
+  </a>
+
+  <div class="header-right">
+    <a href="catalog.html" class="btn-login">Найти подработку</a>
+    <a href="#login" class="link-login">Войти</a>
+    <button type="button" class="burger" id="burgerBtn" aria-label="Меню" aria-expanded="false">
+      <svg id="burgerIcon" width="22" height="22" viewBox="0 0 22 22" fill="currentColor"><rect x="3" y="6" width="16" height="2" rx="1"/><rect x="3" y="14" width="16" height="2" rx="1"/></svg>
+    </button>
+  </div>
+</header>
+
+<script src="shared.js"></script>
+<script src="mobile-drawer.js" defer></script>
+
+<!-- ===== HERO ===== -->
+<section class="hero hero-students-blue">
+  <span class="radar-rings"></span>
+  <div class="hero-students-text">
+    <div class="eyebrow eyebrow--on-blue">// Биржа талантов</div>
+    <h1>Работа<br/>без&nbsp;отрыва<br/>от&nbsp;учебы</h1>
+    <p class="hero-students-lead">Выбирай задачи по&nbsp;навыкам, срокам и&nbsp;оплате, собирай портфолио и&nbsp;зарабатывай уже во&nbsp;время учёбы</p>
+    <a href="catalog.html" class="btn btn-accent btn-hero-tasks btn-hero-anim">
+      К задачам
+      <svg class="btn-hero-tasks-arrow" width="32" height="32" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M9.58399 16L1.33398 20L1.33398 12L9.58399 16Z"/><path d="M20.584 16L11.4173 20V12L20.584 16Z"/><path d="M30.6673 16L22.4173 20V12L30.6673 16Z"/></svg>
+    </a>
+  </div>
+  <img src="assets/hero-students-figma.png" alt="Студенты с задачами" class="hero-students-photo"/>
+</section>
+
+<!-- ===== STATS ===== -->
+<section class="stats">
+  <div class="stat"><div class="num">200+</div><div class="label">Работодателей на платформе</div></div>
+  <div class="sep">//</div>
+  <div class="stat"><div class="num">400+</div><div class="label">Заданий каждый месяц</div></div>
+  <div class="sep">//</div>
+  <div class="stat"><div class="num">500₽</div><div class="label">Минимальный чек за задание</div></div>
+  <div class="sep">//</div>
+  <div class="stat"><div class="num">800+</div><div class="label">Студентов уже работают</div></div>
+</section>
+
+<!-- ===== MANIFESTO ===== -->
+<section class="manifesto" style="grid-template-columns: 1fr auto 1fr; align-items: stretch; gap: 80px; padding: 140px 305.047px 140px 0px; text-align: right">
+  <div></div>
+  <h2 style="text-align: right; font-size: 77px; line-height: 1.05; align-self: start">МЫ<br/>НЕ УЧИМ<br/>РАБОТАТЬ.<br/>МЫ <span style="color:#1153B5">ДАЁМ</span><br/><span style="color:#1153B5">РАБОТАТЬ.</span><br/>ГОУ.</h2>
+  <div style="display:flex; flex-direction:column; justify-content:space-between; align-items:flex-start; gap:60px;">
+    <p class="desc" style="max-width: 320px; margin: 0; text-align: left">СтудРадар — платформа для найма студентов на краткосрочные проекты и событийные мероприятия. Заказчик публикует задачи, студенты выполняют и получают оплату.</p>
+    <img src="assets/logo.svg" alt="" style="width: 143px; height: auto; align-self: flex-start; margin-top: auto"/>
+  </div>
+</section>
+
+<!-- ===== STEPS (original backup, commented) =====
+<section class="steps" id="how-backup" style="padding: 60px 120px 130px">
+  <div class="section-h">
+    <div>
+      <div class="eyebrow">// Как это работает</div>
+      <h2 class="section-title">ТРИ ШАГА ДО ПЕРВОЙ ОПЛАТЫ</h2>
+    </div>
+  </div>
+  <div class="cards-3">
+    <article class="step-card" style="padding: 22px 4px 8px 8px; text-align: justify">
+      <div class="step-num">// 01</div>
+      <div class="img-area">
+        <img src="assets/step-1.png" alt=""/>
+        <span class="click-tag">клац-клац</span>
+      </div>
+      <div class="text-bubble" style="border-radius: 0px 14px 14px">
+        <h3>регистрируйся</h3>
+        <p>Создай профиль за пару минут и укажи свои навыки и интересы</p>
+      </div>
+    </article>
+    <article class="step-card" style="padding: 22px 8px 8px">
+      <div class="step-num">// 02</div>
+      <div class="img-area">
+        <img src="assets/step-2.png" alt=""/>
+        <span class="click-tag" style="transform:rotate(2deg)">клик-клик</span>
+      </div>
+      <div class="text-bubble" style="border-radius: 0px 14px 14px">
+        <h3>выбирай</h3>
+        <p>Смотри задачи по навыкам, срокам и оплате — откликайся в один клик</p>
+      </div>
+    </article>
+    <article class="step-card" style="padding: 22px 8px 8px">
+      <div class="step-num">// 03</div>
+      <div class="img-area">
+        <img src="assets/step-3.png" alt=""/>
+        <span class="click-tag" style="transform:rotate(-2deg)">дзынь-дзынь</span>
+      </div>
+      <div class="text-bubble" style="border-radius: 0px 14px 14px">
+        <h3>зарабатывай</h3>
+        <p>Сделал — получил. Деньги приходят на карту, опыт — в портфолио</p>
+      </div>
+    </article>
+  </div>
+</section>
+==== /backup ==== -->
+
+<!-- ===== TAG MARQUEE ===== -->
+<section class="tag-marquee-section">
+  <div class="tag-row"><div class="tag-track tag-track--a" id="tagRowA"></div></div>
+  <div class="tag-row"><div class="tag-track tag-track--b" id="tagRowB"></div></div>
+  <div class="tag-row"><div class="tag-track tag-track--c" id="tagRowC"></div></div>
+</section>
+
+<style>
+  .tag-marquee-section {
+    background: var(--bg);
+    padding: 64px 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .tag-row { overflow: hidden; }
+  .tag-track {
+    display: flex;
+    gap: 8px;
+    width: max-content;
+    will-change: transform;
+  }
+  .tag-track--a { animation: tagScrollL 46s linear infinite; }
+  .tag-track--b { animation: tagScrollR 52s linear infinite; }
+  .tag-track--c { animation: tagScrollL 40s linear infinite; }
+  .tag-marquee-section:hover .tag-track { animation-play-state: paused; }
+  @keyframes tagScrollL {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  @keyframes tagScrollR {
+    from { transform: translateX(-50%); }
+    to   { transform: translateX(0); }
+  }
+  .tag-pill {
+    flex: 0 0 auto;
+    font-family: 'Tektur', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 30px;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    padding: 18px 34px;
+    border-radius: 999px;
+    background: #fff;
+    color: rgba(2,3,39,0.22);
+    white-space: nowrap;
+    user-select: none;
+  }
+  .tag-pill.is-active {
+    background: var(--blue);
+    color: #fff;
+  }
+  @media (max-width: 900px) {
+    .tag-marquee-section { padding: 40px 0; gap: 8px; }
+    .tag-pill { font-size: 20px; padding: 12px 22px; }
+    .tag-track { gap: 8px; }
+  }
+</style>
+
+<script>
+(function() {
+  var rows = {
+    tagRowA: ['Видео','Атташе','Переводы*','SMM','Медиа','IT-разработка','Фотография','Аналитика','Логистика'],
+    tagRowB: ['Дизайн*','Маркетинг','Репетиторы*','Исследования','Промо','Ивенты','Вёрстка','Озвучка'],
+    tagRowC: ['Монтаж','Reels*','Копирайтинг','Ведущие*','Карточки для WB','Переводчики','3D-графика','Контент']
+  };
+  Object.keys(rows).forEach(function(id) {
+    var track = document.getElementById(id);
+    if (!track) return;
+    var pills = rows[id].map(function(name) {
+      var active = name.indexOf('*') !== -1;
+      var label = name.replace('*', '');
+      return '<span class="tag-pill' + (active ? ' is-active' : '') + '">' + label + '</span>';
+    }).join('');
+    track.innerHTML = pills + pills;
+  });
+})();
+</script>
+
+<!-- ===== STEPS (horizontal pin-scroll variant) ===== -->
+<section class="steps-pin-section" id="how">
+  <div class="steps-pin-stage">
+    <div class="steps-pin-head">
+      <div class="eyebrow">// Как это работает</div>
+      <h2 class="section-title">ТРИ ШАГА ДО ПЕРВОЙ ОПЛАТЫ</h2>
+    </div>
+    <div class="steps-pin-track" id="stepsTrack">
+      <article class="pin-card pin-card--blue">
+        <div class="pin-card-num">// 01</div>
+        <div class="pin-card-img">
+          <img src="assets/step-1.png" alt=""/>
+          <span class="click-tag">клац-клац</span>
+        </div>
+        <div class="pin-card-text">
+          <h3>Регистрируйся</h3>
+          <p>Создай профиль за пару минут — укажи навыки, интересы и направление. Это всё, что нужно, чтобы появиться в выдаче заказчиков.</p>
+        </div>
+      </article>
+
+      <article class="pin-card pin-card--cream">
+        <div class="pin-card-num">// 02</div>
+        <div class="pin-card-img">
+          <img src="assets/step-2.png" alt=""/>
+          <span class="click-tag click-tag--alt1">клик-клик</span>
+        </div>
+        <div class="pin-card-text">
+          <h3>Откликайся</h3>
+          <p>Смотри задачи по навыкам, срокам и оплате — фильтруй, отмечай интересное и откликайся в один клик.</p>
+        </div>
+      </article>
+
+      <article class="pin-card pin-card--orange">
+        <div class="pin-card-num">// 03</div>
+        <div class="pin-card-img">
+          <img src="assets/step-3.png" alt=""/>
+          <span class="click-tag click-tag--alt2">дзынь-дзынь</span>
+        </div>
+        <div class="pin-card-text">
+          <h3>Зарабатывай</h3>
+          <p>Сделал — получил. Деньги падают на карту через безопасную сделку, кейс автоматически уходит в портфолио.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .steps-pin-section {
+    position: relative;
+    background: var(--bg);
+    /* Height = (cards) * 100vh — sets the scroll runway */
+    height: calc(3 * 100vh);
+  }
+  .steps-pin-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .steps-pin-head {
+    padding: 60px 120px 40px;
+    flex-shrink: 0;
+  }
+  .steps-pin-head .eyebrow { margin-bottom: 12px; }
+  .steps-pin-head .section-title { margin: 0; font-size: 64px; line-height: 1.02; }
+  .steps-pin-track {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    padding: 0 64px 60px;
+    will-change: transform;
+  }
+  .pin-card {
+    flex: 0 0 calc(100vw - 128px);
+    height: min(560px, calc(100vh - 280px));
+    border-radius: 32px;
+    padding: 48px;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 48px;
+    align-items: stretch;
+    position: relative;
+    overflow: hidden;
+  }
+  .pin-card--blue   { background: #1153B5; color: #fff; }
+  .pin-card--cream  { background: #F7F0E6; color: var(--ink); }
+  .pin-card--orange { background: #DD5444; color: #fff; }
+  .pin-card-num {
+    position: absolute;
+    top: 32px;
+    right: 56px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    letter-spacing: 0.06em;
+    opacity: 0.7;
+  }
+  .pin-card-img {
+    position: relative;
+    height: 100%;
+    border-radius: 24px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.08);
+  }
+  .pin-card--cream .pin-card-img { background: rgba(2,3,39,0.06); }
+  .pin-card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .pin-card-img .click-tag {
+    position: absolute;
+    top: 38%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-4deg);
+    background: var(--orange);
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 10px 20px;
+    border-radius: 14px;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    box-shadow: 0 14px 38px rgba(2,3,39,0.24);
+  }
+  .pin-card-img .click-tag--alt1 { transform: translate(-50%, -50%) rotate(3deg); }
+  .pin-card-img .click-tag--alt2 { transform: translate(-50%, -50%) rotate(-3deg); }
+  .pin-card-text {
+    padding: 0 16px 0 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .pin-card-text h3 {
+    font-family: 'Tektur', sans-serif;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 54px;
+    line-height: 0.95;
+    margin: 0 0 24px;
+    letter-spacing: -0.01em;
+  }
+  .pin-card-text p {
+    font-family: 'Manrope', sans-serif;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.45;
+    margin: 0;
+    max-width: 520px;
+    opacity: 0.9;
+  }
+
+  @media (max-width: 900px) {
+    .steps-pin-section { height: auto; }
+    .steps-pin-stage { position: static; height: auto; }
+    .steps-pin-head { padding: 40px 24px 16px; }
+    .steps-pin-head .section-title { font-size: 38px; }
+    .steps-pin-track {
+      padding: 0 24px 40px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .pin-card {
+      flex: 0 0 calc(100vw - 48px);
+      scroll-snap-align: center;
+      grid-template-columns: 1fr;
+      padding: 32px 28px;
+    }
+    .pin-card-text h3 { font-size: 32px !important; line-height: 1.05 !important; word-break: normal !important; overflow-wrap: normal !important; hyphens: none; }
+    .pin-card-text p { font-size: 18px; }
+    .pin-card-img { max-height: 260px; }
+  }
+</style>
+
+<script>
+(function() {
+  if (window.innerWidth < 900) return;
+  var section = document.querySelector('.steps-pin-section');
+  var track = document.getElementById('stepsTrack');
+  if (!section || !track) return;
+
+  var lastTx = 0;
+  function update() {
+    var rect = section.getBoundingClientRect();
+    var sectionH = section.offsetHeight;
+    var vh = window.innerHeight;
+    // progress: 0 when section top hits viewport top, 1 when bottom hits viewport bottom
+    var scrolled = -rect.top;
+    var max = sectionH - vh;
+    var progress = Math.max(0, Math.min(1, scrolled / max));
+
+    var trackW = track.scrollWidth;
+    var stageW = window.innerWidth;
+    var distance = Math.max(0, trackW - stageW);
+    var tx = -progress * distance;
+    if (Math.abs(tx - lastTx) > 0.5) {
+      track.style.transform = 'translate3d(' + tx + 'px, 0, 0)';
+      lastTx = tx;
+    }
+  }
+  update();
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+})();
+</script>
+
+<!-- ===== FRESH TASKS ===== -->
+<section class="fresh-section" id="tasks">
+  <div class="section-h">
+    <div>
+      <div class="eyebrow">// Сегодня</div>
+      <h2 class="section-title">Свежие задачи</h2>
+    </div>
+    <a href="catalog.html" class="section-link">Все задачи <svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M9.584 16L1.334 20V12L9.584 16Z"/><path d="M20.584 16L11.417 20V12L20.584 16Z"/><path d="M30.667 16L22.417 20V12L30.667 16Z"/></svg></a>
+  </div>
+
+  <div class="tasks-grid" id="tasks-grid"></div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section class="testi-section">
+  <div class="section-h">
+    <div>
+      <div class="eyebrow">// Как работать</div>
+      <h2 class="section-title">Как студенты<br/>уже работают</h2>
+    </div>
+  </div>
+
+  <div class="testi-marquee">
+    <div class="testi-track" id="testi-track"></div>
+  </div>
+</section>
+
+<!-- Testimonial popup -->
+<div class="testi-popup" id="testi-popup" aria-hidden="true">
+  <div class="testi-popup-overlay" data-close></div>
+  <div class="testi-popup-card">
+    <button class="testi-popup-close" type="button" data-close aria-label="Закрыть">&times;</button>
+    <div class="testi-popup-content"></div>
+  </div>
+</div>
+
+<!-- ===== SAFE DEAL ===== -->
+<section class="safe-section">
+  <div class="safe-band" style="height: 710px">
+    <span class="radar-rings"></span>
+    <div class="safe-text">
+      <div class="eyebrow">// Тебя не обманут</div>
+      <h2 style="width: 592px">Безопасная сделка</h2>
+      <p class="lead">Студент принимает задачу, заказчик замораживает деньги на платформе, после выполнения оплата поступает студенту</p>
+    </div>
+    <img class="safe-composition" src="assets/safe-composition.png" alt=""/>
+  </div>
+</section>
+
+<!-- ===== PORTFOLIO ===== -->
+<section class="portfolio-student">
+  <span class="portfolio-radar"></span>
+  <div class="portfolio-row">
+    <h2 class="portfolio-title">Портфолио,<br/>которое<br/>собирается<br/>само</h2>
+    <div class="portfolio-right">
+      <p class="portfolio-desc">Платформа автоматически собирает выполненные задачи: с описанием, ролью, отзывом заказчика и оценкой. К выпуску у тебя готовый кейс-лист, который можно показать на собеседовании.</p>
+      <div class="portfolio-folder-img" aria-hidden="true">
+        <img src="uploads/Group 1000008710 (1).png" alt="">
+      </div>
+    </div>
+  </div>
+  <div class="portfolio-stage">
+    <figure class="port-chip port-chip-tasks">
+      <span class="port-chip-img">
+        <img src="assets/chip-tasks.png" alt="Задачи">
+      </span>
+      <figcaption>Задачи</figcaption>
+    </figure>
+    <figure class="port-chip port-chip-reviews">
+      <span class="port-chip-img">
+        <img src="assets/chip-reviews.png" alt="Отзывы">
+      </span>
+      <figcaption>Отзывы</figcaption>
+    </figure>
+    <figure class="port-chip port-chip-skills">
+      <span class="port-chip-img">
+        <img src="assets/chip-skills.png" alt="Навыки">
+      </span>
+      <figcaption>Навыки</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ===== PRO ===== -->
+<section class="pro-section">
+  <div class="pro-band">
+    <span class="radar-rings"></span>
+    <div>
+      <div class="eyebrow">// Подписка для буста</div>
+      <h2>СтудРадар PRO</h2>
+      <div class="pro-price"><span class="num">399 ₽</span><span class="per">/мес</span></div>
+      <ul class="pro-list">
+        <li><span class="pro-check"></span>Безлимитные отклики (вместо 5 в день)</li>
+        <li><span class="pro-check"></span>Приоритет в выдаче для заказчиков</li>
+        <li><span class="pro-check"></span>Расширенные фильтры по задачам</li>
+        <li><span class="pro-check"></span>Консультация по портфолио — раз в квартал</li>
+        <li><span class="pro-check"></span>Метка «PRO» в карточке профиля</li>
+      </ul>
+      <div style="margin-top:32px"><a href="#try" class="btn btn-accent">Попробовать
+        <svg class="btn-arrow" viewBox="0 0 44 16" fill="none"><polygon points="0,0 8,8 0,16" /><polygon points="14,0 22,8 14,16" /><polygon points="28,0 36,8 28,16" /></svg>
+      </a></div>
+    </div>
+    <div class="pro-image-area"><img src="assets/pro-image.png" alt=""/></div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="faq-section" id="faq">
+  <div class="faq-grid">
+    <div>
+      <div class="eyebrow">// Вопросы и ответы</div>
+      <h2 class="section-title">Частые<br/>вопросы</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item open">
+        <button class="faq-q" type="button">Кто может зарегистрироваться на платформе?<span class="faq-toggle">+</span></button>
+        <div class="faq-a"><div>Студенты 1–4 курсов бакалавриата, специалитета, а также студенты колледжей и магистратуры. При регистрации нужно подтвердить статус — загрузить скан студенческого билета или справки об обучении. Без верификации профиль не появится в каталоге.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button">Сколько это стоит?<span class="faq-toggle">+</span></button>
+        <div class="faq-a"><div>Регистрация и базовый функционал бесплатные: профиль, отклики на задачи, безопасная сделка, рейтинг и портфолио. Есть подписка PRO за 399&nbsp;₽ в&nbsp;месяц с&nbsp;безлимитными откликами, приоритетом в&nbsp;выдаче и&nbsp;ранним доступом к&nbsp;новым заданиям — для тех, кто хочет получать больше заказов. Базового тарифа достаточно, чтобы начать работать и зарабатывать.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button">Как платформа берёт деньги?<span class="faq-toggle">+</span></button>
+        <div class="faq-a"><div>С каждой выполненной задачи удерживается комиссия 15% — она автоматически вычитается из выплаты после приёмки работы. Никаких отдельных списаний, скрытых платежей или платы за отклики нет.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button">Что такое безопасная сделка и как она защищает от неоплаты?<span class="faq-toggle">+</span></button>
+        <div class="faq-a"><div>Это эскроу-механизм. Заказчик переводит деньги на&nbsp;платформу до&nbsp;того, как вы начинаете работу — средства резервируются на&nbsp;счёте СтудРадара, и заказчик уже не может их забрать. После того как вы сдали работу и она принята, сумма автоматически переводится вам за&nbsp;вычетом комиссии. Если заказчик молчит и не принимает работу 48 часов — система засчитывает задачу выполненной и переводит деньги без его участия.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button">Нужно ли быть самозанятым?<span class="faq-toggle">+</span></button>
+        <div class="faq-a"><div>Да, для получения выплат потребуется статус самозанятого (НПД). Это легальная схема: налог 4% при работе с&nbsp;физлицами и&nbsp;6% при работе с&nbsp;организациями, никаких отчётов и&nbsp;деклараций. Самозанятость оформляется в&nbsp;приложении «Мой налог» за&nbsp;несколько минут — пришлём пошаговую инструкцию после регистрации. Совмещается с учёбой, со&nbsp;стипендией и с другой работой.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button">Сколько я заплачу налогов в итоге?<span class="faq-toggle">+</span></button>
+        <div class="faq-a"><div>При типичной задаче от&nbsp;компании — 6% налога с&nbsp;суммы выплаты. С учётом комиссии платформы 15% и налога ваша чистая выплата составит примерно 79–80% от&nbsp;стоимости задачи. Например, при заказе на&nbsp;3 000&nbsp;₽ на руки придёт около 2 397&nbsp;₽ (3 000 – 450&nbsp;₽ комиссия – 153&nbsp;₽ налог).</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button">А если задача оказалась сложнее, чем казалось, и я не успеваю?<span class="faq-toggle">+</span></button>
+        <div class="faq-a"><div>Один раз за заказ вы можете запросить продление дедлайна до&nbsp;24 часов — заказчик принимает или отклоняет запрос. Если сорвать срок без согласования, заказ переходит в&nbsp;статус «Просрочен», и&nbsp;аккаунт получает блокировку откликов на&nbsp;14 дней. Поэтому лучше оценивать силы заранее и&nbsp;просить продление сразу, как поняли, что не успеваете.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button">Что делать, если заказчик придирается и не принимает работу?<span class="faq-toggle">+</span></button>
+        <div class="faq-a"><div>До трёх раз можно отправлять доработки по&nbsp;чек-листу, который заказчик заполнил при создании задачи. Если стороны не могут договориться — любая из них вызывает модератора платформы. Он изучает переписку и файлы, выносит решение за&nbsp;24 часа — оно обязательно для исполнения.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button">Как формируется портфолио?<span class="faq-toggle">+</span></button>
+        <div class="faq-a"><div>Автоматически. После каждой принятой работы в&nbsp;портфолио добавляется задача с&nbsp;описанием, оценкой заказчика и&nbsp;текстовым отзывом. Файлы результата попадают в&nbsp;портфолио только с&nbsp;вашего согласия. Готовое портфолио можно выгрузить в&nbsp;PDF и приложить к&nbsp;резюме при поиске постоянной работы.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button">Сколько примерно можно заработать?<span class="faq-toggle">+</span></button>
+        <div class="faq-a"><div>Зависит от&nbsp;направления и&nbsp;интенсивности. Средний чек по&nbsp;платформе — около 3 000&nbsp;₽ за&nbsp;задачу. Студенты, регулярно работающие на&nbsp;ивентах, выходят на&nbsp;15–25 тысяч в&nbsp;месяц без ущерба для учёбы. Часовая ставка на простых задачах (стойка регистрации, навигация на&nbsp;мероприятии) — от&nbsp;200–300&nbsp;₽ в&nbsp;час, на профильных (дизайн, перевод, SMM) — выше.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button">Это безопасно? Кто гарантирует, что задача не окажется обманом?<span class="faq-toggle">+</span></button>
+        <div class="faq-a"><div>Каждый заказчик проходит верификацию: проверяется ИНН через ФНС, для физлиц — паспортные данные и&nbsp;анкета. Деньги резервируются до&nbsp;выхода на&nbsp;работу, а не «после». Если на&nbsp;мероприятии что-то пошло не так — есть встроенный чат с&nbsp;историей переписки, который служит доказательством при разборе спора.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button">Может ли работа на платформе помешать учёбе?<span class="faq-toggle">+</span></button>
+        <div class="faq-a"><div>Все задачи разовые и&nbsp;короткие — от&nbsp;нескольких часов до&nbsp;нескольких недель, без обязательств. Вы сами выбираете, на&nbsp;что откликаться и&nbsp;в какое время работать. Платформа изначально проектировалась под совмещение с&nbsp;учёбой, а не вместо неё.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer footer--radar">
+  <span class="footer-radar-fx" aria-hidden="true">
+    <span class="footer-radar-grid"></span>
+  </span>
+
+  <div class="footer-cta">
+    <div class="footer-cta-status"><span class="footer-cta-dot"></span>Радар активен · 412 задач в эфире</div>
+    <a href="catalog.html" class="footer-cta-line">
+      <span><span class="footer-cta-slash">//</span> ТЫ ЕЩЁ ЗДЕСЬ?</span>
+      <span class="footer-cta-go">За работу
+        <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M9.584 16L1.334 20V12L9.584 16Z"/><path d="M20.584 16L11.417 20V12L20.584 16Z"/><path d="M30.667 16L22.417 20V12L30.667 16Z"/></svg>
+      </span>
+    </a>
+  </div>
+
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="for-students.html" class="logo">
+        <span class="logo-mark"><img src="assets/logo.svg" alt=""/></span>СТУДРАДАР
+      </a>
+      <p class="footer-tagline">Платформа для краткосрочной занятости студентов — задачи, портфолио, реальный опыт.</p>
+      <div class="footer-social">
+        <a href="#tg" title="Telegram">TG</a>
+        <a href="#vk" title="ВКонтакте">VK</a>
+      </div>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <div class="footer-col-title">Платформа</div>
+        <a href="#about">О нас</a>
+        <a href="blog.html">Блог</a>
+        <a href="#policy">Политика</a>
+        <a href="#terms">Соглашение</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Студентам</div>
+        <a href="catalog.html">Каталог задач</a>
+        <a href="#tasks">Свежие задачи</a>
+        <a href="#pro">PRO-подписка</a>
+        <a href="#faq">Вопросы</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Бизнесу</div>
+        <a href="employer.html">Для работодателей</a>
+        <a href="students.html">Исполнители</a>
+        <a href="employer.html#pro">Business-тариф</a>
+        <a href="employer.html#faq">Вопросы</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Контакты</div>
+        <a href="#tg">Telegram-бот</a>
+        <a href="#vk">ВКонтакте</a>
+        <a href="mailto:hi@studradar.ru">hi@studradar.ru</a>
+        <a href="#location">Ханты-Мансийск</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 СтудРадар. Все права защищены.</span>
+    <span class="footer-city">
+      <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.6a6.7 6.7 0 0 0-6.7 6.7c0 5 6.7 10.1 6.7 10.1s6.7-5.1 6.7-10.1A6.7 6.7 0 0 0 10 1.6Zm0 9.1a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8Z"/></svg>
+      Ханты-Мансийск
+    </span>
+  </div>
+</footer>
+
+<script>
+  // Toggle pill animation
+  (function() {
+    var toggle = document.querySelector('.toggle');
+    if (!toggle) return;
+    var pill = toggle.querySelector('.toggle-pill');
+    if (!pill) return;
+    var links = Array.prototype.slice.call(toggle.querySelectorAll('a'));
+
+    function movePill(link, instant) {
+      var tRect = toggle.getBoundingClientRect();
+      var lRect = link.getBoundingClientRect();
+      var x = lRect.left - tRect.left - 6;
+      if (instant) {
+        pill.style.transition = 'none';
+        pill.offsetHeight;
+      }
+      pill.style.width = lRect.width + 'px';
+      pill.style.transform = 'translateX(' + x + 'px)';
+      if (instant) {
+        pill.offsetHeight;
+        pill.style.transition = '';
+      }
+    }
+
+    var active = toggle.querySelector('a.active');
+    if (active) movePill(active, true);
+
+    var loginLink = document.querySelector('.link-login');
+    function updateLoginText(href) {}
+    if (active) updateLoginText(active.getAttribute('href'));
+
+    window.addEventListener('resize', function() {
+      var a = toggle.querySelector('a.active');
+      if (a) movePill(a, true);
+    });
+
+    links.forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        var href = this.getAttribute('href');
+        if (!href || href.startsWith('#')) return;
+        links.forEach(function(l) { l.classList.remove('active'); });
+        this.classList.add('active');
+        movePill(this, false);
+        if (href.indexOf('employer') !== -1) {
+          toggle.classList.add('orange');
+        } else {
+          toggle.classList.remove('orange');
+        }
+        updateLoginText(href);
+        e.preventDefault();
+        setTimeout(function() { window.location.href = href; }, 440);
+      });
+    });
+  })();
+
+  // FAQ
+  document.querySelectorAll('.faq-q').forEach(b => b.addEventListener('click', () => {
+    b.parentElement.classList.toggle('open');
+    b.querySelector('.faq-toggle').textContent = b.parentElement.classList.contains('open') ? '×' : '+';
+  }));
+
+  // Render fresh tasks — 6 cards, only first is urgent
+  (function() {
+    var FRESH = [
+      { id:1,  urgent:true,  tag:'Ивенты',        title:'Сопровождение гостей «IT-форума»',      people:'10 человек', loc:'Студенческая ул., 19', date:'12–13 июня 2026 (10:00–18:00)', price:'2 000 ₽',  priceLabel:'За задание / чел', venue:'КВЦ «Югра-Экспо»',  responses:8,  time:'2 часа назад'  },
+      { id:2,  urgent:false, tag:'Контент',        title:'Перевод текстов с русского на китайский', people:'1 человек',  loc:'Удалённо',             date:'До 15 июня 2026',              price:'8 500 ₽',  priceLabel:'За проект',       venue:'ВЭД Экспорт',       responses:7,  time:'4 часа назад'  },
+      { id:3,  urgent:false, tag:'IT-разработка',  title:'Telegram-бот для сети кофеен',          people:'1 человек',  loc:'Удалённо',             date:'До 5 июня 2026',               price:'25 000 ₽', priceLabel:'За проект',       venue:'Кофе Хаус',         responses:6,  time:'6 часов назад' },
+      { id:4,  urgent:false, tag:'Контент',        title:'Тексты для лендинга кофейни',           people:'1 человек',  loc:'Удалённо',             date:'До 28 мая 2026',               price:'4 000 ₽',  priceLabel:'За проект',       venue:'Кофе Хаус',         responses:3,  time:'8 часов назад' },
+      { id:5,  urgent:false, tag:'Видео',          title:'Reels-серия для бренда одежды',         people:'1 человек',  loc:'Удалённо',             date:'До 28 мая 2026',               price:'9 000 ₽',  priceLabel:'За проект',       venue:'Ритейл Плюс',       responses:14, time:'10 часов назад'},
+      { id:6,  urgent:false, tag:'SMM',            title:'Ведение Telegram-канала бренда',        people:'1 человек',  loc:'Удалённо',             date:'До 1 июня 2026',               price:'12 500 ₽', priceLabel:'В месяц',         venue:'Ритейл Плюс',       responses:9,  time:'12 часов назад'},
+    ];
+
+    var SVG_PEOPLE = '<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M5.00816 11.547C5.01028 11.5893 5.00377 11.6317 4.98901 11.6714C4.97426 11.7111 4.95158 11.7474 4.92235 11.7781C4.89312 11.8088 4.85794 11.8333 4.81897 11.8499C4.78 11.8666 4.73805 11.8752 4.69566 11.8751H1.24879C1.10772 11.8753 0.970732 11.8278 0.860095 11.7403C0.749458 11.6528 0.671682 11.5304 0.639413 11.3931C0.61932 11.2991 0.620246 11.2018 0.642125 11.1082C0.664005 11.0146 0.706296 10.927 0.765975 10.8517C1.31739 10.1204 2.04901 9.54464 2.88941 9.18059C2.52045 8.84418 2.23746 8.42427 2.06416 7.95601C1.89086 7.48775 1.83228 6.98478 1.89333 6.48922C1.95438 5.99367 2.13329 5.51996 2.41507 5.10776C2.69685 4.69557 3.07329 4.35689 3.51287 4.1201C3.95246 3.88332 4.44238 3.7553 4.94161 3.74679C5.44084 3.73828 5.93484 3.84952 6.38224 4.07118C6.82963 4.29285 7.21741 4.61849 7.51307 5.02084C7.80874 5.42319 8.00369 5.89053 8.0816 6.38371C8.09166 6.45003 8.07978 6.51783 8.04777 6.57678C8.01576 6.63572 7.96536 6.6826 7.90426 6.71028C7.03737 7.11104 6.30321 7.7514 5.7884 8.5558C5.27359 9.36021 4.99961 10.2951 4.99879 11.2501C4.99879 11.3501 4.99879 11.4486 5.00816 11.547ZM19.2269 10.8509C18.6768 10.1205 17.9468 9.54502 17.1082 9.18059C17.4771 8.84418 17.7601 8.42427 17.9334 7.95601C18.1067 7.48775 18.1653 6.98478 18.1042 6.48922C18.0432 5.99367 17.8643 5.51996 17.5825 5.10776C17.3007 4.69557 16.9243 4.35689 16.4847 4.1201C16.0451 3.88332 15.5552 3.7553 15.056 3.74679C14.5567 3.73828 14.0627 3.84952 13.6153 4.07118C13.1679 4.29285 12.7802 4.61849 12.4845 5.02084C12.1888 5.42319 11.9939 5.89053 11.916 6.38371C11.9059 6.45003 11.9178 6.51783 11.9498 6.57678C11.9818 6.63572 12.0322 6.6826 12.0933 6.71028C12.9602 7.11104 13.6944 7.7514 14.2092 8.5558C14.724 9.36021 14.998 10.2951 14.9988 11.2501C14.9988 11.3501 14.9988 11.4486 14.9894 11.547C14.9873 11.5893 14.9938 11.6317 15.0086 11.6714C15.0233 11.7111 15.046 11.7474 15.0752 11.7781C15.1045 11.8088 15.1396 11.8333 15.1786 11.8499C15.2176 11.8666 15.2595 11.8752 15.3019 11.8751H18.7488C18.8899 11.8753 19.0268 11.8278 19.1375 11.7403C19.2481 11.6528 19.3259 11.5304 19.3582 11.3931C19.3784 11.2989 19.3774 11.2014 19.3554 11.1077C19.3334 11.0139 19.2908 10.9262 19.2308 10.8509H19.2269ZM12.2738 14.2243C12.8961 13.7477 13.3534 13.0881 13.5815 12.3382C13.8095 11.5883 13.7969 10.7857 13.5453 10.0434C13.2936 9.30104 12.8157 8.65618 12.1787 8.19947C11.5417 7.74275 10.7775 7.49713 9.99371 7.49713C9.20987 7.49713 8.44574 7.74275 7.80871 8.19947C7.17167 8.65618 6.69377 9.30104 6.44216 10.0434C6.19055 10.7857 6.17789 11.5883 6.40595 12.3382C6.63401 13.0881 7.09133 13.7477 7.71363 14.2243C6.60936 14.7028 5.68728 15.5222 5.08238 16.5626C5.02752 16.6576 4.99864 16.7654 4.99865 16.8752C4.99865 16.9849 5.02754 17.0927 5.08242 17.1877C5.13729 17.2827 5.21621 17.3616 5.31124 17.4164C5.40627 17.4713 5.51407 17.5001 5.62379 17.5001H14.3738C14.4835 17.5001 14.5913 17.4713 14.6863 17.4164C14.7814 17.3616 14.8603 17.2827 14.9152 17.1877C14.97 17.0927 14.9989 16.9849 14.9989 16.8752C14.9989 16.7654 14.9701 16.6576 14.9152 16.5626C14.309 15.5215 13.3852 14.7021 12.2793 14.2243H12.2738Z"/></svg>';
+    var SVG_PIN   = '<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 1.5A6.5 6.5 0 0 0 3.5 8c0 4.875 6.5 10 6.5 10s6.5-5.125 6.5-10A6.5 6.5 0 0 0 10 1.5Zm0 8.5a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z"/></svg>';
+    var SVG_CAL   = '<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M16 3.5h-1.5V2.5a.75.75 0 1 0-1.5 0v1H6.5V2.5a.75.75 0 1 0-1.5 0v1H4A1.5 1.5 0 0 0 2.5 5v11A1.5 1.5 0 0 0 4 17.5h12a1.5 1.5 0 0 0 1.5-1.5V5A1.5 1.5 0 0 0 16 3.5Zm0 12.5H4V8h12v8Z"/></svg>';
+    var SVG_HEART = '<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M14.5 3.25c-1.7 0-3.18.73-4.13 1.97-.93-1.24-2.42-1.97-4.12-1.97A5.13 5.13 0 0 0 1.25 8.38c0 5.75 7.45 9.87 8.35 10.36a.75.75 0 0 0 .73 0c.9-.49 8.42-4.61 8.42-10.36a5.13 5.13 0 0 0-5.13-5.13Z"/></svg>';
+    var SVG_BOLT  = '<svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><path d="M8 0L1.5 8h4l-1 6L11 6H7l1-6Z"/></svg>';
+
+    var grid = document.getElementById('tasks-grid');
+    if (!grid) return;
+
+    grid.innerHTML = FRESH.map(function(t) {
+      var urgentBadge = t.urgent
+        ? '<span class="task-badge task-badge--urgent">' + SVG_BOLT + 'Срочно</span>'
+        : '';
+      return '<article class="task-card" data-id="' + t.id + '">'
+        + '<header class="task-card-head">'
+        +   '<div class="task-card-badges">' + urgentBadge + '<span class="task-tag task-tag--cat">' + t.tag + '</span></div>'
+        +   '<div class="task-card-icons"><button type="button" class="task-icon-btn" aria-label="В избранное">' + SVG_HEART + '</button></div>'
+        + '</header>'
+        + '<div class="task-card-main">'
+        +   '<div class="task-card-desc">'
+        +     '<h3 class="task-card-title">' + t.title + '</h3>'
+        +     '<ul class="task-card-meta">'
+        +       '<li>' + SVG_PEOPLE + t.people + '</li>'
+        +       '<li>' + SVG_PIN + t.loc + '</li>'
+        +       '<li>' + SVG_CAL + t.date + '</li>'
+        +     '</ul>'
+        +   '</div>'
+        +   '<div class="task-card-price">'
+        +     '<span class="task-card-price-num">' + t.price + '</span>'
+        +     '<span class="task-card-price-label">' + t.priceLabel + '</span>'
+        +   '</div>'
+        + '</div>'
+        + '<footer class="task-card-foot">'
+        +   '<div class="task-card-venue"><span class="task-card-venue-img"></span><div class="task-card-venue-meta"><span class="task-card-venue-name">' + t.venue + '</span></div></div>'
+        +   '<div class="task-card-stats"><span class="task-card-responses"><span class="task-card-responses-num">' + t.responses + '</span> откликов</span><span class="task-card-time">' + t.time + '</span></div>'
+        + '</footer>'
+        + '</article>';
+    }).join('');
+
+    grid.querySelectorAll('.task-card').forEach(function(card) {
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', function(e) {
+        if (e.target.closest('.task-icon-btn')) return;
+        window.location.href = 'task.html?id=' + (card.dataset.id || '1');
+      });
+    });
+  })();
+</script>
+<script>
+  // Testimonials marquee
+  (function() {
+    const photos = [
+      'assets/Photo/4.jpg','assets/Photo/12.png','assets/Photo/6.png','assets/Photo/9.png',
+      'assets/Photo/5.png','assets/Photo/3.webp','assets/Photo/7.png','assets/Photo/11.png',
+      'assets/Photo/8.png','assets/Photo/10.png','assets/Photo/1.webp','assets/Photo/13.png',
+      'assets/Photo/2.webp'
+    ];
+    const reviews = [
+      { t:'Первый реальный заработок на учёбе', x:'До этого я подрабатывал волонтёром на мероприятиях, но там никогда ничего не платили — считалось, что «опыт и так ценен». Здесь всё иначе: задача описана понятно, бюджет зафиксирован сразу, а оплата пришла на карту в тот же день, как заказчик принял работу. Я закрыл уже четыре задачи, и каждый раз деньги приходили вовремя без единого напоминания. Для студента, который живёт на стипендию, это реально меняет ситуацию.', a:'Игорь · 2 курс, экономика' },
+      { t:'Портфолио выросло за один месяц', x:'Раньше я брала бесплатные «проекты для друзей», чтобы хоть что-то показать на собеседовании. За месяц на платформе я собрала пять реальных кейсов с настоящими брендами: упаковка соцсетей, баннеры, презентация для стартапа. Заказчики оставляют отзывы прямо в профиле, и теперь я не объясняю на словах, что умею — я просто показываю ссылку. На последнем собеседовании меня взяли почти сразу именно из-за этого портфолио.', a:'Мария · 3 курс, дизайн' },
+      { t:'Эскроу — это спокойствие', x:'Я долго боялся фриланса: на биржах постоянные истории, как заказчик пропадает после сдачи работы. Здесь деньги замораживаются на платформе ещё до того, как я начинаю делать задачу, и я вижу это в личном кабинете. Я спокойно пишу код, зная, что бюджет уже зарезервирован и в случае спора есть арбитраж. За полгода ни одной проблемы с оплатой — это совсем другой уровень доверия.', a:'Артём · 4 курс, IT' },
+      { t:'Сроки и деньги ясны заранее', x:'Больше всего бесило, когда заказчик говорит «ну сделай, потом обсудим оплату». Здесь так невозможно: цена и дедлайн прописаны в задаче до отклика, и поменять их задним числом нельзя. Я заранее понимаю, сколько часов вложу и сколько получу, поэтому могу нормально совмещать подработку с парами и сессией. Это дисциплинирует и меня, и заказчика.', a:'Полина · 2 курс, журналистика' },
+      { t:'Совмещаю с парами без стресса', x:'Я думал, что любая подработка убьёт учёбу, но тут можно брать ровно столько задач, сколько тянешь. Беру в основном короткие проекты по SMM на выходные, веду пару каналов по контент-плану. Заказчики адекватные, правки конкретные, без «сделайте как-нибудь покрасивее». За семестр заработал на новый ноутбук и при этом не завалил ни одного экзамена.', a:'Дмитрий · 3 курс, маркетинг' },
+      { t:'Языковая практика и доход вместе', x:'Я учусь на лингвиста и искала, где применять язык не в стол, а на реальных текстах. Здесь регулярно появляются задачи на перевод и вычитку — от описаний товаров до субтитров. Получаю и практику, и деньги, и обратную связь от носителей-заказчиков, что для меня даже важнее оплаты. Чувствую, что к диплому подойду уже с реальным рабочим опытом, а не только с зачёткой.', a:'Алина · 1 курс, лингвистика' },
+      { t:'Сделал бота — получил постоянного клиента', x:'Взял разовую задачу: написать Telegram-бота для записи в небольшую студию. Заказчику понравилось, и теперь я веду ему доработки уже четвёртый месяц на постоянной основе. Платформа дала мне первого клиента, с которого началась нормальная история в резюме. Из «студента без опыта» я превратился в человека, у которого есть живой продукт в проде и реальные отзывы.', a:'Никита · 4 курс, разработка' },
+      { t:'Фотосъёмки каждые выходные', x:'Я снимала в основном друзей и думала, что до коммерческой съёмки мне ещё далеко. Здесь начала с маленьких задач — предметка для маркетплейса, репортаж с мероприятия. Сейчас почти каждые выходные у меня съёмка, а заказчики возвращаются и советуют меня знакомым. Камера наконец-то начала окупать саму себя, и я уверенно беру всё более сложные проекты.', a:'Софья · 3 курс, фотография' },
+      { t:'Организовал ивент и понял, что это моё', x:'Попал на задачу по сопровождению гостей форума: десять человек, два дня, чёткий график. Всё было расписано до мелочей — что делать, когда, сколько за это платят. После мероприятия заказчик позвал меня координировать следующий ивент уже с командой. Я понял, что событийный менеджмент — это то, чем хочу заниматься, и теперь у меня есть реальные кейсы, а не просто строчка в резюме.', a:'Егор · 2 курс, менеджмент' },
+      { t:'Таргет на реальных бюджетах', x:'В универе нам рассказывают теорию рекламы, но крутить кампании на учебных «фантиках» — совсем не то. Здесь я веду таргет на настоящих бюджетах малого бизнеса и вижу, как решения влияют на заявки. Заказчики делятся цифрами, обсуждают гипотезы — это лучшая практика, которую можно получить на третьем курсе. За такой опыт в обычной жизни ещё и приплачивать пришлось бы, а тут платят мне.', a:'Карина · 4 курс, реклама' },
+      { t:'Монтаж, который реально смотрят', x:'Раньше мои ролики видели только подписчики из двадцати человек. Теперь я монтирую Reels и интервью для брендов, и эти видео набирают тысячи просмотров. Видеть свою работу в реальных аккаунтах мотивирует сильнее любой оценки за курсовую. Плюс заработок стабильный: беру два-три проекта в месяц и спокойно закрываю свои расходы.', a:'Тимур · 3 курс, видеопродакшн' },
+      { t:'От разовой задачи к постоянной работе', x:'Начинала с одной небольшой PR-задачи перед мероприятием — написать рассылку и посты. Заказчику зашло, и меня оставили вести коммуникации на весь проект. Через платформу я получила то, чего никак не могла добиться рассылками резюме: реальный опыт и человека, который готов меня рекомендовать. Сейчас советую сервис всем на потоке, кто жалуется, что «без опыта никуда не берут».', a:'Виктория · 2 курс, PR' }
+    ];
+    const track = document.getElementById('testi-track');
+    if (!track) return;
+    track.innerHTML = reviews.map((r, i) => {
+      const parts = r.a.split(' · ');
+      const nm = parts.shift();
+      const role = parts.join(' · ');
+      return `
+      <article class="testi-card" data-idx="${i}">
+        <div class="testi-tab">,,</div>
+        <div class="testi-body">
+          <p>${r.x}</p>
+          <div class="testi-author">
+            <div class="testi-ava" style="background-image:url('${photos[i % photos.length]}')"></div>
+            <div class="testi-meta">
+              <span class="testi-name">${nm}</span>
+              ${role ? `<span class="testi-role">${role}</span>` : ''}
+            </div>
+          </div>
+        </div>
+      </article>`;
+    }).join('');
+
+    const marquee = track.parentElement;
+    function updateMarquee() {
+      const mw = marquee.offsetWidth;
+      const tw = track.scrollWidth;
+      const endX = Math.min(0, mw - tw);
+      track.style.setProperty('--end-x', endX + 'px');
+    }
+    updateMarquee();
+    window.addEventListener('resize', updateMarquee);
+
+    const popup = document.getElementById('testi-popup');
+    const popupContent = popup.querySelector('.testi-popup-content');
+
+    track.addEventListener('click', e => {
+      const card = e.target.closest('.testi-card');
+      if (!card) return;
+      const r = reviews[card.dataset.idx];
+      popupContent.innerHTML = `
+        <p>${r.x}</p>
+        <div class="who">${r.a}</div>
+      `;
+      popup.classList.add('is-open');
+      popup.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    });
+
+    function closePopup() {
+      popup.classList.remove('is-open');
+      popup.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+    popup.addEventListener('click', e => {
+      if (e.target.hasAttribute('data-close')) closePopup();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && popup.classList.contains('is-open')) closePopup();
+    });
+  })();
+</script>
+<script>
+(function(){
+  var header = document.querySelector('.header');
+  var lastY = 0;
+  window.addEventListener('scroll', function(){
+    var y = window.scrollY;
+    if (y > lastY && y > 80) {
+      header.classList.add('header--hidden');
+    } else {
+      header.classList.remove('header--hidden');
+    }
+    lastY = y;
+  }, {passive: true});
+})();
+</script>
+<script>
+(function(){
+  var TASKS = [
+    { id:1,  tag:'Дизайн',     title:'Оформление соцсетей компании',        company:'Технопарк Югры',  price:'7 500 ₽' },
+    { id:2,  tag:'Разработка', title:'Tilda-лендинг для стартапа',           company:'Технопарк Югры',  price:'18 000 ₽' },
+    { id:3,  tag:'IT',         title:'Telegram-бот для сети кофеен',         company:'Кофе Хаус',       price:'25 000 ₽' },
+    { id:4,  tag:'Контент',    title:'Тексты для лендинга кофейни',          company:'Кофе Хаус',       price:'4 000 ₽' },
+    { id:5,  tag:'Event',      title:'Промоутер на день города',             company:'Технопарк Югры',  price:'5 500 ₽' },
+    { id:6,  tag:'SMM',        title:'Ведение Telegram-канала',              company:'Ритейл Плюс',     price:'12 500 ₽' },
+    { id:7,  tag:'Видео',      title:'Reels для бренда одежды',              company:'Ритейл Плюс',     price:'9 000 ₽' },
+    { id:8,  tag:'IT',         title:'Вёрстка email-шаблонов',               company:'Технопарк Югры',  price:'6 000 ₽' },
+    { id:9,  tag:'Дизайн',     title:'Иллюстрации для детского журнала',     company:'Медиа Юг',        price:'14 000 ₽' },
+    { id:10, tag:'Разработка', title:'CRM-интеграция для интернет-магазина', company:'Ритейл Плюс',     price:'22 000 ₽' },
+    { id:11, tag:'Event',      title:'Фотограф на корпоратив',               company:'Технопарк Югры',  price:'8 000 ₽' },
+    { id:12, tag:'Контент',    title:'Сценарий для YouTube-ролика',          company:'Медиа Юг',        price:'5 000 ₽' },
+    { id:13, tag:'Дизайн',     title:'Логотип и брендбук стартапа',          company:'Стартап Лаб',     price:'30 000 ₽' },
+    { id:14, tag:'SMM',        title:'Контент-план для Instagram',           company:'Ритейл Плюс',     price:'6 500 ₽' },
+    { id:15, tag:'IT',         title:'Парсер данных для аналитики',          company:'Стартап Лаб',     price:'15 000 ₽' },
+    { id:16, tag:'Видео',      title:'Монтаж обучающего курса',              company:'Медиа Юг',        price:'11 000 ₽' },
+    { id:17, tag:'Разработка', title:'Мобильное приложение MVP',             company:'Стартап Лаб',     price:'45 000 ₽' },
+    { id:18, tag:'Event',      title:'Ведущий на студенческий форум',        company:'Технопарк Югры',  price:'7 000 ₽' },
+  ];
+  function esc(s){ return s.replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+  function hi(text,q){
+    if(!q) return esc(text);
+    return esc(text).replace(new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<mark class="search-highlight">$1</mark>');
+  }
+  var wrap=document.getElementById('search-wrap');
+  if(!wrap) return;
+  var hdr=document.querySelector('.header');
+  var btn=wrap.querySelector('.search-toggle');
+  var input=document.querySelector('.search-input');
+  var drop=document.getElementById('search-dropdown');
+  var iw=document.querySelector('.search-input-wrap');
+  function openSearch(){
+    if(iw&&hdr){
+      var hdrR=hdr.getBoundingClientRect();
+      var logo=hdr.querySelector('.logo');
+      var logoR=logo?logo.getBoundingClientRect():{right:hdrR.left+160};
+      var btnR=btn.getBoundingClientRect();
+      iw.style.left=(logoR.right-hdrR.left+8)+'px';
+      iw.style.right=(hdrR.right-btnR.left+8)+'px';
+    }
+    wrap.classList.add('open');
+    if(hdr) hdr.classList.add('search-open');
+    setTimeout(function(){input.focus();},50);
+  }
+  function closeSearch(){
+    if(iw){iw.style.left='';iw.style.right='';}
+    wrap.classList.remove('open');
+    if(hdr) hdr.classList.remove('search-open');
+    input.value='';
+    drop.classList.remove('active');
+  }
+  btn.addEventListener('click',function(){
+    wrap.classList.contains('open') ? closeSearch() : openSearch();
+  });
+  document.addEventListener('click',function(e){
+    if(!wrap.contains(e.target) && !iw.contains(e.target)) closeSearch();
+  });
+  input.addEventListener('input',function(){
+    var q=this.value.trim().toLowerCase();
+    if(!q){ drop.classList.remove('active'); return; }
+    var res=TASKS.filter(function(t){ return t.title.toLowerCase().includes(q)||t.tag.toLowerCase().includes(q)||t.company.toLowerCase().includes(q); });
+    drop.innerHTML = res.length
+      ? res.slice(0,8).map(function(t){ return '<a href="task.html?id='+t.id+'" class="search-item"><span class="search-item-title">'+hi(t.title,q)+'</span><span class="search-item-meta">'+esc(t.tag)+' · '+esc(t.company)+' · '+esc(t.price)+'</span></a>'; }).join('')
+      : '<div class="search-empty">Ничего не найдено</div>';
+    drop.classList.add('active');
+  });
+  input.addEventListener('keydown',function(e){
+    if(e.key==='Escape') closeSearch();
+  });
+})();
+</script>
+<script>
+(function(){
+  var statsSection = document.querySelector('.stats');
+  if (!statsSection) return;
+  var nums = statsSection.querySelectorAll('.num');
+  var animated = false;
+  var items = [];
+  nums.forEach(function(el) {
+    var raw = el.textContent;
+    var match = raw.match(/^(\d+)/);
+    if (!match) { items.push(null); return; }
+    items.push({ el: el, value: parseInt(match[1], 10), suffix: raw.slice(match[1].length) });
+  });
+  function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+  function run() {
+    var duration = 1400, start = null;
+    function step(ts) {
+      if (!start) start = ts;
+      var t = Math.min((ts - start) / duration, 1);
+      var p = easeOut(t);
+      items.forEach(function(item) {
+        if (!item) return;
+        item.el.textContent = Math.round(item.value * p) + item.suffix;
+      });
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  var io = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting && !animated) {
+      animated = true;
+      run();
+      io.disconnect();
+    }
+  }, { threshold: 0.4 });
+  io.observe(statsSection);
+})();
+</script>
+<script src="registration.js"></script>
+<script>
+(function() {
+  var btn = document.querySelector('.btn-hero-tasks');
+  if (!btn) return;
+  var arrow = btn.querySelector('.btn-hero-tasks-arrow');
+  if (!arrow) return;
+  btn.addEventListener('mouseenter', function() {
+    var btnR = btn.getBoundingClientRect();
+    var arrowR = arrow.getBoundingClientRect();
+    arrow.style.transform = 'translateX(' + (btnR.right - 28 - arrowR.right) + 'px)';
+  });
+  btn.addEventListener('mouseleave', function() {
+    arrow.style.transform = '';
+  });
+})();
+</script>
+</body>
+</html>

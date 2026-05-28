@@ -1,0 +1,1262 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>СтудРадар — студенты для вашего бизнеса</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="city-picker.js" defer></script>
+</head>
+<body class="orange-theme" data-screen-label="02 Бизнесу">
+<script>(function(){try{var s=localStorage.getItem('studradar_session');var r=s&&JSON.parse(s).role;if(r==='employer')window.location.replace('employer-dashboard.html');else if(r==='student')window.location.replace('catalog.html');}catch(e){}})();</script>
+
+<!-- ===== HEADER ===== -->
+<header class="header">
+  <a href="employer.html" class="logo">
+    <span class="logo-mark" style="background:transparent"><img src="assets/logo.svg" alt=""/></span>СТУДРАДАР
+  </a>
+
+  <nav class="toggle orange" aria-label="Я ищу">
+    <span class="toggle-pill"></span>
+    <a href="for-students.html">Студентам</a>
+    <a href="employer.html" class="active">Заказчику</a>
+  </nav>
+
+  <nav class="menu">
+    <a href="students.html">Студенты</a>
+    <a href="for-students.html#how">О платформе</a>
+    <a href="blog.html">Блог</a>
+  </nav>
+
+  <a href="#location" class="location" title="Сменить город">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.6a6.7 6.7 0 0 0-6.7 6.7c0 5 6.7 10.1 6.7 10.1s6.7-5.1 6.7-10.1A6.7 6.7 0 0 0 10 1.6Zm0 9.1a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8Z"/></svg>
+    Ханты-Мансийск
+  </a>
+
+  <div class="header-right">
+    <a href="employer-new-task.html" class="btn-login js-post-task">Разместить задачу</a>
+    <a href="#login" class="link-login">Войти</a>
+    <button type="button" class="burger" id="burgerBtn" aria-label="Меню" aria-expanded="false">
+      <svg id="burgerIcon" width="22" height="22" viewBox="0 0 22 22" fill="currentColor"><rect x="3" y="6" width="16" height="2" rx="1"/><rect x="3" y="14" width="16" height="2" rx="1"/></svg>
+    </button>
+  </div>
+</header>
+
+<script src="mobile-drawer.js" defer></script>
+
+<!-- ===== HERO ===== -->
+<section class="hero hero-employer-red">
+  <span class="radar-rings"></span>
+  <div class="hero-employer-text">
+    <div class="eyebrow hero-employer-eyebrow">// БИРЖА ТАЛАНТОВ</div>
+    <h1>Студенты для&nbsp;ваших задач</h1>
+    <p class="hero-employer-lead">Публикуйте задачи, выбирайте студентов, платите только за результат</p>
+    <a href="employer-new-task.html" class="btn btn-accent-blue btn-hero-tasks btn-hero-anim js-post-task">
+      Разместить задачу
+      <svg class="btn-hero-tasks-arrow" width="32" height="32" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M9.58399 16L1.33398 20L1.33398 12L9.58399 16Z"/><path d="M20.584 16L11.4173 20V12L20.584 16Z"/><path d="M30.6673 16L22.4173 20V12L30.6673 16Z"/></svg>
+    </a>
+  </div>
+  <img src="assets/IMG (52) (1).png" alt="" class="hero-employer-photo"/>
+</section>
+
+<!-- ===== STATS ===== -->
+<section class="stats">
+  <div class="stat"><div class="num">800+</div><div class="label">Активных<br>студентов</div></div>
+  <div class="sep">//</div>
+  <div class="stat"><div class="num">5&nbsp;мин</div><div class="label">Среднее время первого отклика</div></div>
+  <div class="sep">//</div>
+  <div class="stat"><div class="num">400+</div><div class="label">Довольных<br>заказчиков</div></div>
+  <div class="sep">//</div>
+  <div class="stat"><div class="num">95%</div><div class="label">Задач закрываются в&nbsp;срок</div></div>
+</section>
+
+<!-- ===== MANIFESTO ===== -->
+<section class="manifesto" style="grid-template-columns: 0.6fr auto 1fr; align-items: stretch; gap: 80px; padding: 140px 120px 140px 40px; position: relative; overflow: hidden; border-radius: 0 0 40px 40px;">
+  <span class="radar-rings" style="background-image: url('assets/radar-dark.svg'); background-position: -380px center; background-size: 1100px auto;"></span>
+  <div></div>
+  <h2 style="text-align: right; font-size: 77px; line-height: 1.05; align-self: center; position: relative; z-index: 1;">
+    ТЫСЯЧИ<br/>СТУДЕНТОВ<br/>
+    <span style="color: var(--orange)">ГОТОВЫ</span><br/>
+    <span style="color: var(--orange)">ПОМОЧЬ</span><br/>
+    УЖЕ<br/>СЕГОДНЯ
+  </h2>
+  <div style="display:flex; flex-direction:column; justify-content:space-between; align-items:flex-start; gap:60px; position: relative; z-index: 1;">
+    <p class="desc" style="max-width: 320px; margin: 0; text-align: left">СтудРадар — платформа для найма студентов на краткосрочные проекты и событийные мероприятия. Заказчик публикует задачи, студенты выполняют и получают оплату.</p>
+    <img src="assets/logo.svg" alt="" style="width: 130px; height: auto; align-self: flex-start; margin-top: auto"/>
+  </div>
+</section>
+
+<!-- ===== TAG MARQUEE ===== -->
+<section class="tag-marquee-section">
+  <div class="tag-row"><div class="tag-track tag-track--a" id="tagRowA"></div></div>
+  <div class="tag-row"><div class="tag-track tag-track--b" id="tagRowB"></div></div>
+  <div class="tag-row"><div class="tag-track tag-track--c" id="tagRowC"></div></div>
+</section>
+
+<style>
+  .tag-marquee-section {
+    background: var(--bg);
+    padding: 64px 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .tag-row { overflow: hidden; }
+  .tag-track {
+    display: flex;
+    gap: 8px;
+    width: max-content;
+    will-change: transform;
+  }
+  .tag-track--a { animation: tagScrollL 46s linear infinite; }
+  .tag-track--b { animation: tagScrollR 52s linear infinite; }
+  .tag-track--c { animation: tagScrollL 40s linear infinite; }
+  .tag-marquee-section:hover .tag-track { animation-play-state: paused; }
+  @keyframes tagScrollL {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  @keyframes tagScrollR {
+    from { transform: translateX(-50%); }
+    to   { transform: translateX(0); }
+  }
+  .tag-pill {
+    flex: 0 0 auto;
+    font-family: 'Tektur', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 30px;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    padding: 18px 34px;
+    border-radius: 999px;
+    background: #fff;
+    color: rgba(2,3,39,0.22);
+    white-space: nowrap;
+    user-select: none;
+  }
+  .tag-pill.is-active {
+    background: var(--orange);
+    color: #fff;
+  }
+  @media (max-width: 900px) {
+    .tag-marquee-section { padding: 40px 0; gap: 8px; }
+    .tag-pill { font-size: 20px; padding: 12px 22px; }
+    .tag-track { gap: 8px; }
+  }
+</style>
+
+<script>
+(function() {
+  var rows = {
+    tagRowA: ['Видео','Атташе','Переводы*','SMM','Медиа','IT-разработка','Фотография','Аналитика','Логистика'],
+    tagRowB: ['Дизайн*','Маркетинг','Репетиторы*','Исследования','Промо','Ивенты','Вёрстка','Озвучка'],
+    tagRowC: ['Монтаж','Reels*','Копирайтинг','Ведущие*','Карточки для WB','Переводчики','3D-графика','Контент']
+  };
+  Object.keys(rows).forEach(function(id) {
+    var track = document.getElementById(id);
+    if (!track) return;
+    var pills = rows[id].map(function(name) {
+      var active = name.indexOf('*') !== -1;
+      var label = name.replace('*', '');
+      return '<span class="tag-pill' + (active ? ' is-active' : '') + '">' + label + '</span>';
+    }).join('');
+    track.innerHTML = pills + pills;
+  });
+})();
+</script>
+
+<!-- ===== STEPS ===== -->
+<!-- ===== STEPS (original backup, commented) =====
+<section class="steps">
+  <div class="section-h">
+    <div>
+      <div class="eyebrow">// Как это работает</div>
+      <h2 class="section-title">Три шага<br/>до закрытия задачи</h2>
+    </div>
+  </div>
+  <div class="cards-3">
+    <article class="step-card">
+      <div class="step-num">// 01</div>
+      <div class="img-area">
+        <span class="click-tag">опубликуй</span>
+      </div>
+      <div class="text-bubble">
+        <h3>опишите задачу</h3>
+        <p>Заполните карточку: что нужно, к какому сроку и за какой бюджет</p>
+      </div>
+    </article>
+    <article class="step-card">
+      <div class="step-num">// 02</div>
+      <div class="img-area">
+        <span class="click-tag" style="transform:rotate(2deg)">отклики</span>
+      </div>
+      <div class="text-bubble">
+        <h3>выберите</h3>
+        <p>Изучайте отклики, профили и портфолио — назначайте исполнителя в один клик</p>
+      </div>
+    </article>
+    <article class="step-card">
+      <div class="step-num">// 03</div>
+      <div class="img-area">
+        <span class="click-tag" style="transform:rotate(-2deg)">принято</span>
+      </div>
+      <div class="text-bubble">
+        <h3>примите работу</h3>
+        <p>Деньги уходят со счёта только после того, как вы подтвердили результат</p>
+      </div>
+    </article>
+  </div>
+</section>
+==== /backup ==== -->
+
+<!-- ===== STEPS (horizontal pin-scroll variant — employer) ===== -->
+<section class="steps-pin-section" id="how">
+  <div class="steps-pin-stage">
+    <div class="steps-pin-head">
+      <div class="eyebrow">// Как это работает</div>
+      <h2 class="section-title">ЧЕТЫРЕ ШАГА ДО ЗАКРЫТИЯ ЗАДАЧИ</h2>
+    </div>
+    <div class="steps-pin-track" id="stepsTrack">
+      <article class="pin-card pin-card--orange">
+        <div class="pin-card-img"><img src="assets/Four%20steps/1.png" alt=""/></div>
+        <div class="pin-card-text">
+          <h3>Публикуете задачу</h3>
+          <p>Формат, компетенции, период, бюджет, число людей. Можно прислать бриф — соберём карточку за вас.</p>
+        </div>
+      </article>
+
+      <article class="pin-card pin-card--blue">
+        <div class="pin-card-img"><img src="assets/Four%20steps/2.png" alt=""/></div>
+        <div class="pin-card-text">
+          <h3>Получаете отклики</h3>
+          <p>Платформа предлагает задачу подходящим студентам по компетенциям, расписанию и локации. Вы получаете релевантных кандидатов с профилем, портфолио и рейтингом.</p>
+        </div>
+      </article>
+
+      <article class="pin-card pin-card--ink">
+        <div class="pin-card-img"><img src="assets/Four%20steps/3.png" alt=""/></div>
+        <div class="pin-card-text">
+          <h3>Резервируете оплату</h3>
+          <p>Сумма блокируется на платформе. Студент видит подтверждение и приступает к задаче.</p>
+        </div>
+      </article>
+
+      <article class="pin-card pin-card--cream">
+        <div class="pin-card-img"><img src="assets/Four%20steps/4.png" alt=""/></div>
+        <div class="pin-card-text">
+          <h3>Принимаете работу</h3>
+          <p>Подтверждаете закрытие — деньги уходят исполнителю. Если работа не выполнена, средства остаются у вас.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .steps-pin-section {
+    position: relative;
+    background: #fff;
+    height: calc(4 * 100vh);
+    border-radius: 40px 40px 0 0;
+  }
+  .steps-pin-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .steps-pin-head {
+    padding: 60px 120px 40px;
+    flex-shrink: 0;
+  }
+  .steps-pin-head .eyebrow { margin-bottom: 12px; }
+  .steps-pin-head .section-title { margin: 0; font-size: 64px; line-height: 1.02; white-space: nowrap; }
+  .steps-pin-track {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    padding: 0 64px 60px;
+    will-change: transform;
+  }
+  .pin-card {
+    flex: 0 0 calc(100vw - 128px);
+    height: min(560px, calc(100vh - 280px));
+    border-radius: 32px;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 48% 52%;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .pin-card--orange { background: #DD5444; color: #fff; }
+  .pin-card--blue   { background: #1151B1; color: #fff; }
+  .pin-card--ink    { background: #020327; color: #fff; }
+  .pin-card--cream  { background: #F7F0E6; color: #020327; }
+  .pin-card-img {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6% 2% 6% 5%;
+    box-sizing: border-box;
+  }
+  .pin-card-img img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    transform: translateY(-10px);
+  }
+  /* Синий, тёмный и кремовый блоки — одинаковый размер картинки */
+  .pin-card--blue .pin-card-img img,
+  .pin-card--ink .pin-card-img img,
+  .pin-card--cream .pin-card-img img {
+    max-height: 94%;
+    max-width: 98%;
+  }
+  /* Первый блок (форма) — картинка чуть правее и ниже */
+  .pin-card--orange .pin-card-img img {
+    transform: translate(24px, 22px) scale(1.08);
+  }
+  /* Третий блок (кошелёк) — картинка чуть выше */
+  .pin-card--ink .pin-card-img img {
+    transform: translateY(-20px);
+  }
+  .pin-card-text {
+    padding: 0 6% 0 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .pin-card-text h3 {
+    font-family: 'Tektur', sans-serif;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: clamp(34px, 4.4vw, 58px);
+    line-height: 1.0;
+    margin: 0 0 16px;
+    letter-spacing: -0.01em;
+  }
+  .pin-card-text p {
+    font-family: 'Manrope', sans-serif;
+    font-size: clamp(16px, 1.55vw, 22px);
+    font-weight: 500;
+    line-height: 1.4;
+    margin: 0;
+    max-width: 560px;
+  }
+
+  @media (max-width: 900px) {
+    .steps-pin-section { height: auto; }
+    .steps-pin-stage { position: static; height: auto; }
+    .steps-pin-head { padding: 40px 24px 16px; }
+    .steps-pin-head .section-title { font-size: 38px; white-space: normal; }
+    .steps-pin-track {
+      padding: 0 24px 40px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .pin-card {
+      flex: 0 0 calc(100vw - 48px);
+      scroll-snap-align: center;
+      grid-template-columns: 1fr;
+      padding: 32px 28px;
+    }
+    .pin-card-text h3 { font-size: 32px !important; line-height: 1.05 !important; word-break: normal !important; overflow-wrap: normal !important; hyphens: none; }
+    .pin-card-text p { font-size: 18px; }
+    .pin-card-img { max-height: 260px; }
+  }
+</style>
+
+<script>
+(function() {
+  if (window.innerWidth < 900) return;
+  var section = document.querySelector('.steps-pin-section');
+  var track = document.getElementById('stepsTrack');
+  if (!section || !track) return;
+
+  var lastTx = 0;
+  function update() {
+    var rect = section.getBoundingClientRect();
+    var sectionH = section.offsetHeight;
+    var vh = window.innerHeight;
+    var scrolled = -rect.top;
+    var max = sectionH - vh;
+    var progress = Math.max(0, Math.min(1, scrolled / max));
+    var trackW = track.scrollWidth;
+    var stageW = window.innerWidth;
+    var distance = Math.max(0, trackW - stageW);
+    var tx = -progress * distance;
+    if (Math.abs(tx - lastTx) > 0.5) {
+      track.style.transform = 'translate3d(' + tx + 'px, 0, 0)';
+      lastTx = tx;
+    }
+  }
+  update();
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+})();
+</script>
+
+<!-- ===== TARIFFS ===== -->
+<section class="tariffs-section" id="tariffs">
+  <div class="section-h">
+    <div>
+      <div class="eyebrow">// Как это работает</div>
+      <h2 class="section-title">Тарифы</h2>
+    </div>
+    <a href="students.html" class="section-link" style="color: var(--orange)">Каталог студентов <svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M9.584 16L1.334 20V12L9.584 16Z"/><path d="M20.584 16L11.417 20V12L20.584 16Z"/><path d="M30.667 16L22.417 20V12L30.667 16Z"/></svg></a>
+  </div>
+
+  <div class="tariffs-grid">
+    <article class="tariff-card">
+      <div class="tariff-eyebrow">// Разовая задача</div>
+      <h3 class="tariff-title">Опубликовать задачу</h3>
+      <div class="tariff-price"><span class="num">15%</span><span class="per">Комиссия</span></div>
+      <p class="tariff-desc">Один исполнитель, понятная задача. Платите только при приёмке.</p>
+      <ul class="tariff-list">
+        <li><svg class="tariff-check" viewBox="0 0 18 18" fill="none"><path d="M3.5 9.5l3.5 3.5 7.5-8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Механизм безопасной оплаты</li>
+        <li><svg class="tariff-check" viewBox="0 0 18 18" fill="none"><path d="M3.5 9.5l3.5 3.5 7.5-8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Чек самозанятого автоматически</li>
+        <li><svg class="tariff-check" viewBox="0 0 18 18" fill="none"><path d="M3.5 9.5l3.5 3.5 7.5-8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Замена при срыве через спор</li>
+        <li><svg class="tariff-check" viewBox="0 0 18 18" fill="none"><path d="M3.5 9.5l3.5 3.5 7.5-8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Отчет по сделкам по запросу</li>
+      </ul>
+      <a href="employer-new-task.html" class="tariff-btn">Опубликовать
+        <svg class="btn-arrow" viewBox="0 0 44 16" fill="none"><polygon points="0,0 8,8 0,16"/><polygon points="14,0 22,8 14,16"/><polygon points="28,0 36,8 28,16"/></svg>
+      </a>
+    </article>
+
+    <article class="tariff-card is-dark">
+      <div class="tariff-eyebrow">// Популярно</div>
+      <h3 class="tariff-title">Подбор под ключ</h3>
+      <div class="tariff-price"><span class="pre">от</span><span class="num">20 000 ₽</span><span class="per">/ проект</span></div>
+      <p class="tariff-desc">Мероприятие на 10+ человек. Координатор СтудРадара ведёт всё сам.</p>
+      <ul class="tariff-list">
+        <li><svg class="tariff-check" viewBox="0 0 18 18" fill="none"><path d="M3.5 9.5l3.5 3.5 7.5-8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Механизм безопасной оплаты</li>
+        <li><svg class="tariff-check" viewBox="0 0 18 18" fill="none"><path d="M3.5 9.5l3.5 3.5 7.5-8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Замена в течение 2 часов</li>
+        <li><svg class="tariff-check" viewBox="0 0 18 18" fill="none"><path d="M3.5 9.5l3.5 3.5 7.5-8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Выделенный менеджер</li>
+        <li><svg class="tariff-check" viewBox="0 0 18 18" fill="none"><path d="M3.5 9.5l3.5 3.5 7.5-8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Брифинг и проверка выхода</li>
+        <li><svg class="tariff-check" viewBox="0 0 18 18" fill="none"><path d="M3.5 9.5l3.5 3.5 7.5-8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Отчётные документы</li>
+      </ul>
+      <a href="#request" class="tariff-btn is-accent">Оставить заявку
+        <svg class="btn-arrow" viewBox="0 0 44 16" fill="none"><polygon points="0,0 8,8 0,16"/><polygon points="14,0 22,8 14,16"/><polygon points="28,0 36,8 28,16"/></svg>
+      </a>
+    </article>
+
+    <article class="tariff-card">
+      <div class="tariff-eyebrow">// Разовая задача</div>
+      <h3 class="tariff-title">Подписка</h3>
+      <div class="tariff-price"><span class="num">3 990 ₽</span><span class="per">/ мес</span></div>
+      <p class="tariff-desc">Регулярные публикации, приоритет в выдаче, выделенный менеджер.</p>
+      <ul class="tariff-list">
+        <li><svg class="tariff-check" viewBox="0 0 18 18" fill="none"><path d="M3.5 9.5l3.5 3.5 7.5-8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Безлимитные публикации</li>
+        <li><svg class="tariff-check" viewBox="0 0 18 18" fill="none"><path d="M3.5 9.5l3.5 3.5 7.5-8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Приоритет в выдаче</li>
+        <li><svg class="tariff-check" viewBox="0 0 18 18" fill="none"><path d="M3.5 9.5l3.5 3.5 7.5-8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Замена в течение 4 часов</li>
+        <li><svg class="tariff-check" viewBox="0 0 18 18" fill="none"><path d="M3.5 9.5l3.5 3.5 7.5-8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Ежемесячный отчёт</li>
+      </ul>
+      <a href="employer-new-task.html" class="tariff-btn">Опубликовать
+        <svg class="btn-arrow" viewBox="0 0 44 16" fill="none"><polygon points="0,0 8,8 0,16"/><polygon points="14,0 22,8 14,16"/><polygon points="28,0 36,8 28,16"/></svg>
+      </a>
+    </article>
+  </div>
+</section>
+
+<!-- ===== FRESH PERFORMERS ===== -->
+<section class="fresh-section" id="performers">
+  <div class="section-h">
+    <div>
+      <div class="eyebrow">// Сегодня онлайн</div>
+      <h2 class="section-title">Студенты готовы к работе</h2>
+    </div>
+    <a href="students.html" class="section-link">Все исполнители <svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M9.584 16L1.334 20V12L9.584 16Z"/><path d="M20.584 16L11.417 20V12L20.584 16Z"/><path d="M30.667 16L22.417 20V12L30.667 16Z"/></svg></a>
+  </div>
+
+  <div class="tasks-grid" id="tasks-grid"></div>
+</section>
+
+<style>
+  #performers .tasks-grid { gap: 24px; }
+  .sc2 {
+    background: #fff;
+    border-radius: 32px;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.25s, transform 0.25s;
+  }
+  .sc2:hover {
+    box-shadow: 0 8px 40px rgba(2,3,39,0.10);
+    transform: translateY(-2px);
+  }
+  .sc2-upper {
+    display: flex;
+    gap: 28px;
+    padding: 10px 10px 0;
+  }
+  .sc2-avatar {
+    width: 113px;
+    height: 145px;
+    border-radius: 24px;
+    background: linear-gradient(135deg, #E8EBF8, #D0D5F0);
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .sc2-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .sc2-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .sc2-name-block {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 16px;
+  }
+  .sc2-name {
+    font: 600 20px/1.35 'Manrope', sans-serif;
+    color: #020327;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .sc2-meta { display: flex; gap: 20px; align-items: center; }
+  .sc2-rating, .sc2-reviews {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    font: 600 18px/114% 'Manrope', sans-serif;
+    color: rgba(2,3,39,0.72);
+  }
+  .sc2-info-bar {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    padding: 16px 0;
+    border-top: 1px solid rgba(2,3,39,0.06);
+    font: 500 14px/1 'Manrope', sans-serif;
+    color: #020327;
+    flex-wrap: wrap;
+  }
+  .sc2-sep { color: rgba(2,3,39,0.40); }
+  .sc2-lower {
+    padding: 14px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .sc2-title {
+    font: 700 18px/140% 'Tektur', sans-serif;
+    color: #020327;
+    text-transform: uppercase;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .sc2-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .sc2-tag {
+    padding: 8px 12px;
+    border-radius: 25px;
+    background: rgba(2,3,39,0.06);
+    font: 500 14px/140% 'Manrope', sans-serif;
+    color: rgba(2,3,39,0.72);
+  }
+</style>
+
+<!-- ===== WHY US ===== -->
+<section class="wm-section">
+  <div class="section-h">
+    <div>
+      <div class="eyebrow">// почему мы?</div>
+      <h2 class="section-title">Меняем подход<br/>к работе со студентами</h2>
+    </div>
+  </div>
+
+  <div class="wm-stack">
+
+    <!-- Card 1 -->
+    <article class="wm-card wm--orange">
+      <div class="wm-body">
+        <h3 class="wm-h">Проверенная<br/>база</h3>
+        <p class="wm-p">Профили исполнителей подтверждены через интеграцию с университетом: курс, направление подготовки, академическая нагрузка и история прошлых задач на платформе.</p>
+      </div>
+      <div class="wm-media"><img src="assets/Почему мы/Laptop.png" alt="" loading="lazy"/></div>
+    </article>
+
+    <!-- Card 2 -->
+    <article class="wm-card wm--blue">
+      <div class="wm-body">
+        <h3 class="wm-h">Умные алгоритмы<br/>подбора</h3>
+        <p class="wm-p">Подбираем кандидатов по компетенциям, расписанию и геолокации, поэтому в выдаче оказываются студенты, которые действительно вам подойдут.</p>
+      </div>
+      <div class="wm-media"><img src="assets/Почему мы/Students.png" alt="" loading="lazy"/></div>
+    </article>
+
+    <!-- Card 3 -->
+    <article class="wm-card wm--cream">
+      <div class="wm-body">
+        <h3 class="wm-h">Берём на себя<br/>всю рутину</h3>
+        <p class="wm-p">Автоматизировали регистрацию, документооборот и расчёты с исполнителем. Сделка проходит через статус самозанятого, чеки и закрывающие документы формируются на стороне платформы.</p>
+      </div>
+      <div class="wm-media"><img src="assets/Почему мы/Documents.png" alt="" loading="lazy"/></div>
+    </article>
+
+    <!-- Card 4 -->
+    <article class="wm-card wm--ink">
+      <div class="wm-body">
+        <h3 class="wm-h">Оплата только<br/>за результат</h3>
+        <p class="wm-p">Деньги замораживаются на платформе и уходят студенту только после того, как вы приняли работу. Не вышел или сделал плохо — возвращаем оплату.</p>
+      </div>
+      <div class="wm-media"><img src="assets/Почему мы/Shield.png" alt="" loading="lazy"/></div>
+    </article>
+
+  </div>
+</section>
+
+<style>
+  .wm-section { background: transparent; margin: 0; padding: 60px; }
+  .wm-stack { display: flex; flex-direction: column; gap: 28px; }
+  .wm-card {
+    border-radius: 40px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 420px;
+    position: sticky;
+    transition: transform .3s ease;
+  }
+  .wm-stack > .wm-card:nth-child(1) { top: 40px; }
+  .wm-stack > .wm-card:nth-child(2) { top: 64px; }
+  .wm-stack > .wm-card:nth-child(3) { top: 88px; }
+  .wm-stack > .wm-card:nth-child(4) { top: 112px; }
+  .wm-card::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 18%;
+    width: 1080px;
+    height: 1080px;
+    transform: translateY(-50%);
+    background: url('assets/radar-white.svg') center / contain no-repeat;
+    opacity: 0.85;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .wm--cream::before {
+    background-image: url('assets/radar.svg');
+    opacity: 0.4;
+  }
+  .wm-card > .wm-body,
+  .wm-card > .wm-media { position: relative; z-index: 1; }
+  .wm--orange { background: #DD5444; color: #fff; }
+  .wm--cream  { background: #F7F0E6; color: #020327; }
+  .wm--blue   { background: #1153B5; color: #fff; }
+  .wm--ink    { background: #020327; color: #fff; }
+  .wm-body {
+    padding: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    justify-content: flex-end;
+  }
+  .wm-h {
+    font-family: 'Tektur', sans-serif;
+    font-weight: 700;
+    font-size: 44px;
+    line-height: 1.05;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .wm-p {
+    font-family: 'Manrope', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.5;
+    margin: 0;
+    max-width: 560px;
+    opacity: 0.88;
+  }
+  .wm--cream .wm-p { opacity: 0.72; }
+  .wm-media { position: relative; overflow: hidden; }
+  .wm-media img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+  /* per-card image sizing */
+  .wm--orange .wm-media img { object-fit: contain; padding: 16px; position: relative; left: -20px; }
+  .wm--ink .wm-media img    { object-fit: contain; padding: 32px; transform: scale(1.4); }
+  .wm--blue .wm-media img   { object-fit: contain; padding: 0; transform: translateY(15px) scale(1.2); }
+  .wm--cream .wm-media img  { object-fit: contain; padding: 0; transform: scale(1.2); }
+  .wm--blue, .wm--cream { grid-template-columns: 0.75fr 1.25fr; }
+
+  /* Stats (card 1) */
+  .wm-stats { display: flex; flex-wrap: wrap; gap: 12px 28px; margin-top: 6px; }
+  .wm-stat {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 600;
+  }
+  .wm-stat svg { width: 20px; height: 20px; flex: none; opacity: 0.9; }
+
+  /* Doc rows (card 2) */
+  .wm-docs { display: flex; flex-direction: column; gap: 10px; margin-top: 6px; }
+  .wm-doc {
+    display: flex; align-items: center; gap: 14px;
+    background: rgba(2,3,39,0.04); border-radius: 16px; padding: 14px 16px;
+  }
+  .wm-doc-ico {
+    width: 40px; height: 40px; border-radius: 11px; flex: none;
+    background: rgba(221,84,68,0.14); color: #DD5444;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .wm-doc-ico svg { width: 22px; height: 22px; }
+  .wm-doc-tx { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .wm-doc-tx b { font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 700; color: #020327; }
+  .wm-doc-tx span { font-family: 'Manrope', sans-serif; font-size: 13px; color: rgba(2,3,39,0.6); }
+  .wm-doc-sum { font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 700; color: #020327; white-space: nowrap; }
+  .wm-doc-btn {
+    flex: none; height: 36px; padding: 0 16px;
+    background: #DD5444; color: #fff; border: none; border-radius: 10px;
+    font-family: 'Tektur', sans-serif; font-size: 12px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.03em; cursor: pointer;
+    transition: background .18s;
+  }
+  .wm-doc-btn:hover { background: #020327; }
+
+  /* Candidate card (card 3) */
+  .wm-cand { background: rgba(255,255,255,0.10); border-radius: 18px; padding: 18px 20px; margin-top: 4px; max-width: 560px; }
+  .wm-cand-top { display: flex; align-items: center; gap: 14px; }
+  .wm-cand-ava {
+    width: 44px; height: 44px; border-radius: 50%; flex: none;
+    background: rgba(255,255,255,0.18); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 15px;
+  }
+  .wm-cand-id { flex: 1; min-width: 0; }
+  .wm-cand-name { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 16px; }
+  .wm-cand-meta { font-family: 'Manrope', sans-serif; font-size: 13px; opacity: 0.78; margin-top: 2px; }
+  .wm-cand-rate { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; font-family: 'Manrope', sans-serif; font-size: 13px; opacity: 0.9; white-space: nowrap; }
+  .wm-cand-title { font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 600; margin: 14px 0 12px; }
+  .wm-cand-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .wm-tag {
+    font-family: 'Manrope', sans-serif; font-size: 12px; font-weight: 600;
+    padding: 6px 12px; border-radius: 999px;
+    background: rgba(255,255,255,0.16);
+  }
+
+  /* Safe badge (card 4) */
+  .wm-safe { display: flex; align-items: center; gap: 14px; margin-top: 6px; }
+  .wm-safe-ico {
+    width: 52px; height: 52px; border-radius: 14px; flex: none;
+    background: rgba(255,255,255,0.12); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .wm-safe-ico svg { width: 26px; height: 26px; }
+  .wm-safe-tx b { display: block; font-family: 'Tektur', sans-serif; font-size: 18px; font-weight: 700; text-transform: uppercase; }
+  .wm-safe-tx span { font-family: 'Manrope', sans-serif; font-size: 14px; opacity: 0.78; }
+
+  @media (max-width: 980px) {
+    .wm-section { padding: 20px; }
+    .wm-stack { gap: 24px; }
+    .wm-card { grid-template-columns: 1fr; height: auto; min-height: 0; position: relative; top: auto !important; }
+    .wm-body { padding: 32px 24px; }
+    .wm-h { font-size: 36px !important; line-height: 1.05 !important; }
+    .wm-media { height: 220px; order: -1; padding: 0; }
+    .wm-doc { flex-wrap: wrap; }
+    .wm-doc-btn { margin-left: 54px; }
+  }
+</style>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section class="testi-section">
+  <div class="section-h">
+    <div>
+      <div class="eyebrow">// Отзывы</div>
+      <h2 class="section-title">Что говорят<br/>заказчики</h2>
+    </div>
+  </div>
+
+  <div class="testi-marquee">
+    <div class="testi-track" id="testi-track"></div>
+  </div>
+</section>
+
+<!-- Testimonial popup -->
+<div class="testi-popup" id="testi-popup" aria-hidden="true">
+  <div class="testi-popup-overlay" data-close></div>
+  <div class="testi-popup-card">
+    <button class="testi-popup-close" type="button" data-close aria-label="Закрыть">?</button>
+    <div class="testi-popup-content"></div>
+  </div>
+</div>
+
+<!-- ===== PRO ===== -->
+<section class="pro-section" id="pro">
+  <div class="pro-band">
+    <span class="radar-rings"></span>
+    <div>
+      <div class="eyebrow">// Подписка для команд</div>
+      <h2>СтудРадар Business</h2>
+      <div class="pro-price"><span class="num">2 990 ₽</span><span class="per">/мес</span></div>
+      <ul class="pro-list">
+        <li><span class="pro-check"></span>Безлимитные публикации задач</li>
+        <li><span class="pro-check"></span>Приоритет в выдаче — ваши задачи видят первыми</li>
+        <li><span class="pro-check"></span>Брендированный профиль компании</li>
+        <li><span class="pro-check"></span>Личный менеджер и поддержка 24/7</li>
+        <li><span class="pro-check"></span>Закрытый пул студентов под NDA</li>
+      </ul>
+      <div style="margin-top:32px"><a href="#try" class="btn btn-accent-blue">Подключить
+        <svg class="btn-arrow" viewBox="0 0 44 16" fill="none"><polygon points="0,0 8,8 0,16" /><polygon points="14,0 22,8 14,16" /><polygon points="28,0 36,8 28,16" /></svg>
+      </a></div>
+    </div>
+    <div class="pro-image-area"><img src="assets/pro-image-emp.png" alt=""/></div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="faq-section" id="faq">
+  <div class="faq-grid">
+    <div>
+      <div class="eyebrow">// Вопросы и ответы</div>
+      <h2 class="section-title">Частые<br/>вопросы</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item open">
+        <button class="faq-q" type="button">Сколько стоит размещение задачи?<span class="faq-toggle">+</span></button>
+        <div class="faq-a"><div>Размещение — бесплатно. Платформа берёт 15% от итоговой стоимости задачи только после того, как вы приняли работу. Не приняли — комиссия не списывается.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button">Как мы оформляем выплату студенту?<span class="faq-toggle">+</span></button>
+        <div class="faq-a"><div>Никак — студенты на платформе работают как самозанятые. Мы автоматически формируем чек, ваша компания получает закрывающий документ.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button">Что, если результат не устраивает?<span class="faq-toggle">+</span></button>
+        <div class="faq-a"><div>Деньги до приёмки заморожены на платформе. Если работа не принята — подключается арбитраж: фиксируем требования из ТЗ, разбираем спор и принимаем решение в течение 48 часов.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button">Можно ли закрепить студента на регулярные задачи?<span class="faq-toggle">+</span></button>
+        <div class="faq-a"><div>Да. После первой удачной сделки исполнитель сохраняется в избранном, а на тарифе Business — собирается команда из проверенных студентов под ваши проекты.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="employer.html" class="logo">
+        <span class="logo-mark"><img src="assets/logo.svg" alt=""/></span>СТУДРАДАР
+      </a>
+      <p class="footer-tagline">Платформа для краткосрочной занятости студентов — задачи, портфолио, реальный опыт.</p>
+      <div class="footer-social">
+        <a href="#tg" title="Telegram">TG</a>
+        <a href="#vk" title="ВКонтакте">VK</a>
+      </div>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <div class="footer-col-title">Платформа</div>
+        <a href="#about">О нас</a>
+        <a href="blog.html">Блог</a>
+        <a href="#policy">Политика</a>
+        <a href="#terms">Соглашение</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Студентам</div>
+        <a href="catalog.html">Каталог задач</a>
+        <a href="for-students.html#tasks">Свежие задачи</a>
+        <a href="for-students.html#pro">PRO-подписка</a>
+        <a href="for-students.html#faq">Вопросы</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Бизнесу</div>
+        <a href="employer.html">Для работодателей</a>
+        <a href="students.html">Исполнители</a>
+        <a href="#pro">Business-тариф</a>
+        <a href="#faq">Вопросы</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Контакты</div>
+        <a href="#tg">Telegram-бот</a>
+        <a href="#vk">ВКонтакте</a>
+        <a href="mailto:hi@studradar.ru">hi@studradar.ru</a>
+        <a href="#location">Ханты-Мансийск</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 СтудРадар. Все права защищены.</span>
+    <span class="footer-city">
+      <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.6a6.7 6.7 0 0 0-6.7 6.7c0 5 6.7 10.1 6.7 10.1s6.7-5.1 6.7-10.1A6.7 6.7 0 0 0 10 1.6Zm0 9.1a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8Z"/></svg>
+      Ханты-Мансийск
+    </span>
+  </div>
+</footer>
+
+<script>
+  // Toggle pill animation
+  (function() {
+    var toggle = document.querySelector('.toggle');
+    if (!toggle) return;
+    var pill = toggle.querySelector('.toggle-pill');
+    if (!pill) return;
+    var links = Array.prototype.slice.call(toggle.querySelectorAll('a'));
+
+    function movePill(link, instant) {
+      var tRect = toggle.getBoundingClientRect();
+      var lRect = link.getBoundingClientRect();
+      var x = lRect.left - tRect.left - 6;
+      if (instant) {
+        pill.style.transition = 'none';
+        pill.offsetHeight;
+      }
+      pill.style.width = lRect.width + 'px';
+      pill.style.transform = 'translateX(' + x + 'px)';
+      if (instant) {
+        pill.offsetHeight;
+        pill.style.transition = '';
+      }
+    }
+
+    var active = toggle.querySelector('a.active');
+    if (active) movePill(active, true);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function() { var a = toggle.querySelector('a.active'); if (a) movePill(a, true); });
+    }
+
+    function updateLoginText(href) {}
+
+    window.addEventListener('resize', function() {
+      var a = toggle.querySelector('a.active');
+      if (a) movePill(a, true);
+    });
+
+    links.forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        var href = this.getAttribute('href');
+        if (!href || href.startsWith('#')) return;
+        links.forEach(function(l) { l.classList.remove('active'); });
+        this.classList.add('active');
+        movePill(this, false);
+        if (href.indexOf('employer') !== -1) {
+          toggle.classList.add('orange');
+        } else {
+          toggle.classList.remove('orange');
+        }
+        updateLoginText(href);
+        e.preventDefault();
+        setTimeout(function() { window.location.href = href; }, 440);
+      });
+    });
+  })();
+
+  // FAQ
+  document.querySelectorAll('.faq-q').forEach(b => b.addEventListener('click', () => {
+    b.parentElement.classList.toggle('open');
+    b.querySelector('.faq-toggle').textContent = b.parentElement.classList.contains('open') ? '?' : '+';
+  }));
+
+  // Ready-to-work students
+  const perf = [
+    { id:6,  photo:'assets/Студенты/1 (18).png', name:'Алина Гордеева',  uni:'УрФУ',  year:4, spec:'IT-разработка', rate:'5.0', deals:31, city:'Екатеринбург',   title:'Разработаю Telegram-бота или веб-приложение под ключ',     skills:['Python','FastAPI','React'] },
+    { id:12, photo:'assets/Студенты/i (1).webp', name:'Кирилл Захаров',  uni:'ТюмГУ', year:4, spec:'IT-разработка', rate:'5.0', deals:27, city:'Тюмень',         title:'Разработаю MVP мобильного приложения или CRM-интеграцию',  skills:['Flutter','Node.js','MongoDB'] },
+    { id:3,  photo:'assets/Студенты/1 (15).png', name:'Мария Кузьмина',  uni:'УрФУ',  year:4, spec:'Видео',         rate:'5.0', deals:18, city:'Екатеринбург',   title:'Сниму и смонтирую Reels, YouTube-ролики и рекламу',        skills:['Premiere Pro','After Effects','Съёмка'] },
+    { id:1,  photo:'assets/Студенты/1 (13).png', name:'Анна Петрова',    uni:'ЮГУ',   year:3, spec:'Дизайн',        rate:'4.9', deals:12, city:'Ханты-Мансийск', title:'Оформлю фирменный стиль и соцсети для вашего бренда',      skills:['Figma','UI/UX','Брендинг'] },
+    { id:4,  photo:'assets/Студенты/1 (16).png', name:'Артём Соколов',   uni:'ЮГУ',   year:1, spec:'Контент',       rate:'4.9', deals:23, city:'Ханты-Мансийск', title:'Разработаю контент-стратегию и фирменный стиль для бренда', skills:['Копирайтинг','Контент-план','Сторителлинг'] },
+    { id:9,  photo:'assets/Студенты/1 (21).png', name:'Елена Борисова',  uni:'ТюмГУ', year:4, spec:'Ивенты',        rate:'4.9', deals:15, city:'Тюмень',         title:'Организую и проведу мероприятие любого формата',           skills:['Организация','Координация','Логистика'] },
+  ];
+  function pluralTasks(n) {
+    var m = n % 100, r = n % 10;
+    if (m >= 11 && m <= 19) return 'задач';
+    if (r === 1) return 'задача';
+    if (r >= 2 && r <= 4) return 'задачи';
+    return 'задач';
+  }
+  const STAR_SVG = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M18.3203 8.93578L14.7969 12.0108L15.8524 16.5889C15.9082 16.8282 15.8923 17.0787 15.8065 17.309C15.7208 17.5394 15.5691 17.7393 15.3703 17.8839C15.1716 18.0284 14.9346 18.1112 14.6891 18.1218C14.4436 18.1324 14.2004 18.0704 13.9899 17.9436L9.99689 15.5217L6.01252 17.9436C5.80202 18.0704 5.55881 18.1324 5.31328 18.1218C5.06775 18.1112 4.83079 18.0284 4.63204 17.8839C4.4333 17.7393 4.28157 17.5394 4.19584 17.309C4.1101 17.0787 4.09416 16.8282 4.15002 16.5889L5.20392 12.0155L1.6797 8.93578C1.49331 8.77502 1.35852 8.5628 1.29225 8.32574C1.22598 8.08868 1.23117 7.83733 1.30718 7.60321C1.38319 7.36909 1.52663 7.16262 1.71952 7.0097C1.9124 6.85678 2.14614 6.76421 2.39142 6.74359L7.03674 6.34125L8.85002 2.01625C8.94471 1.78931 9.10443 1.59546 9.30907 1.45911C9.51371 1.32276 9.75411 1.25 10 1.25C10.2459 1.25 10.4863 1.32276 10.691 1.45911C10.8956 1.59546 11.0553 1.78931 11.15 2.01625L12.9688 6.34125L17.6125 6.74359C17.8578 6.76421 18.0915 6.85678 18.2844 7.0097C18.4773 7.16262 18.6207 7.36909 18.6968 7.60321C18.7728 7.83733 18.778 8.08868 18.7117 8.32574C18.6454 8.5628 18.5106 8.77502 18.3242 8.93578H18.3203Z" fill="#1153B5"/></svg>';
+  const CHAT_SVG = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10.3125 1.875C8.24119 1.87727 6.25538 2.70111 4.79074 4.16574C3.32611 5.63038 2.50227 7.61619 2.5 9.6875V16.2758C2.50041 16.6003 2.62953 16.9115 2.85902 17.141C3.08852 17.3705 3.39966 17.4996 3.72422 17.5H10.3125C12.3845 17.5 14.3716 16.6769 15.8368 15.2118C17.3019 13.7466 18.125 11.7595 18.125 9.6875C18.125 7.6155 17.3019 5.62836 15.8368 4.16323C14.3716 2.6981 12.3845 1.875 10.3125 1.875ZM6.875 10.9375C6.68958 10.9375 6.50832 10.8825 6.35415 10.7795C6.19998 10.6765 6.07982 10.5301 6.00886 10.3588C5.93791 10.1875 5.91934 9.99896 5.95551 9.8171C5.99169 9.63525 6.08098 9.4682 6.21209 9.33709C6.3432 9.20598 6.51025 9.11669 6.6921 9.08051C6.87396 9.04434 7.06246 9.06291 7.23377 9.13386C7.40507 9.20482 7.55149 9.32498 7.6545 9.47915C7.75752 9.63332 7.8125 9.81458 7.8125 10C7.8125 10.2486 7.71373 10.4871 7.53791 10.6629C7.3621 10.8387 7.12364 10.9375 6.875 10.9375ZM10.3125 10.9375C10.1271 10.9375 9.94582 10.8825 9.79165 10.7795C9.63748 10.6765 9.51732 10.5301 9.44636 10.3588C9.37541 10.1875 9.35684 9.99896 9.39301 9.8171C9.42919 9.63525 9.51848 9.4682 9.64959 9.33709C9.7807 9.20598 9.94775 9.11669 10.1296 9.08051C10.3115 9.04434 10.5 9.06291 10.6713 9.13386C10.8426 9.20482 10.989 9.32498 11.092 9.47915C11.195 9.63332 11.25 9.81458 11.25 10C11.25 10.2486 11.1512 10.4871 10.9754 10.6629C10.7996 10.8387 10.5611 10.9375 10.3125 10.9375ZM13.75 10.9375C13.5646 10.9375 13.3833 10.8825 13.2292 10.7795C13.075 10.6765 12.9548 10.5301 12.8839 10.3588C12.8129 10.1875 12.7943 9.99896 12.8305 9.8171C12.8667 9.63525 12.956 9.4682 13.0871 9.33709C13.2182 9.20598 13.3852 9.11669 13.5671 9.08051C13.749 9.04434 13.9375 9.06291 14.1088 9.13386C14.2801 9.20482 14.4265 9.32498 14.5295 9.47915C14.6325 9.63332 14.6875 9.81458 14.6875 10C14.6875 10.2486 14.5887 10.4871 14.4129 10.6629C14.2371 10.8387 13.9986 10.9375 13.75 10.9375Z" fill="#1153B5"/></svg>';
+  // Testimonials marquee
+  (function() {
+    const photos = [
+      'assets/Photo/5.png','assets/Photo/8.png','assets/Photo/6.png','assets/Photo/4.jpg',
+      'assets/Photo/10.png','assets/Photo/12.png','assets/Photo/7.png','assets/Photo/11.png',
+      'assets/Photo/9.png','assets/Photo/3.webp','assets/Photo/1.webp','assets/Photo/13.png',
+      'assets/Photo/2.webp'
+    ];
+    const reviews = [
+      { t:'Нашли исполнителя за 30 минут', x:'Опубликовали задачу утром, и к обеду в кабинете уже лежало четыре релевантных отклика — с портфолио, ссылками на прошлые работы и адекватными сроками. Раньше на поиск подходящего человека уходило два дня переписки в мессенджерах и созвонов «на берегу». Здесь весь процесс свёрнут в один экран: видишь кандидатов, рейтинг, выполненные задачи и сразу принимаешь решение. Для нас это сэкономило не часы, а полноценные рабочие дни.', a:'КВЦ Югра-Экспо' },
+      { t:'Шесть человек на мероприятие за двое суток', x:'Нам срочно понадобилась команда стендистов на отраслевой форум — шесть человек, презентабельных и пунктуальных. Через платформу мы собрали всю группу за двое суток, согласовали смены и форму прямо в чате задачи. В день мероприятия вышли все шестеро, без срывов и «я передумал». Раньше такой набор через знакомых и агентства занял бы у нас минимум неделю и стоил бы заметно дороже.', a:'Елена · агентство «Север»' },
+      { t:'Наконец-то справедливая система', x:'Главная боль раньше была с бухгалтерией: работа с физлицами означала горы документов и вопросы от налоговой. Здесь все исполнители оформлены как самозанятые, чеки автоматически попадают в личный кабинет, а закрывающие документы формируются сами. Финотдел впервые перестал возражать против работы со студентами. Прозрачность оплаты через эскроу сняла последние сомнения у руководства.', a:'Анна · ООО «Капитал»' },
+      { t:'Закрыли срочную задачу за два дня', x:'В четверг вечером выяснилось, что на субботний ивент нет промоутера. Опубликовали задачу прямо из телефона, к утру пятницы было семь откликов с опытом именно в промо. Выбрали человека по рейтингу и отзывам, созвонились, согласовали детали — и в субботу мероприятие прошло как надо. Скорость, с которой здесь закрываются горящие задачи, для нас оказалась решающим фактором.', a:'Дмитрий · кофейня «Сова»' },
+      { t:'Эскроу — это уверенность для обеих сторон', x:'Мы платим только за результат, который реально приняли. Деньги резервируются на платформе заранее, исполнитель видит, что бюджет есть, и работает спокойно, а мы не рискуем предоплатой. Один раз возник спорный момент по объёму работ — подключили арбитраж, и вопрос решили за день по понятным правилам. Это совсем другое отношение, чем на классических биржах фриланса.', a:'Олег · IT-студия «Меридиан»' },
+      { t:'Адекватные цены при хорошем качестве', x:'Заказывали оформление соцсетей и поначалу скептически относились к «студентам». Дизайнер подошёл к задаче серьёзнее многих опытных фрилансеров: прислал несколько концепций, аккуратно собрал гайд по стилю, уложился в срок. По итогам отдали ему регулярные посты на месяц вперёд и обсуждаем долгосрочное сотрудничество. Соотношение цены и качества оказалось лучше, чем мы рассчитывали.', a:'Дмитрий · кофейня «Сова»' },
+      { t:'Студент превзошёл ожидания', x:'Брали человека на разовый проект, а в итоге получили практически штатного специалиста. Он не просто выполнил задачу, а предложил, как улучшить процесс, и довёл всё до результата без напоминаний. Сейчас он работает с нами на постоянной основе и закрывает целое направление. Через платформу мы случайно нашли одного из самых ценных людей в команде.', a:'Алексей · стартап «Рост»' },
+      { t:'14 задач за полгода', x:'Мы перевели на платформу почти весь поток мелких и средних задач: дизайн, тексты, видеомонтаж. За полгода закрыли четырнадцать задач, и каждая прошла прозрачно — с фиксированным бюджетом и понятными сроками. Цены ощутимо ниже рынка агентств, а качество стабильно держится на уровне. Рекомендуем сервис всем коллегам, кто устал от непредсказуемого фриланса.', a:'Дарья · агентство «Максимум»' },
+      { t:'Удобный личный кабинет', x:'Раньше задачи жили в почте, чатах и табличках одновременно — что-то постоянно терялось. Здесь вся история по проекту в одном месте: переписка, файлы, версии, статусы согласований. Любой человек из команды может зайти и понять, на каком этапе работа, без долгих расспросов. Этот порядок экономит нам нервы не меньше, чем деньги.', a:'Наталья · сеть кофеен' },
+      { t:'Качество выше, чем у фрилансеров', x:'Студенты заинтересованы в портфолио и отзывах, поэтому вкладываются в результат заметно сильнее. Мы получаем не «лишь бы сдать», а работу, которую человек хочет показывать будущим заказчикам. На обычных биржах фриланса такого отношения почти не встречали — там чаще берут количеством. Здесь же мотивация исполнителя совпадает с нашими интересами.', a:'Михаил · digital-агентство' },
+      { t:'Теперь все задачи только здесь', x:'Постепенно перевели сюда все мелкие задачи с биржи фриланса и не пожалели. Меньше переписки «вы ещё работаете?», меньше срывов сроков, меньше споров об оплате. Экономия времени и нервов оказалась колоссальной, хотя изначально мы шли просто за ценой. Теперь это наш основной канал для разовых и регулярных работ.', a:'Кристина · бренд косметики' },
+      { t:'Сэкономили 40% бюджета', x:'Раньше всю визуальную часть делала студия по фиксированному и довольно высокому прайсу. Перешли на студента-дизайнера через платформу: сроки остались те же, а бюджет сократился почти в полтора раза. Качество при этом не просело — клиенты разницы не заметили, а финансовый результат почувствовали мы. Освободившиеся деньги пустили на продвижение.', a:'Артур · бренд одежды' },
+      { t:'Концепция выше всех ожиданий', x:'Заказывали креативную концепцию кампании и были готовы к «нормально, но доработаем». В итоге получили идею, которую почти не пришлось править, — настолько точно человек попал в задачу. Кампания сработала так удачно, что её отметили даже наши инвесторы на ближайшей встрече. От исполнителя со студенческой скамьи мы такого уровня честно не ждали.', a:'Светлана · мебельная студия' },
+      { t:'Регулярные посты от одного человека', x:'Закрепили за собой студента-SMM-специалиста на постоянную загрузку. Он сам составляет контент-план, готовит посты пакетами и присылает на согласование заранее, без нашего микроменеджмента. Работает уже четвёртый месяц без единого сбоя по срокам. По сути мы получили внешнего сотрудника по цене подработки.', a:'Игорь · ресторан «Кедр»' },
+      { t:'Платформа закрывает любые задачи', x:'У нас бывает всё: от разовых ивентов и промо до регулярного контента и аналитики. Практически любую узкую задачу здесь удаётся закрыть за пару дней, не собирая команду под каждый случай отдельно. Это превратилось в наш универсальный инструмент для нестандартных запросов. Когда не знаем, где взять нужного человека, идём сюда первым делом.', a:'Антон · ивент-холдинг' },
+    ];
+    const track = document.getElementById('testi-track');
+    if (!track) return;
+    track.innerHTML = reviews.map((r, i) => {
+      const parts = r.a.split(' · ');
+      const nm = parts.shift();
+      const role = parts.join(' · ');
+      return `
+      <article class="testi-card" data-idx="${i}">
+        <div class="testi-tab">,,</div>
+        <div class="testi-body">
+          <p>${r.x}</p>
+          <div class="testi-author">
+            <div class="testi-ava" style="background-image:url('${photos[i % photos.length]}')"></div>
+            <div class="testi-meta">
+              <span class="testi-name">${nm}</span>
+              ${role ? `<span class="testi-role">${role}</span>` : ''}
+            </div>
+          </div>
+        </div>
+      </article>`;
+    }).join('');
+
+    const marquee = track.parentElement;
+    function updateMarquee() {
+      const mw = marquee.offsetWidth;
+      const tw = track.scrollWidth;
+      const endX = Math.min(0, mw - tw);
+      track.style.setProperty('--end-x', endX + 'px');
+    }
+    updateMarquee();
+    window.addEventListener('resize', updateMarquee);
+
+    const popup = document.getElementById('testi-popup');
+    const popupContent = popup.querySelector('.testi-popup-content');
+
+    track.addEventListener('click', e => {
+      const card = e.target.closest('.testi-card');
+      if (!card) return;
+      const r = reviews[card.dataset.idx];
+      popupContent.innerHTML = `
+        <p>${r.x}</p>
+        <div class="who">${r.a}</div>
+      `;
+      popup.classList.add('is-open');
+      popup.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    });
+
+    function closePopup() {
+      popup.classList.remove('is-open');
+      popup.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+    popup.addEventListener('click', e => {
+      if (e.target.hasAttribute('data-close')) closePopup();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && popup.classList.contains('is-open')) closePopup();
+    });
+  })();
+
+  var grid = document.getElementById('tasks-grid');
+  grid.innerHTML = perf.map(p => {
+    var tags = p.skills.slice(0, 3).map(sk => '<span class="sc2-tag">' + sk + '</span>').join('');
+    return `
+    <article class="sc2" tabindex="0" role="link" data-href="student.html?id=${p.id}">
+      <div class="sc2-upper">
+        <div class="sc2-avatar"><img src="${p.photo}" alt="${p.name}" loading="lazy"/></div>
+        <div class="sc2-info">
+          <div class="sc2-name-block">
+            <h3 class="sc2-name">${p.name}</h3>
+            <div class="sc2-meta">
+              <span class="sc2-rating">${STAR_SVG}${p.rate}</span>
+              <span class="sc2-reviews">${CHAT_SVG}${p.deals}&nbsp;${pluralTasks(p.deals)}</span>
+            </div>
+          </div>
+          <div class="sc2-info-bar">
+            <span>${p.city}</span>
+            <span class="sc2-sep">·</span>
+            <span>${p.uni}</span>
+            <span class="sc2-sep">·</span>
+            <span>${p.spec}, ${p.year} курс</span>
+          </div>
+        </div>
+      </div>
+      <div class="sc2-lower">
+        <p class="sc2-title">${p.title}</p>
+        <div class="sc2-tags">${tags}</div>
+      </div>
+    </article>`;
+  }).join('');
+  grid.addEventListener('click', e => {
+    var card = e.target.closest('.sc2');
+    if (card && card.dataset.href) window.location.href = card.dataset.href;
+  });
+</script>
+<script>
+(function(){
+  var header = document.querySelector('.header');
+  var lastY = 0;
+  window.addEventListener('scroll', function(){
+    var y = window.scrollY;
+    if (y > lastY && y > 80) {
+      header.classList.add('header--hidden');
+    } else {
+      header.classList.remove('header--hidden');
+    }
+    lastY = y;
+  }, {passive: true});
+})();
+</script>
+<script>
+(function(){
+  var TASKS = [
+    { id:1,  tag:'Дизайн',     title:'Оформление соцсетей компании',        company:'Технопарк Югры',  price:'7 500 ₽' },
+    { id:2,  tag:'Разработка', title:'Tilda-лендинг для стартапа',           company:'Технопарк Югры',  price:'18 000 ₽' },
+    { id:3,  tag:'IT',         title:'Telegram-бот для сети кофеен',         company:'Кофе Хаус',       price:'25 000 ₽' },
+    { id:4,  tag:'Контент',    title:'Тексты для лендинга кофейни',          company:'Кофе Хаус',       price:'4 000 ₽' },
+    { id:5,  tag:'Event',      title:'Промоутер на день города',             company:'Технопарк Югры',  price:'5 500 ₽' },
+    { id:6,  tag:'SMM',        title:'Ведение Telegram-канала',              company:'Ритейл Плюс',     price:'12 500 ₽' },
+    { id:7,  tag:'Видео',      title:'Reels для бренда одежды',              company:'Ритейл Плюс',     price:'9 000 ₽' },
+    { id:8,  tag:'IT',         title:'Вёрстка email-шаблонов',               company:'Технопарк Югры',  price:'6 000 ₽' },
+    { id:9,  tag:'Дизайн',     title:'Иллюстрации для детского журнала',     company:'Медиа Юг',        price:'14 000 ₽' },
+    { id:10, tag:'Разработка', title:'CRM-интеграция для интернет-магазина', company:'Ритейл Плюс',     price:'22 000 ₽' },
+    { id:11, tag:'Event',      title:'Фотограф на корпоратив',               company:'Технопарк Югры',  price:'8 000 ₽' },
+    { id:12, tag:'Контент',    title:'Сценарий для YouTube-ролика',          company:'Медиа Юг',        price:'5 000 ₽' },
+    { id:13, tag:'Дизайн',     title:'Логотип и брендбук стартапа',          company:'Стартап Лаб',     price:'30 000 ₽' },
+    { id:14, tag:'SMM',        title:'Контент-план для Instagram',           company:'Ритейл Плюс',     price:'6 500 ₽' },
+    { id:15, tag:'IT',         title:'Парсер данных для аналитики',          company:'Стартап Лаб',     price:'15 000 ₽' },
+    { id:16, tag:'Видео',      title:'Монтаж обучающего курса',              company:'Медиа Юг',        price:'11 000 ₽' },
+    { id:17, tag:'Разработка', title:'Мобильное приложение MVP',             company:'Стартап Лаб',     price:'45 000 ₽' },
+    { id:18, tag:'Event',      title:'Ведущий на студенческий форум',        company:'Технопарк Югры',  price:'7 000 ₽' },
+  ];
+  function esc(s){ return s.replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+  function hi(text,q){
+    if(!q) return esc(text);
+    return esc(text).replace(new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<mark class="search-highlight">$1</mark>');
+  }
+  var wrap=document.getElementById('search-wrap');
+  if(!wrap) return;
+  var hdr=document.querySelector('.header');
+  var btn=wrap.querySelector('.search-toggle');
+  var input=document.querySelector('.search-input');
+  var drop=document.getElementById('search-dropdown');
+  var iw=document.querySelector('.search-input-wrap');
+  function openSearch(){
+    if(iw&&hdr){
+      var hdrR=hdr.getBoundingClientRect();
+      var logo=hdr.querySelector('.logo');
+      var logoR=logo?logo.getBoundingClientRect():{right:hdrR.left+160};
+      var btnR=btn.getBoundingClientRect();
+      iw.style.left=(logoR.right-hdrR.left+8)+'px';
+      iw.style.right=(hdrR.right-btnR.left+8)+'px';
+    }
+    wrap.classList.add('open');
+    if(hdr) hdr.classList.add('search-open');
+    setTimeout(function(){input.focus();},50);
+  }
+  function closeSearch(){
+    if(iw){iw.style.left='';iw.style.right='';}
+    wrap.classList.remove('open');
+    if(hdr) hdr.classList.remove('search-open');
+    input.value='';
+    drop.classList.remove('active');
+  }
+  btn.addEventListener('click',function(){
+    wrap.classList.contains('open') ? closeSearch() : openSearch();
+  });
+  document.addEventListener('click',function(e){
+    if(!wrap.contains(e.target) && !iw.contains(e.target)) closeSearch();
+  });
+  input.addEventListener('input',function(){
+    var q=this.value.trim().toLowerCase();
+    if(!q){ drop.classList.remove('active'); return; }
+    var res=TASKS.filter(function(t){ return t.title.toLowerCase().includes(q)||t.tag.toLowerCase().includes(q)||t.company.toLowerCase().includes(q); });
+    drop.innerHTML = res.length
+      ? res.slice(0,8).map(function(t){ return '<a href="task.html?id='+t.id+'" class="search-item"><span class="search-item-title">'+hi(t.title,q)+'</span><span class="search-item-meta">'+esc(t.tag)+' · '+esc(t.company)+' · '+esc(t.price)+'</span></a>'; }).join('')
+      : '<div class="search-empty">Ничего не найдено</div>';
+    drop.classList.add('active');
+  });
+  input.addEventListener('keydown',function(e){
+    if(e.key==='Escape') closeSearch();
+  });
+})();
+</script>
+<script>
+(function(){
+  var statsSection = document.querySelector('.stats');
+  if (!statsSection) return;
+  var nums = statsSection.querySelectorAll('.num');
+  var animated = false;
+  var items = [];
+  nums.forEach(function(el) {
+    var raw = el.textContent;
+    var match = raw.match(/^(\d+)/);
+    if (!match) { items.push(null); return; }
+    items.push({ el: el, value: parseInt(match[1], 10), suffix: raw.slice(match[1].length) });
+  });
+  function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+  function run() {
+    // Lock each .stat width so the grid doesn't recalculate column sizes each frame
+    var stats = statsSection.querySelectorAll('.stat');
+    stats.forEach(function(s) { s.style.width = s.offsetWidth + 'px'; });
+    var duration = 1400, start = null;
+    function step(ts) {
+      if (!start) start = ts;
+      var t = Math.min((ts - start) / duration, 1);
+      var p = easeOut(t);
+      items.forEach(function(item) {
+        if (!item) return;
+        item.el.textContent = Math.round(item.value * p) + item.suffix;
+      });
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  var io = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting && !animated) {
+      animated = true;
+      run();
+      io.disconnect();
+    }
+  }, { threshold: 0.4 });
+  io.observe(statsSection);
+})();
+</script>
+<script src="shared.js"></script>
+<script>
+(function(){})();
+</script>
+<script src="registration.js"></script>
+<script>
+(function() {
+  var btn = document.querySelector('.hero-cta-band .btn-hero-anim');
+  if (!btn) return;
+  var arrow = btn.querySelector('.btn-arrow');
+  if (!arrow) return;
+  btn.addEventListener('mouseenter', function() {
+    var btnR = btn.getBoundingClientRect();
+    var arrowR = arrow.getBoundingClientRect();
+    arrow.style.transform = 'translateX(' + (btnR.right - 28 - arrowR.right) + 'px)';
+  });
+  btn.addEventListener('mouseleave', function() {
+    arrow.style.transform = '';
+  });
+})();
+</script>
+</body>
+</html>

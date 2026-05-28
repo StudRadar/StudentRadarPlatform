@@ -1,0 +1,677 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Документы — СтудРадар</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Tektur:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root {
+      --ec-blue: #1153B5;
+      --ec-blue-08: hsla(216, 83%, 39%, 0.08);
+      --ec-accent: #DD5444;
+      --ec-ink: #020327;
+      --ec-ink-72: hsla(238, 90%, 8%, 0.72);
+      --ec-ink-40: hsla(238, 90%, 8%, 0.40);
+      --ec-fill-04: hsla(238, 90%, 8%, 0.04);
+      --ec-fill-06: hsla(238, 90%, 8%, 0.06);
+    }
+    body { background: #F2F2F2; font-family: 'Manrope', sans-serif; }
+
+    /* ===== Header ===== */
+    .ec-hd {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 40px; background: #F2F2F2;
+    }
+    .ec-hd-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+    .ec-hd-logo img { width: 40px; height: 40px; flex-shrink: 0; }
+    .ec-hd-logo span {
+      font-family: 'Tektur', sans-serif; font-weight: 600; font-size: 19px;
+      color: #000; letter-spacing: 0; white-space: nowrap;
+    }
+    .ec-hd-menu { display: flex; align-items: center; gap: 10px; }
+    .ec-chip {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 24px; border-radius: 80px;
+      background: var(--ec-fill-04); color: var(--ec-ink);
+      font-size: 16px; font-weight: 400; text-decoration: none;
+      border: 0; cursor: pointer; transition: background .15s;
+    }
+    .ec-chip:hover { background: var(--ec-fill-06); }
+    .ec-chip svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .ec-chip .ic-accent { color: var(--ec-accent); }
+    .ec-hd-user { position: relative; }
+    .ec-user {
+      display: flex; align-items: center; gap: 16px;
+      padding: 4px 28px 4px 4px; border-radius: 100px;
+      background: #E9E9EB; border: 1px solid hsla(0, 0%, 0%, 0.30);
+      cursor: pointer;
+    }
+    .ec-user-ava {
+      width: 46px; height: 46px; border-radius: 50%; overflow: hidden;
+      flex-shrink: 0; background: #C9D4EA;
+      display: flex; align-items: center; justify-content: center; color: #1153B5;
+    }
+    .ec-user-ava svg { width: 60%; height: 60%; }
+    .ec-user-name { font-size: 16px; color: var(--ec-ink); white-space: nowrap; }
+    .ec-user > svg { width: 20px; height: 20px; color: var(--ec-ink-72); }
+
+    /* ===== Layout ===== */
+    .ec-wrap {
+      max-width: 1206px; margin: 0 auto; padding: 24px 40px 80px;
+      display: flex; align-items: flex-start; gap: 24px;
+    }
+    .ec-col-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 18px; }
+    .ec-aside { width: 290px; flex-shrink: 0; display: flex; flex-direction: column; gap: 0; }
+
+    /* ===== Sidebar nav ===== */
+    .ec-nav-item {
+      display: flex; align-items: center; width: 290px; box-sizing: border-box;
+      padding: 16px 24px; border-radius: 10px; gap: 10px;
+      font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 500;
+      color: var(--ec-ink); background: transparent; border: 0; cursor: pointer;
+      text-align: left; text-decoration: none; transition: background .15s, color .15s;
+    }
+    .ec-nav-item:hover { background: var(--ec-fill-04); }
+    .ec-nav-item.is-active { background: var(--ec-blue-08); color: var(--ec-blue); }
+
+    /* ===== Document card sections ===== */
+    .ec-card { background: #fff; border-radius: 32px; padding: 28px 30px; }
+    .ec-card-title {
+      font-family: 'Tektur', sans-serif; font-weight: 700; font-size: 22px;
+      text-transform: uppercase; color: var(--ec-ink); margin: 0 0 6px;
+    }
+    .doc-section-desc {
+      font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 400;
+      color: var(--ec-ink-72); line-height: 1.55; margin: 0 0 20px;
+    }
+
+    /* ===== Generic list rows ===== */
+    .ed-list { display: flex; flex-direction: column; }
+    .ed-row {
+      display: flex; align-items: center; gap: 18px;
+      padding: 18px 0; border-bottom: 1px solid var(--ec-fill-06);
+    }
+    .ed-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .ed-row:first-child { padding-top: 0; }
+    .ed-ico {
+      width: 46px; height: 46px; border-radius: 13px; flex: none;
+      background: rgba(221,84,68,0.12); color: var(--ec-accent);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ed-tx { flex: 1; min-width: 0; }
+    .ed-tx .t { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 16px; color: var(--ec-ink); }
+    .ed-tx .s {
+      font-family: 'Manrope', sans-serif; font-size: 14px; color: var(--ec-ink-72);
+      margin-top: 3px; line-height: 1.45;
+    }
+    .ed-sum {
+      font-family: 'Manrope', sans-serif; font-size: 17px; font-weight: 700; color: var(--ec-ink);
+      white-space: nowrap;
+    }
+    .ed-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 600;
+      padding: 4px 11px; border-radius: 100px; white-space: nowrap;
+    }
+    .ed-badge--wait { background: rgba(255,181,0,0.12); color: #956800; }
+    .ed-badge--ok   { background: rgba(34,197,94,0.13); color: #15803d; }
+    .ed-btn {
+      flex: none; height: 42px; padding: 0 22px;
+      background: var(--ec-accent); color: #fff; border: none; border-radius: 12px;
+      cursor: pointer; font-family: 'Manrope', sans-serif; font-size: 14px;
+      font-weight: 700; transition: background .18s; white-space: nowrap;
+    }
+    .ed-btn:hover { background: var(--ec-ink); }
+    .ed-btn--ghost {
+      background: var(--ec-fill-04); color: var(--ec-ink);
+      border: 1.5px solid rgba(2,3,39,0.14);
+    }
+    .ed-btn--ghost:hover { background: var(--ec-fill-06); border-color: rgba(2,3,39,0.26); color: var(--ec-ink); }
+
+    /* ===== Agreement card ===== */
+    .ed-agree {
+      display: flex; align-items: center; gap: 16px;
+      background: var(--ec-fill-04); border-radius: 16px; padding: 20px 22px;
+    }
+    .ed-agree .ed-tx .s { color: #15803d; font-weight: 600; }
+
+    /* ===== Requisites ===== */
+    .ed-data-row {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--ec-fill-06);
+    }
+    .ed-data-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .ed-data-row:first-child { padding-top: 0; }
+    .ed-data-left { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+    .ed-data-label {
+      font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 500;
+      color: var(--ec-ink-40); text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .ed-data-value { font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 600; color: var(--ec-ink); }
+    .ed-data-value.is-empty { color: var(--ec-ink-40); font-weight: 500; font-style: italic; }
+    .ed-data-edit {
+      flex-shrink: 0; background: none; border: 1.5px solid rgba(2,3,39,0.12);
+      border-radius: 10px; padding: 7px 15px; cursor: pointer;
+      font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 600;
+      color: var(--ec-ink-72); display: flex; align-items: center; gap: 6px;
+      transition: color .18s, border-color .18s, background .18s;
+    }
+    .ed-data-edit:hover { color: var(--ec-accent); border-color: var(--ec-accent); background: rgba(221,84,68,0.05); }
+
+    /* ===== Modal ===== */
+    .doc-modal {
+      position: fixed; inset: 0; z-index: 900;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity .22s;
+    }
+    .doc-modal.is-open { opacity: 1; pointer-events: auto; }
+    .doc-modal-backdrop { position: absolute; inset: 0; background: rgba(2,3,39,0.55); }
+    .doc-modal-window {
+      position: relative; z-index: 1;
+      background: #fff; border-radius: 24px;
+      padding: 32px 36px 28px; width: min(480px, calc(100vw - 32px));
+      box-shadow: 0 24px 60px rgba(0,0,0,0.18);
+      transform: translateY(10px); transition: transform .25s;
+    }
+    .doc-modal.is-open .doc-modal-window { transform: translateY(0); }
+    .doc-modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .doc-modal-title {
+      font-family: 'Tektur', sans-serif; font-size: 24px; font-weight: 700;
+      color: var(--ec-ink); margin: 0; line-height: 1.1; text-transform: uppercase;
+    }
+    .doc-modal-close {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: #F2F2F2; border: 0; cursor: pointer;
+      display: grid; place-items: center; padding: 0;
+      color: var(--ec-ink); transition: background .2s, transform .2s;
+    }
+    .doc-modal-close:hover { background: #E3E4E7; transform: rotate(90deg); }
+    .doc-modal-label {
+      display: block; font-family: 'Manrope', sans-serif; font-size: 13px;
+      font-weight: 600; color: var(--ec-ink-72); margin-bottom: 6px;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .doc-modal-input {
+      width: 100%; box-sizing: border-box;
+      background: var(--ec-fill-04); border: 1.5px solid transparent;
+      border-radius: 12px; padding: 14px 16px;
+      font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 500; color: var(--ec-ink);
+      outline: none; transition: border-color .18s; margin-bottom: 20px;
+    }
+    .doc-modal-input:focus { border-color: var(--ec-accent); }
+    .doc-modal-save {
+      width: 100%; height: 52px;
+      background: var(--ec-accent); color: #fff; border: none; border-radius: 14px;
+      font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 700;
+      cursor: pointer; transition: background .18s;
+    }
+    .doc-modal-save:hover { background: var(--ec-ink); }
+
+    /* toast */
+    .ed-toast {
+      position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(20px);
+      background: var(--ec-ink); color: #fff; padding: 14px 22px; border-radius: 14px;
+      font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 600;
+      box-shadow: 0 16px 40px rgba(2,3,39,0.28);
+      opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 950;
+    }
+    .ed-toast.is-shown { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 980px) {
+      .ec-hd { padding: 16px 20px; }
+      .ec-hd-menu .ec-chip span { display: none; }
+      .ec-wrap { flex-direction: column; padding: 20px 16px 60px; }
+      .ec-aside { width: 100%; flex-direction: row; overflow-x: auto; gap: 8px; }
+      .ec-nav-item { width: auto; white-space: nowrap; }
+      .ec-col-main { width: 100%; }
+    }
+    @media (max-width: 760px) {
+      .ed-row { flex-wrap: wrap; gap: 12px; }
+      .ed-tx { flex: 1 1 calc(100% - 64px); }
+      .ed-sum, .ed-badge, .ed-row .ed-btn { margin-left: 62px; }
+      .ed-row .ed-btn { width: 100%; margin-left: 0; }
+      .ed-agree { flex-wrap: wrap; }
+      .ed-agree .ed-btn { width: 100%; }
+      .ed-data-row { flex-direction: column; }
+      .ed-data-edit { align-self: flex-start; }
+    }
+  </style>
+</head>
+<body class="orange-theme" data-screen-label="Документы">
+<script>(function(){
+  try {
+    var s = localStorage.getItem('studradar_session');
+    var h = s && JSON.parse(s).role;
+    if (!h) { window.location.replace('employer.html'); return; }
+    if (h === 'student') { window.location.replace('catalog.html'); return; }
+  } catch(e){}
+})();</script>
+
+<!-- ===== HEADER ===== -->
+<header class="ec-hd">
+  <a href="employer-dashboard.html" class="ec-hd-logo">
+    <img src="assets/logo.svg" alt=""/>
+    <span>СтудРадар</span>
+  </a>
+
+  <nav class="ec-hd-menu" aria-label="Меню">
+    <a href="students.html" class="ec-chip">
+      <svg class="ic-accent" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M64.12,147.8a4,4,0,0,1-4,4.2H16a8,8,0,0,1-7.8-6.17,8.35,8.35,0,0,1,1.62-6.93A67.79,67.79,0,0,1,37,117.51a40,40,0,1,1,66.46-35.8,3.94,3.94,0,0,1-2.27,4.18A64.08,64.08,0,0,0,64,144C64,145.27,64,146.54,64.12,147.8Zm182-8.91A67.76,67.76,0,0,0,219,117.51a40,40,0,1,0-66.46-35.8,3.94,3.94,0,0,0,2.27,4.18A64.08,64.08,0,0,1,192,144c0,1.27,0,2.54-.12,3.8a4,4,0,0,0,4,4.2H240a8,8,0,0,0,7.8-6.17A8.33,8.33,0,0,0,246.17,138.89Zm-89,43.18a48,48,0,1,0-58.37,0A72.13,72.13,0,0,0,65.07,212,8,8,0,0,0,72,224H184a8,8,0,0,0,6.93-12A72.15,72.15,0,0,0,157.16,182.07Z"/></svg>
+      <span>Студенты</span>
+    </a>
+    <a href="employer-dashboard.html" class="ec-chip">
+      <svg class="ic-accent" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,24a16,16,0,0,0-7.16,1.69l-88,44a16,16,0,0,0,0,28.62l88,44a16,16,0,0,0,14.32,0l88-44a16,16,0,0,0,0-28.62l-88-44A16,16,0,0,0,128,24Z"/><path d="M219.16,152.84,128,198.42,36.84,152.84a8,8,0,1,0-7.16,14.31l92,46a8,8,0,0,0,7.16,0l92-46a8,8,0,1,0-7.16-14.31Z"/><path d="M219.16,190.84,128,236.42,36.84,190.84a8,8,0,1,0-7.16,14.31l92,46a8,8,0,0,0,7.16,0l92-46a8,8,0,1,0-7.16-14.31Z"/></svg>
+      <span>Мой кабинет</span>
+    </a>  </nav>
+
+  <div class="ec-hd-user">
+    <div class="ec-notif" id="ecNotif">
+      <button type="button" class="ec-notif-btn" id="notifBtn" aria-label="Уведомления" aria-haspopup="menu" aria-expanded="false">
+        <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216Z"/></svg>
+        <span class="ec-notif-dot">3</span>
+      </button>
+      <div class="ec-notif-menu" id="notifMenu" role="menu" hidden>
+        <div class="ec-notif-head">Уведомления</div>
+        <a class="ec-notif-item unread" href="employer-dashboard.html#responses" role="menuitem">
+          <span class="ec-notif-ic"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M232.07,186.76a80,80,0,0,0-62.5-114.17A80,80,0,1,0,23.93,138.76l-7.27,24.71a16,16,0,0,0,19.87,19.87l24.71-7.27a80.39,80.39,0,0,0,25.18,7.35,80,80,0,0,0,108.94,40.45l24.71,7.27a16,16,0,0,0,19.87-19.86Z"/></svg></span>
+          <span class="ec-notif-tx"><span class="t">Новый отклик</span><span class="s">«Лендинг для образовательного курса» — 3 кандидата</span></span>
+        </a>
+        <a class="ec-notif-item unread" href="employer-chat.html?id=1" role="menuitem">
+          <span class="ec-notif-ic"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Z"/></svg></span>
+          <span class="ec-notif-tx"><span class="t">Сообщение от Ксении Р.</span><span class="s">по задаче «Сопровождение гостей форума «Югра-Экспо»»</span></span>
+        </a>
+        <a class="ec-notif-item" href="employer-finance.html" role="menuitem">
+          <span class="ec-notif-ic"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M216,64H56a8,8,0,0,1,0-16H192a8,8,0,0,0,0-16H56A24,24,0,0,0,32,56V184a24,24,0,0,0,24,24H216a16,16,0,0,0,16-16V80A16,16,0,0,0,216,64Zm-36,80a12,12,0,1,1,12-12A12,12,0,0,1,180,144Z"/></svg></span>
+          <span class="ec-notif-tx"><span class="t">Средства заморожены по эскроу</span><span class="s">5 175 ₽ по задаче «Югра-Экспо»</span></span>
+        </a>
+        <a class="ec-notif-all" href="chats.html">Все уведомления</a>
+      </div>
+    </div>
+    <button type="button" class="ec-user" id="userBtn" aria-haspopup="menu" aria-expanded="false">
+      <span class="ec-user-ava" aria-hidden="true">
+        <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128,24a104,104,0,1,0,104,104A104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"/></svg>
+      </span>
+      <span class="ec-user-name" id="ecUserName">Ивент-агентство Югра 360</span>
+      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="feed-user-menu" role="menu" id="userMenu" hidden>
+      <a href="employer-profile.html" role="menuitem">Профиль</a>
+      <a href="settings.html" role="menuitem">Настройки</a>
+      <button type="button" class="feed-user-menu-logout" data-logout>Выйти</button>
+    </div>
+  </div>
+</header>
+<script src="shared.js"></script>
+
+<!-- ===== CABINET ===== -->
+<div class="ec-wrap">
+
+  <aside class="ec-aside" aria-label="Разделы кабинета">
+    <a class="ec-nav-item" href="employer-dashboard.html#work">В работе</a>
+    <a class="ec-nav-item" href="employer-dashboard.html#responses">Сбор откликов</a>
+    <a class="ec-nav-item" href="employer-dashboard.html#done">Завершенные задачи</a>
+    <a class="ec-nav-item is-active" href="employer-documents.html">Документы</a>
+    <a class="ec-nav-item" href="employer-finance.html">Финансы</a>
+    <a class="ec-nav-item" href="employer-profile.html">Профиль</a>
+  </aside>
+
+  <main class="ec-col-main">
+
+    <!-- ===== Документы по выбранной задаче ===== -->
+    <section class="ec-card" id="taskDocsCard" style="display:none;border:2px solid var(--ec-accent);">
+      <h2 class="ec-card-title" id="taskDocsTitle">Документы по задаче</h2>
+      <p class="doc-section-desc" id="taskDocsSub"></p>
+      <div class="ed-list" id="taskDocsList"></div>
+    </section>
+
+    <!-- ===== Card 1: Акты к подписанию ===== -->
+    <section class="ec-card">
+      <h2 class="ec-card-title">Акты к подписанию</h2>
+      <p class="doc-section-desc">По закрытым задачам сформированы акты выполненных работ. Подпишите их, чтобы завершить сделку и провести оплату исполнителю.</p>
+
+      <div class="ed-list" id="actsList">
+        <div class="ed-row" data-act>
+          <span class="ed-ico">
+            <svg width="22" height="22" viewBox="0 0 20 20" fill="none"><path d="M5 2h7l3 3v13H5V2z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M11 2v4h4M7.5 11h5M7.5 14h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </span>
+          <div class="ed-tx">
+            <div class="t">Акт № 124 — «Reels-серия для бренда одежды»</div>
+            <div class="s">Исполнитель: Мария Кузьмина · закрыта 14 мая 2026</div>
+          </div>
+          <span class="ed-sum">9 000 ₽</span>
+          <span class="ed-badge ed-badge--wait" data-status>Ждёт подписи</span>
+          <button type="button" class="ed-btn" data-sign>Подписать</button>
+        </div>
+
+        <div class="ed-row" data-act>
+          <span class="ed-ico">
+            <svg width="22" height="22" viewBox="0 0 20 20" fill="none"><path d="M5 2h7l3 3v13H5V2z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M11 2v4h4M7.5 11h5M7.5 14h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </span>
+          <div class="ed-tx">
+            <div class="t">Акт № 118 — «Тексты для лендинга кофейни»</div>
+            <div class="s">Исполнитель: Дарья Яковлева · закрыта 8 мая 2026</div>
+          </div>
+          <span class="ed-sum">4 000 ₽</span>
+          <span class="ed-badge ed-badge--wait" data-status>Ждёт подписи</span>
+          <button type="button" class="ed-btn" data-sign>Подписать</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Card 2: Закрывающие документы ===== -->
+    <section class="ec-card">
+      <h2 class="ec-card-title">Закрывающие документы</h2>
+      <p class="doc-section-desc">Подписанные акты, счета и чеки самозанятых по завершённым сделкам. Их можно скачать для бухгалтерии в любой момент.</p>
+
+      <div class="ed-list">
+        <div class="ed-row">
+          <span class="ed-ico">
+            <svg width="22" height="22" viewBox="0 0 20 20" fill="none"><path d="M3 4h14v12H3z" stroke="currentColor" stroke-width="1.6"/><path d="M3 8h14M7 12h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </span>
+          <div class="ed-tx">
+            <div class="t">Счёт № СР-0420 — апрель 2026</div>
+            <div class="s">Telegram-бот для сети кофеен · 4 закрытые задачи</div>
+          </div>
+          <span class="ed-sum">25 000 ₽</span>
+          <button type="button" class="ed-btn ed-btn--ghost" data-download>Скачать</button>
+        </div>
+
+        <div class="ed-row">
+          <span class="ed-ico">
+            <svg width="22" height="22" viewBox="0 0 20 20" fill="none"><path d="M5 2h7l3 3v13H5V2z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M11 2v4h4M7.5 11h5M7.5 14h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </span>
+          <div class="ed-tx">
+            <div class="t">Акт № 110 — «Оформление соцсетей»</div>
+            <div class="s">Исполнитель: Анна Петрова · подписан 30 апреля 2026</div>
+          </div>
+          <span class="ed-sum">12 500 ₽</span>
+          <button type="button" class="ed-btn ed-btn--ghost" data-download>Скачать</button>
+        </div>
+
+        <div class="ed-row">
+          <span class="ed-ico">
+            <svg width="22" height="22" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7.5" stroke="currentColor" stroke-width="1.6"/><path d="M10 6v8M7.5 8.5h3.2a1.8 1.8 0 0 1 0 3.6H8.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </span>
+          <div class="ed-tx">
+            <div class="t">Чек самозанятого № 7741</div>
+            <div class="s">Reels-серия · сформирован автоматически 14 мая 2026</div>
+          </div>
+          <span class="ed-sum">9 000 ₽</span>
+          <button type="button" class="ed-btn ed-btn--ghost" data-download>Скачать</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Card 4: Договор с платформой ===== -->
+    <section class="ec-card">
+      <h2 class="ec-card-title">Договор с платформой</h2>
+      <p class="doc-section-desc">Работа на платформе ведётся по договору-оферте. Вы приняли его условия при регистрации — документ доступен для скачивания.</p>
+
+      <div class="ed-agree">
+        <span class="ed-ico">
+          <svg width="22" height="22" viewBox="0 0 20 20" fill="none"><path d="M5 2h7l3 3v13H5V2z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M7.5 11l1.7 1.7L13 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <div class="ed-tx">
+          <div class="t">Договор-оферта СтудРадар (ред. от 01.03.2026)</div>
+          <div class="s">Принят 12 апреля 2026</div>
+        </div>
+        <button type="button" class="ed-btn ed-btn--ghost" data-download>Скачать PDF</button>
+      </div>
+    </section>
+
+    <!-- ===== Card 5: Реквизиты компании ===== -->
+    <section class="ec-card">
+      <h2 class="ec-card-title">Реквизиты компании</h2>
+      <p class="doc-section-desc">Эти данные подставляются в счета и закрывающие документы. Заполните их, чтобы бухгалтерия принимала акты без правок.</p>
+
+      <div class="ed-list" id="reqList">
+        <div class="ed-data-row">
+          <div class="ed-data-left">
+            <span class="ed-data-label">Название компании</span>
+            <span class="ed-data-value" id="valCompany">ООО «Кофе Хаус»</span>
+          </div>
+          <button type="button" class="ed-data-edit" data-req="company" data-label="Название компании">
+            <svg width="14" height="14" viewBox="0 0 256 256" fill="currentColor"><path d="M227.32,73.37,182.63,28.69a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.32,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120Z"/></svg>
+            Изменить
+          </button>
+        </div>
+
+        <div class="ed-data-row">
+          <div class="ed-data-left">
+            <span class="ed-data-label">ИНН</span>
+            <span class="ed-data-value" id="valInn">7701234567</span>
+          </div>
+          <button type="button" class="ed-data-edit" data-req="inn" data-label="ИНН">
+            <svg width="14" height="14" viewBox="0 0 256 256" fill="currentColor"><path d="M227.32,73.37,182.63,28.69a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.32,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120Z"/></svg>
+            Изменить
+          </button>
+        </div>
+
+        <div class="ed-data-row">
+          <div class="ed-data-left">
+            <span class="ed-data-label">КПП</span>
+            <span class="ed-data-value is-empty" id="valKpp">Не указан</span>
+          </div>
+          <button type="button" class="ed-data-edit" data-req="kpp" data-label="КПП">
+            <svg width="14" height="14" viewBox="0 0 256 256" fill="currentColor"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg>
+            Указать
+          </button>
+        </div>
+
+        <div class="ed-data-row">
+          <div class="ed-data-left">
+            <span class="ed-data-label">Юридический адрес</span>
+            <span class="ed-data-value is-empty" id="valAddr">Не указан</span>
+          </div>
+          <button type="button" class="ed-data-edit" data-req="addr" data-label="Юридический адрес">
+            <svg width="14" height="14" viewBox="0 0 256 256" fill="currentColor"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg>
+            Указать
+          </button>
+        </div>
+
+        <div class="ed-data-row">
+          <div class="ed-data-left">
+            <span class="ed-data-label">Email для документов</span>
+            <span class="ed-data-value" id="valEmail">buh@coffeehouse.ru</span>
+          </div>
+          <button type="button" class="ed-data-edit" data-req="email" data-label="Email для документов">
+            <svg width="14" height="14" viewBox="0 0 256 256" fill="currentColor"><path d="M227.32,73.37,182.63,28.69a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.32,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120Z"/></svg>
+            Изменить
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ===== MODAL: Реквизит ===== -->
+<div class="doc-modal" id="reqModal" role="dialog" aria-modal="true" aria-labelledby="reqModalTitle">
+  <div class="doc-modal-backdrop" data-modal-close></div>
+  <div class="doc-modal-window">
+    <div class="doc-modal-head">
+      <h2 class="doc-modal-title" id="reqModalTitle">Изменить</h2>
+      <button type="button" class="doc-modal-close" data-modal-close aria-label="Закрыть">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <label class="doc-modal-label" id="reqModalLabel" for="reqModalInput">Значение</label>
+    <input type="text" class="doc-modal-input" id="reqModalInput" autocomplete="off"/>
+    <button type="button" class="doc-modal-save" id="reqModalSave">Сохранить</button>
+  </div>
+</div>
+
+<div class="ed-toast" id="edToast">Документ скачан</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var toast = document.getElementById('edToast');
+  var toastTimer;
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('is-shown');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toast.classList.remove('is-shown'); }, 2200);
+  }
+
+  var STORE = 'studradar_employer_docs_v1';
+  function loadStore() {
+    try { return JSON.parse(localStorage.getItem(STORE) || '{}'); } catch (e) { return {}; }
+  }
+  function saveStore(d) {
+    try { localStorage.setItem(STORE, JSON.stringify(d)); } catch (e) {}
+  }
+  var state = loadStore();
+
+  // ===== Документы по конкретной задаче (?task=) =====
+  var TASK_DOCS = {
+    '21': { title: 'Фирменный стиль для онлайн-курса', who: 'Олеся Чернова', sum: '15 000 ₽', date: '5 мая 2026' },
+    '23': { title: 'Серия Reels для кофейни',          who: 'Мария Кузьмина', sum: '10 000 ₽', date: '2 апреля 2026' },
+    '1':  { title: 'Сопровождение гостей форума «Югра-Экспо»', who: 'Мария Кузьмина', sum: '4 500 ₽', date: 'в работе' },
+    '3':  { title: 'Telegram-бот для сети кофеен',     who: 'Кирилл Захаров', sum: '25 000 ₽', date: 'в работе' },
+    '9':  { title: 'Контент-план и посты для кофейни', who: 'Алина Русова',  sum: '12 000 ₽', date: 'в работе' }
+  };
+  (function () {
+    var tid = new URLSearchParams(location.search).get('task');
+    if (!tid || !TASK_DOCS[tid]) return;
+    var d = TASK_DOCS[tid];
+    var card = document.getElementById('taskDocsCard');
+    document.getElementById('taskDocsTitle').textContent = 'Документы по задаче «' + d.title + '»';
+    document.getElementById('taskDocsSub').textContent = 'Исполнитель: ' + d.who + ' · ' + d.sum + ' · ' + (d.date === 'в работе' ? 'задача в работе' : 'закрыта ' + d.date);
+    var fileSvg = '<svg width="22" height="22" viewBox="0 0 20 20" fill="none"><path d="M5 2h7l3 3v13H5V2z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M11 2v4h4M7.5 11h5M7.5 14h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
+    var checkSvg = '<svg width="22" height="22" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7.5" stroke="currentColor" stroke-width="1.6"/><path d="M10 6v8M7.5 8.5h3.2a1.8 1.8 0 0 1 0 3.6H8.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
+    var rows;
+    if (d.date === 'в работе') {
+      rows = '<div class="ed-row"><span class="ed-ico">' + fileSvg + '</span>'
+        + '<div class="ed-tx"><div class="t">Документы появятся после завершения задачи</div>'
+        + '<div class="s">Акт и чек сформируются автоматически при приёмке работы</div></div></div>';
+    } else {
+      rows = '<div class="ed-row"><span class="ed-ico">' + fileSvg + '</span>'
+        + '<div class="ed-tx"><div class="t">Акт выполненных работ — «' + d.title + '»</div>'
+        + '<div class="s">Исполнитель: ' + d.who + ' · подписан ' + d.date + '</div></div>'
+        + '<span class="ed-sum">' + d.sum + '</span>'
+        + '<button type="button" class="ed-btn ed-btn--ghost" data-download>Скачать</button></div>'
+        + '<div class="ed-row"><span class="ed-ico">' + checkSvg + '</span>'
+        + '<div class="ed-tx"><div class="t">Чек самозанятого</div>'
+        + '<div class="s">Сформирован автоматически ' + d.date + '</div></div>'
+        + '<span class="ed-sum">' + d.sum + '</span>'
+        + '<button type="button" class="ed-btn ed-btn--ghost" data-download>Скачать</button></div>';
+    }
+    document.getElementById('taskDocsList').innerHTML = rows;
+    card.style.display = '';
+    setTimeout(function () { card.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60);
+  })();
+
+  // ===== Sign acts =====
+  document.querySelectorAll('#actsList [data-act]').forEach(function (row, i) {
+    var btn = row.querySelector('[data-sign]');
+    var badge = row.querySelector('[data-status]');
+    var key = 'act' + i;
+
+    function markSigned() {
+      badge.textContent = 'Подписан';
+      badge.classList.remove('ed-badge--wait');
+      badge.classList.add('ed-badge--ok');
+      btn.textContent = 'Скачать';
+      btn.classList.add('ed-btn--ghost');
+      btn.dataset.signed = '1';
+    }
+
+    if (state[key]) markSigned();
+
+    btn.addEventListener('click', function () {
+      if (btn.dataset.signed) {
+        showToast('Акт скачан в PDF');
+        return;
+      }
+      markSigned();
+      state[key] = true;
+      saveStore(state);
+      showToast('Акт подписан — оплата исполнителю проведена');
+    });
+  });
+
+  // ===== Download buttons =====
+  document.querySelectorAll('[data-download]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      showToast('Документ скачан в PDF');
+    });
+  });
+
+  // ===== Requisites modal =====
+  var modal = document.getElementById('reqModal');
+  var modalTitle = document.getElementById('reqModalTitle');
+  var modalLabel = document.getElementById('reqModalLabel');
+  var modalInput = document.getElementById('reqModalInput');
+  var modalSave = document.getElementById('reqModalSave');
+  var activeReq = null;
+
+  var FIELDS = {
+    company: { el: 'valCompany' },
+    inn:     { el: 'valInn'  },
+    kpp:     { el: 'valKpp'  },
+    addr:    { el: 'valAddr' },
+    email:   { el: 'valEmail'}
+  };
+
+  Object.keys(FIELDS).forEach(function (k) {
+    if (state['req_' + k]) {
+      var span = document.getElementById(FIELDS[k].el);
+      span.textContent = state['req_' + k];
+      span.classList.remove('is-empty');
+    }
+  });
+
+  function openModal(reqKey, label) {
+    activeReq = reqKey;
+    var span = document.getElementById(FIELDS[reqKey].el);
+    modalTitle.textContent = label;
+    modalLabel.textContent = label;
+    modalInput.value = span.classList.contains('is-empty') ? '' : span.textContent;
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function () { modalInput.focus(); }, 50);
+  }
+  function closeModal() {
+    modal.classList.remove('is-open');
+    document.body.style.overflow = '';
+    activeReq = null;
+  }
+
+  document.querySelectorAll('[data-req]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      openModal(btn.getAttribute('data-req'), btn.getAttribute('data-label'));
+    });
+  });
+  document.querySelectorAll('[data-modal-close]').forEach(function (el) {
+    el.addEventListener('click', closeModal);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+  });
+
+  modalSave.addEventListener('click', function () {
+    if (!activeReq) return;
+    var val = (modalInput.value || '').trim();
+    if (!val) return;
+    var span = document.getElementById(FIELDS[activeReq].el);
+    span.textContent = val;
+    span.classList.remove('is-empty');
+    var btn = document.querySelector('[data-req="' + activeReq + '"]');
+    if (btn && /Указать/.test(btn.textContent)) {
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 256 256" fill="currentColor"><path d="M227.32,73.37,182.63,28.69a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.32,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120Z"/></svg> Изменить';
+    }
+    state['req_' + activeReq] = val;
+    saveStore(state);
+    closeModal();
+    showToast('Реквизиты сохранены');
+  });
+})();
+</script>
+</body>
+</html>
